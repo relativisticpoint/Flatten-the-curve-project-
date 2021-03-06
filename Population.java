@@ -19,7 +19,7 @@ public class Population {
 	public Population() {
 		everyone = new ArrayList<Person>();
 		while (everyone.size() < nbOfPeople) {
-			Person newPerson = new Person (500*Math.random(), 500*Math.random());
+			Person newPerson = new Person (500*Math.random(), 500*Math.random());  //If the simulation is 500x500 pixels
 			everyone.add (newPerson);
 		}
 	}
