@@ -12,8 +12,8 @@ public class Population {
 	
 	//Parameters
 	
-	int nbOfPeople = 100;
-	ArrayList<Person> everyone;
+	public int nbOfPeople = 100;
+	public ArrayList<Person> everyone;
 	
 	//Constructor	
 	public Population() {
