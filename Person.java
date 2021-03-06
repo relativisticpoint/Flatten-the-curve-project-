@@ -10,10 +10,12 @@ public class Person {
 	
 	//Parameters
 	
-	double positionX;
-	double positionY;
-	Color status = Color.green;
-	boolean wearMask = false;
+	public double positionX;
+	public double positionY;
+	public double velocity;
+	public Color status = Color.green;
+	public boolean wearMask = false;
+
 	
 	// Constructor
 	public Person (double initialX, double initialY) {
