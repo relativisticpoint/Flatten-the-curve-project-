@@ -1,7 +1,14 @@
+/*
+ * This is just the basic version
+ * To be improved...
+*/
+
 import java.util.*;
 import java.awt.*;
 
 public class Person {
+	
+	//Parameters
 	
 	double positionX;
 	double positionY;
