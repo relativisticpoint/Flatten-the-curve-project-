@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.Timer;
 
 class Vec {
-    double x, y;
+    public double x, y;
  
     Vec() {
     }
