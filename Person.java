@@ -10,23 +10,28 @@ public class Person {
 	
 	//Parameters
 	
-	public double positionX;
-	public double positionY;
-	public double velocity;
+	
+	public Vec velocity;
+	public Vec position;
 	public Color status = Color.green;
 	public boolean wearMask = false;
 
 	
 	// Constructor
-	public Person (double initialX, double initialY) {
-		positionX = initialX;
-		positionY = initialY;
+	public Person (Vec Position, Vec Velocity) {
+		position = Position;
+		velocity = Velocity;
 	}
 		
 	// To change the status of a person
 	public void changeStatus (Color newStatus) {
 		status = newStatus;
 	}
+	//to move 
+	public void movement(){
+		position.add(velocity);
+	}
+	
 
 }
 
