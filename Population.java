@@ -12,15 +12,24 @@ public class Population {
 	
 	//Parameters
 	
-	public int nbOfPeople = 100;
+	public int nbOfPeople;
 	public ArrayList<Person> everyone;
 	
 	//Constructor	
-	public Population() {
+	public Population(int initNb) {
+		nbOfPeople = initNb;
 		everyone = new ArrayList<Person>();
 		while (everyone.size() < nbOfPeople) {
-			Person newPerson = new Person (500*Math.random(), 500*Math.random());  //If the simulation is 500x500 pixels
+			Person newPerson = new Person (new Vec(1450*Math.random(),1450*Math.random()),
+			                               new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0));  //If the simulation is 1500x1500 pixels
 			everyone.add (newPerson);
+		}
+	}
+	
+	//To create "the moving population"
+	public void newWorld() {
+		for (Person a : everyone) {
+			a.movement();
 		}
 	}
 		
