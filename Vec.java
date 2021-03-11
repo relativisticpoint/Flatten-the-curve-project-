@@ -44,7 +44,7 @@ class Vec {
     }
  
     double dot(Vec v) {
-        return x * v.x + y * v.y;
+        return this.x * v.x + this.y * v.y;
     }
  
     void normalize() {
@@ -59,15 +59,15 @@ class Vec {
         return atan2(y, x);
     }
  
-    static Vec sub(Vec v, Vec v2) {
+    public Vec sub(Vec v, Vec v2) {
         return new Vec(v.x - v2.x, v.y - v2.y);
     }
  
-    static double dist(Vec v, Vec v2) {
-        return sqrt(pow(v.x - v2.x, 2) + pow(v.y - v2.y, 2));
+    public double dist(Vec v) {
+        return sqrt(pow(v.x - this.x, 2) + pow(v.y - this.y, 2));
     }
  
-    static double angleBetween(Vec v, Vec v2) {
-        return acos(v.dot(v2) / (v.mag() * v2.mag()));
+    public double angleBetween(Vec v) {
+        return acos(this.dot(v) / (this.mag() * v.mag()));
     }
 }
