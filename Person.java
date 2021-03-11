@@ -9,8 +9,9 @@ import java.awt.*;
 public class Person {
 	
 	//Parameters
-	
+		
 	public static final double RADIUS = 10.0;
+	public static final double INFECT_RADIUS = 40.0;
 	public Vec position;
 	public Vec velocity;
 	public Color status = Color.green;
@@ -30,10 +31,19 @@ public class Person {
 	
 	// To move a person
 	public void movement() {
-		while (position.x + velocity.x <0 || position.x + velocity.x >1500 || position.y + velocity.y <0 || position.y + velocity.y >1500) {
-			velocity = new Vec (20.0*Math.random()-10.0, 20.0*Math.random()-10.0);
-		}
 		position.add(velocity);
 	}
+	
+	// Method to verify if the person is still in the world window
+	public boolean outWindow() {
+		return ((boolean)(position.x + velocity.x <0) || (boolean)(position.x + velocity.x >1180) 
+			|| (boolean)(position.y + velocity.y <0) || (boolean)(position.y + velocity.y >1180));
+	}
+	
+	// Method to verify if it is the same person
+	public boolean different(Person p) {
+		return !((boolean)(this.position.x == p.position.x) && (boolean)(this.position.y == p.position.y));
+	}
+	
 }
 
