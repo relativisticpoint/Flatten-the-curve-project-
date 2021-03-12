@@ -21,34 +21,34 @@ public class Population {
 		everyone = new ArrayList<Person>();
 		
 		//To make "everyone" not empty
-		Person newPerson = new Person (new Vec(700*Math.random(),700*Math.random()), new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0)); 
+		Person newPerson = new Person ();
+		newPerson = new Person (newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity()); 
 		everyone.add (newPerson);
 		
 		//To generate a population with the desired number of people
 		while (everyone.size() < nbOfPeople) {			
 			
-			newPerson = new Person (new Vec(700*Math.random(),700*Math.random()),				 //If the simulation is 1200x1200 pixels
-			                        new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0));   //The velocity is in [-10,10]
+			newPerson = new Person (newPerson.setNewRandomPosition(),				 //If the simulation is 800x800 pixels
+			                        newPerson.setNewRandomVelocity());   			//The velocity is in [-10,10]
 			
 			while (this.coincideWhenInitiate(newPerson)) {
-				newPerson = new Person (new Vec(1150*Math.random(),1150*Math.random()),new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0));
+				newPerson = new Person (newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity());
 			}			
 			everyone.add (newPerson);
 		}
 	}
 	
 	//To create "the moving population"
-	public void newWorld() {
+	public void updateWorld() {
 		
 		if (!everyone.isEmpty()){
 			for (Person a : everyone) {
 				int count =0;
 		
 				while (this.movingImpossible(a)) {	
-					a.velocity = new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0);
-					//System.out.println(count);
+					a.changeVelocity();
 					count++;
-					if (count ==300) {
+					if (count ==500) {
 						break;
 					}
 				}
@@ -100,11 +100,6 @@ public class Population {
 		return this.coincideAfterMoving(p1);
 	}
 	
-	public void changeVelocity () {
-		for (Person a : everyone) {
-			a.velocity = new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0);
-		}
-	}
 }
 	
 	
