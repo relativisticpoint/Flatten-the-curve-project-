@@ -10,12 +10,14 @@ public class Person {
 	
 	//Parameters
 		
-	public static final double RADIUS = 10.0;
+	public static final int RADIUS = 10;
 	public static final double INFECT_RADIUS = 40.0;
 	public Vec position;
 	public Vec velocity;
 	public Color status = Color.green;
 	public boolean wearMask = false;
+	private APoint centre; //center of the point
+	
 
 	
 	// Constructor
@@ -43,6 +45,13 @@ public class Person {
 	// Method to verify if it is the same person
 	public boolean different(Person p) {
 		return !((boolean)(this.position.x == p.position.x) && (boolean)(this.position.y == p.position.y));
+	}
+	
+	public void drawFaces (Graphics g){
+		g.setColor(status);
+		int x = (int) centre.x;
+		int y = (int) centre.y;
+		g.fillOval (x,y,2*this.RADIUS, 2*this.RADIUS);
 	}
 	
 }
