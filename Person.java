@@ -37,8 +37,8 @@ public class Person {
 	
 	// Method to verify if the person is still in the world window
 	public boolean outWindow() {
-		return ((boolean)(position.x + velocity.x <0) || (boolean)(position.x + velocity.x >650) 
-			|| (boolean)(position.y + velocity.y <0) || (boolean)(position.y + velocity.y >650));
+		return ((boolean)(position.x + velocity.x <10) || (boolean)(position.x + velocity.x >770) 
+			|| (boolean)(position.y + velocity.y <40) || (boolean)(position.y + velocity.y >770));
 	}
 	
 	// Method to verify if it is the same person
