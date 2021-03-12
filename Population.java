@@ -21,13 +21,13 @@ public class Population {
 		everyone = new ArrayList<Person>();
 		
 		//To make "everyone" not empty
-		Person newPerson = new Person (new Vec(1150*Math.random(),1150*Math.random()), new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0)); 
+		Person newPerson = new Person (new Vec(700*Math.random(),700*Math.random()), new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0)); 
 		everyone.add (newPerson);
 		
 		//To generate a population with the desired number of people
 		while (everyone.size() < nbOfPeople) {			
 			
-			newPerson = new Person (new Vec(1150*Math.random(),1150*Math.random()),				 //If the simulation is 1200x1200 pixels
+			newPerson = new Person (new Vec(700*Math.random(),700*Math.random()),				 //If the simulation is 1200x1200 pixels
 			                        new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0));   //The velocity is in [-10,10]
 			
 			while (this.coincide(newPerson)) {
@@ -42,6 +42,14 @@ public class Population {
 		
 		if (!everyone.isEmpty()){
 			for (Person a : everyone) {
+				int count =0;
+				while (!this.movingPossible(a)) {	
+					a.velocity = new Vec(20.0*Math.random()-10.0,20.0*Math.random()-10.0);
+					count++;
+					if (count ==300) {
+						break;
+					}
+				}
 				a.movement();
 			}
 		}
@@ -69,7 +77,7 @@ public class Population {
 		}
 		
 		Person p1 = new Person (new Vec(p.position.x + p.velocity.x, p.position.y + p.velocity.y), new Vec (p.velocity.x,p.velocity.y));
-		return !this.coincide(p1);
+		return this.coincide(p1);
 	}
 }
 	
