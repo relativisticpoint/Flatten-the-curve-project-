@@ -23,6 +23,8 @@ public class PlotTheFaces extends JFrame implements ActionListener {
 		this.setResizable(true);
 		this.setVisible (true);
 		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		monChrono = new Timer (100,this);
 		monChrono.start();
 	}
@@ -43,6 +45,7 @@ public class PlotTheFaces extends JFrame implements ActionListener {
 		if (e.getSource()==monChrono){
 			time = time + 100;
 			this.setTitle ("Flatten the curve - Playing time: "+time/100+"s");
+			
 			faces.updateWorld();
 			repaint();
 			countToChangeVelocity++;
