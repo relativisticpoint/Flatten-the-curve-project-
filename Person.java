@@ -11,13 +11,21 @@ public class Person {
 	//Parameters
 		
 	public static final double RADIUS = 10.0;
+	public static final double VELOCITY_MAX = 7.0;
 	public static final double INFECT_RADIUS = 30.0;
-	public static final double VELOCITY_MAX = 10.0;
+	public static final double PERCENTAGE_TO_GET_INFECTED = 40.0;
+	
+	
 	public Vec position;
 	public Vec velocity;
+	
+	
 	public Color status = Color.green;
+	public boolean infectionSourceIfRed = true;
+	
+		
 	public boolean wearMask = false;
-
+	//public LinkedList <Person> inRadiusPeople;	
 
 	
 	//Constructor default
@@ -44,7 +52,7 @@ public class Person {
 	//Method to verify if the person is still in the world window
 	public boolean outWindow() {
 		return ((boolean)(position.x + velocity.x <10) || (boolean)(position.x + velocity.x >1170) 
-			|| (boolean)(position.y + velocity.y <40) || (boolean)(position.y + velocity.y >770));
+			|| (boolean)(position.y + velocity.y <40) || (boolean)(position.y + velocity.y >760));
 	}
 	
 	//Method to verify if it is the same person
@@ -61,7 +69,12 @@ public class Person {
 	}
 	
 	public Vec setNewRandomPosition() {
-		return new Vec(1100*Math.random(),700*Math.random());
+		return new Vec(1100*Math.random()+10,700*Math.random()+40);
+	}
+	
+	//Method to check if a person gets too close to an infected person
+	public boolean getTooClose (Person p) {
+		return (boolean)(this.position.dist(p.position) < RADIUS+INFECT_RADIUS);
 	}
 	
 	public void drawFaces (Graphics g) {
@@ -71,7 +84,7 @@ public class Person {
 		}
 		if (status == Color.red) {
 			g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
-			g.drawOval ((int)(position.x), (int)(position.y),(int)(2*(RADIUS+INFECT_RADIUS)), (int)(2*(RADIUS+INFECT_RADIUS)));
+			//g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*(RADIUS+INFECT_RADIUS)), (int)(2*(RADIUS+INFECT_RADIUS)));
 		}			
 	}
 	
