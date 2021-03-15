@@ -14,6 +14,7 @@ public class Population {
 	
 	public int nbOfPeople;
 	public ArrayList<Person> everyone;
+	public LinkedList<Person> infectedPeople = new LinkedList<Person>();
 	
 	//Constructor	
 	public Population(int initNb) {
@@ -23,13 +24,14 @@ public class Population {
 		//To make "everyone" not empty
 		Person newPerson = new Person ();
 		newPerson = new Person (newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity()); 
+		newPerson.changeStatus(Color.red);
 		everyone.add (newPerson);
 		
 		//To generate a population with the desired number of people
 		while (everyone.size() < nbOfPeople) {			
 			
-			newPerson = new Person (newPerson.setNewRandomPosition(),				 //If the simulation is 800x800 pixels
-			                        newPerson.setNewRandomVelocity());   			//The velocity is in [-10,10]
+			newPerson = new Person (newPerson.setNewRandomPosition(),			//If the simulation is 800x800 pixels
+			                        newPerson.setNewRandomVelocity());   		//The velocity is in [-10,10]
 			
 			while (this.coincideWhenInitiate(newPerson)) {
 				newPerson = new Person (newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity());
@@ -38,26 +40,7 @@ public class Population {
 		}
 	}
 	
-	//To create "the moving population"
-	public void updateWorld() {
-		
-		if (!everyone.isEmpty()){
-			for (Person a : everyone) {
-				int count =0;
-		
-				while (this.movingImpossible(a)) {	
-					a.changeVelocity();
-					count++;
-					if (count ==500) {
-						break;
-					}
-				}
-				a.movement();
-			}
-		}
-	}
-	
-	//To verify all people are not "spawn on to each other"
+	//To verify all people are not "spawn on top of each other"
 	public boolean coincideWhenInitiate(Person p) {
 		if (!everyone.isEmpty()){
 			for (Person b : everyone) {
@@ -70,6 +53,46 @@ public class Population {
 		}
 		return false;
 	}
+	
+	//To update the world in general
+	public void updateWorld() {
+		this.updateWorldInfection(); 
+		this.updateWorldMovement();
+		
+	}
+	
+	//To spread the disease
+	
+	public void updateWorldInfection () {
+		for (Person a : everyone) {
+			if (a.status == Color.red && a.infectionSourceIfRed) {
+				for (Person b : everyone) {
+					if (b.status == Color.green && b.infectionSourceIfRed && b.getTooClose(a) && b.different(a)) {
+						b.infectionSourceIfRed = false;
+						if (100.0*Math.random() > b.PERCENTAGE_TO_GET_INFECTED) {
+							b.changeStatus(Color.red);
+						}
+					}
+				}
+			}
+		}
+
+	}
+	
+	//To create "the moving population"
+	public void updateWorldMovement () {
+		if (!everyone.isEmpty()){					
+			for (Person a : everyone) {
+						
+				while (this.movingImpossible(a)) {	
+					a.changeVelocity();
+				}
+				
+				a.movement();
+			}
+		}
+	}
+					
 	
 	//To verify all people do not "step onto each other" after moving
 	public boolean coincideAfterMoving(Person p) {
@@ -90,14 +113,9 @@ public class Population {
 	}
 	
 	public boolean movingImpossible (Person p) {
-		if (!everyone.isEmpty()) {
-			if (p.outWindow()) {
-				return true;
-			}
-		}
 		
 		Person p1 = new Person (new Vec((p.position).x + (p.velocity).x, (p.position).y + (p.velocity).y), new Vec ((p.velocity).x,(p.velocity).y));
-		return this.coincideAfterMoving(p1);
+		return (p.outWindow() || this.coincideAfterMoving(p1));
 	}
 	
 }
