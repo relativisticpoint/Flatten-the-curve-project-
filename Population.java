@@ -11,6 +11,7 @@ import java.awt.*;
 public class Population {
 	
 	//Parameters
+	public static final double ONE_DAY = 4000.0;
 	
 	public int nbOfPeople;
 	public ArrayList<Person> everyone;
@@ -24,15 +25,12 @@ public class Population {
 		//To make "everyone" not empty
 		Person newPerson = new Person ();
 		newPerson = new Person (newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity()); 
-		newPerson.changeStatus(Color.red);
 		everyone.add (newPerson);
 		
 		//To generate a population with the desired number of people
-		while (everyone.size() < nbOfPeople) {			
-			
-			newPerson = new Person (newPerson.setNewRandomPosition(),			//If the simulation is 800x800 pixels
-			                        newPerson.setNewRandomVelocity());   		//The velocity is in [-10,10]
-			
+		while (everyone.size() < nbOfPeople) {						
+			newPerson = new Person (newPerson.setNewRandomPosition(),newPerson.setNewRandomVelocity()); 
+			  					
 			while (this.coincideWhenInitiate(newPerson)) {
 				newPerson = new Person (newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity());
 			}			
@@ -54,6 +52,15 @@ public class Population {
 		return false;
 	}
 	
+	//To change everyone's velocity after some time
+	public void newVelocity () {
+		for (Person a : everyone) {
+			if (Math.random() <0.5) {
+				a.velocity =  a.setNewRandomVelocity();
+			}
+		}
+	}
+	
 	//To update the world in general
 	public void updateWorld() {
 		this.updateWorldInfection(); 
@@ -61,22 +68,58 @@ public class Population {
 		
 	}
 	
-	//To spread the disease
+	//To start the infection
+	public void startTheInfection(double x) {
+		if (x == ONE_DAY) {
+			for (int i =0; i< (int)(5.0*Math.random()+1.0); i++) {
+				everyone.get(i).changeStatus(Color.red);
+			}
+		}
+	}
 	
+	//To update the world with disease	
 	public void updateWorldInfection () {
+		for (Person p : everyone) {
+			
+			//A healthy person may get infected after 3 days
+			if (p.timeToBeInfected >0) {
+				if (p.timeToBeInfected == 3*ONE_DAY) {
+					p.timeToBeInfected = 0.0;
+					if (100.0*Math.random() < p.PERCENTAGE_TO_GET_INFECTED) {
+						p.changeStatus(Color.red);
+					}
+				}else{
+					p.timeToBeInfected += 100.0;
+				}
+			}
+			
+			//An infected person may recover after 7 days or die after 10 days
+			if (p.status == Color.red) {
+				if (p.infectionTime < 7*ONE_DAY) {
+					p.infectionTime += 100.0;
+				}else if (p.infectionTime == 7*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
+					p.changeStatus(Color.green);
+					p.infectionTime =0.0;
+				}else{
+					p.infectionTime += 100.0;
+					if (p.infectionTime == 10*ONE_DAY) {
+						p.changeStatus(Color.black);
+						p.infectionTime = 0.0;
+					}
+				}
+				
+			}
+		}
+							
 		for (Person a : everyone) {
-			if (a.status == Color.red && a.infectionSourceIfRed) {
+			if (a.status == Color.red) {
 				for (Person b : everyone) {
-					if (b.status == Color.green && b.infectionSourceIfRed && b.getTooClose(a) && b.different(a)) {
-						b.infectionSourceIfRed = false;
-						if (100.0*Math.random() > b.PERCENTAGE_TO_GET_INFECTED) {
-							b.changeStatus(Color.red);
-						}
+					if (b.status == Color.green && b.timeToBeInfected == 0.0 && b.getTooClose(a)) {
+						b.timeToBeInfected += 100.0;
 					}
 				}
 			}
 		}
-
 	}
 	
 	//To create "the moving population"
@@ -85,7 +128,7 @@ public class Population {
 			for (Person a : everyone) {
 						
 				while (this.movingImpossible(a)) {	
-					a.changeVelocity();
+					a.velocity = a.setNewRandomVelocity();
 				}
 				
 				a.movement();
