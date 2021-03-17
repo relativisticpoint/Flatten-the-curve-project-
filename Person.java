@@ -9,20 +9,22 @@ import java.awt.*;
 public class Person {
 	
 	//Parameters
+	public static final double ONE_DAY= 4000.0;
 		
 	public static final double RADIUS = 10.0;
-	public static final double VELOCITY_MAX = 7.0;
-	public static final double INFECT_RADIUS = 30.0;
-	public static final double PERCENTAGE_TO_GET_INFECTED = 40.0;
+	public static final double VELOCITY_MAX = 7.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
 	
-	
+	public static final double INFECT_RADIUS = 20.0;
+	public static final double PERCENTAGE_TO_GET_INFECTED = 50.0;
+	public static final double PERCENTAGE_TO_RECOVER = 40.0;
+	public static final double PROBABILITY_TO_DIE = 40.0;
+		
 	public Vec position;
 	public Vec velocity;
+	public double timeToBeInfected =0.0;
+	public double infectionTime =0.0;
 	
-	
-	public Color status = Color.green;
-	public boolean infectionSourceIfRed = true;
-	
+	public Color status = Color.green;	
 		
 	public boolean wearMask = false;
 	//public LinkedList <Person> inRadiusPeople;	
@@ -38,10 +40,24 @@ public class Person {
 		position = initPosition;
 		velocity = initVelocity;
 	}
+	
+	public Vec setNewRandomVelocity() {
+		if (status == Color.black) {
+			return new Vec(0.0,0.0);
+		}
+		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
+	}
+	
+	public Vec setNewRandomPosition() {
+		return new Vec(1100*Math.random()+10,700*Math.random()+40);
+	}
 		
 	//To change the status of a person
 	public void changeStatus (Color newStatus) {
 		status = newStatus;
+		if (newStatus == Color.black) {
+			this.velocity = new Vec (0.0,0.0);
+		}
 	}
 	
 	//To move a person
@@ -60,32 +76,28 @@ public class Person {
 		return !((boolean)(this.position.x == p.position.x) && (boolean)(this.position.y == p.position.y));
 	}
 	
-	public void changeVelocity() {
-		velocity = this.setNewRandomVelocity();
-	}
-	
-	public Vec setNewRandomVelocity() {
-		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
-	}
-	
-	public Vec setNewRandomPosition() {
-		return new Vec(1100*Math.random()+10,700*Math.random()+40);
-	}
 	
 	//Method to check if a person gets too close to an infected person
 	public boolean getTooClose (Person p) {
+		if (!this.different(p)) {
+			return false;
+		}
 		return (boolean)(this.position.dist(p.position) < RADIUS+INFECT_RADIUS);
 	}
 	
 	public void drawFaces (Graphics g) {
 		g.setColor (status);
-		if (status == Color.green) {
+		g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
+		
+		/*if (status == Color.green) {
 			g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
 		}
 		if (status == Color.red) {
 			g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
-			//g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*(RADIUS+INFECT_RADIUS)), (int)(2*(RADIUS+INFECT_RADIUS)));
-		}			
+			g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*(RADIUS+INFECT_RADIUS)), (int)(2*(RADIUS+INFECT_RADIUS)));
+		}*/
+		
+						
 	}
 	
 	
