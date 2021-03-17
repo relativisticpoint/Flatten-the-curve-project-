@@ -8,7 +8,9 @@ import java.awt.Graphics;
 public class PlotTheFaces extends JFrame implements ActionListener {
 	
 	//attributes
-	private int time =0;
+	public static final double ONE_DAY= 4000.0;
+	
+	private double time =0.0;
 	private Timer monChrono;
 	private Population faces;
 	private int countToChangeVelocity =0;
@@ -43,19 +45,17 @@ public class PlotTheFaces extends JFrame implements ActionListener {
 	
 	public void actionPerformed (ActionEvent e){
 		if (e.getSource()==monChrono){
-			time = time + 100;
-			this.setTitle ("Flatten the curve - Playing time: "+time/100+"s");
+			time = time + 100.0;
+			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
 			
+			faces.startTheInfection(time);						
 			faces.updateWorld();
+			
 			repaint();
 			countToChangeVelocity++;
 			
 			if (countToChangeVelocity==20) {
-				for (Person a : faces.everyone) {
-					if (Math.random() <0.5) {
-						a.changeVelocity();
-					}
-				}
+				faces.newVelocity();
 				countToChangeVelocity =0;
 			}
 			
