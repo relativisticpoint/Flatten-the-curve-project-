@@ -1,28 +1,33 @@
-// Draw a Smiley Face
+// Draw a Smiley Face representing a healthy person
 
 import java.awt.*; 
+import java.awt.Color;
+import javax.swing.*;
+
 
 public class SmileyFace extends Person { 
 	//attributes
-	private color = Color.green;
+	private Color status = Color.green;
 	//constructor
-	public SmileyFace (Vec initPosition, Vec initVelocity){
-		super(initPosition, initVelocity);
+	public SmileyFace (){
+		super();
 	}
-	public void drawFaces(Graphics g) { 
-
-		// Oval for face outline 
-		g.drawOval(80, 70, 150, 150); 
-
-		// Ovals for eyes 
-		// with black color filled 
-		g.setColor(Color.BLACK); 
-		g.fillOval(120, 120, 15, 15); 
-		g.fillOval(170, 120, 15, 15); 
-
-		// Arc for the smile 
-		g.drawArc(130, 180, 50, 20, 180, 180); 
-	} 
-} 
+	public SmileyFace (Vec initPosition, Vec initVelocity){
+		super(initPosition,initVelocity);
+		
+	}
+	//when a healthy person is infected by virus
+	public Person changeStatus (){
+		Vec newPosition = this.position;
+		Vec newVelocity = this.velocity;
+		IllFace newPatient = new IllFace (newPosition,newVelocity);
+		return newPatient;
+	}
+	//representation 
+	public void drawFaces (Graphics g){
+		g.setColor(status);
+		g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
+	}
+}
 
 

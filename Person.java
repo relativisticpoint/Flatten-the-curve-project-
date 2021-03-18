@@ -6,7 +6,7 @@
 import java.util.*;
 import java.awt.*;
 
-public class Person {
+public abstract class Person {
 	
 	//Parameters
 	public static final double ONE_DAY= 4000.0;
@@ -15,16 +15,16 @@ public class Person {
 	public static final double VELOCITY_MAX = 7.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
 	
 	public static final double INFECT_RADIUS = 20.0;
-	public static final double PERCENTAGE_TO_GET_INFECTED = 50.0;
-	public static final double PERCENTAGE_TO_RECOVER = 40.0;
-	public static final double PROBABILITY_TO_DIE = 40.0;
+	public static final double PERCENTAGE_TO_GET_INFECTED = 50.0;//smileyface
+	public static final double PERCENTAGE_TO_RECOVER = 40.0;//illface
+	public static final double PROBABILITY_TO_DIE = 40.0;//illface
 		
 	public Vec position;
 	public Vec velocity;
 	public double timeToBeInfected =0.0;
 	public double infectionTime =0.0;
 	
-	public Color status = Color.green;	
+	//public Color status = Color.green;	
 		
 	public boolean wearMask = false;
 	//public LinkedList <Person> inRadiusPeople;	
@@ -42,24 +42,14 @@ public class Person {
 	}
 	
 	public Vec setNewRandomVelocity() {
-		if (status == Color.black) {
-			return new Vec(0.0,0.0);
-		}
 		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
 	}
-	
+
 	public Vec setNewRandomPosition() {
 		return new Vec(1100*Math.random()+10,700*Math.random()+40);
 	}
-		
-	//To change the status of a person
-	public void changeStatus (Color newStatus) {
-		status = newStatus;
-		if (newStatus == Color.black) {
-			this.velocity = new Vec (0.0,0.0);
-		}
-	}
 	
+
 	//To move a person
 	public void movement() {
 		position.add(velocity);
@@ -84,22 +74,10 @@ public class Person {
 		}
 		return (boolean)(this.position.dist(p.position) < RADIUS+INFECT_RADIUS);
 	}
-	
-	public void drawFaces (Graphics g) {
-		g.setColor (status);
-		g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
-		
-		/*if (status == Color.green) {
-			g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
-		}
-		if (status == Color.red) {
-			g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
-			g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*(RADIUS+INFECT_RADIUS)), (int)(2*(RADIUS+INFECT_RADIUS)));
-		}*/
-		
-						
-	}
-	
+	//Some abstract methods
+	public abstract Person changeStatus ();
+	public abstract Person hasRecovered ();	
+	public abstract void drawFaces (Graphics g);
 	
 }
 

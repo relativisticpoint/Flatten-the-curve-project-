@@ -49,7 +49,7 @@ public class PlotTheFaces extends JFrame implements ActionListener {
 			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
 			
 			faces.startTheInfection(time);						
-			faces.updateWorld();
+			faces.updateWorld();//error
 			
 			repaint();
 			countToChangeVelocity++;
