@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.*;
 
 
-public class IllFace extends Person implements Recover{ 
+public class IllFace extends Person { 
 	//attributes
 	private Color status = Color.red;
 	private int INFECT_RADIUS = 20;
