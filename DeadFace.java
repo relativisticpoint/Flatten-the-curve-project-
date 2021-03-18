@@ -15,7 +15,18 @@ public class DeadFace extends Person {
 	}
 	public DeadFace (Vec initPosition, Vec initVelocity){
 		super(initPosition, initVelocity);
-		this.velocity = new Vec (0.0,0.0);
+	}
+	public Person changeStatus (){
+		Vec newPosition = this.position;
+		Vec newVelocity = new Vec(0.0,0.0);
+		DeadFace newDeath = new DeadFace (newPosition,newVelocity);
+		return newDeath;
+	}
+	public Person hasRecovered (){
+		Vec newPos = this.position;
+		Vec newVelo = this.velocity;
+		SmileyFace newRecovered = new SmileyFace (newPos,newVelo);
+		return newRecovered;
 	}
 	public void drawFaces (Graphics g){
 		g.setColor(status);

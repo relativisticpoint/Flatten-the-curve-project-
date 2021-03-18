@@ -74,9 +74,9 @@ public abstract class Person {
 		}
 		return (boolean)(this.position.dist(p.position) < RADIUS+INFECT_RADIUS);
 	}
-	//Some abstract methods
+	
 	public abstract Person changeStatus ();
-	public abstract Person hasRecovered ();	
+	public abstract Person hasRecovered ();
 	public abstract void drawFaces (Graphics g);
 	
 }

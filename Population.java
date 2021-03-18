@@ -102,6 +102,7 @@ public class Population {
 				if (p.infectionTime < 7*ONE_DAY) {
 					p.infectionTime += 100.0;
 				}else if (p.infectionTime == 7*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
+					
 					everyone.add(p.hasRecovered());
 					everyone.remove(p);
 					p.infectionTime =0.0;

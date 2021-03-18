@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.swing.*;
 
 
-public class SmileyFace extends Person { 
+public class SmileyFace extends Person{ 
 	//attributes
 	private Color status = Color.green;
 	//constructor
@@ -22,6 +22,12 @@ public class SmileyFace extends Person {
 		Vec newVelocity = this.velocity;
 		IllFace newPatient = new IllFace (newPosition,newVelocity);
 		return newPatient;
+	}
+	public Person hasRecovered (){
+		Vec newPos = this.position;
+		Vec newVelo = this.velocity;
+		SmileyFace newRecovered = new SmileyFace (newPos,newVelo);
+		return newRecovered;
 	}
 	//representation 
 	public void drawFaces (Graphics g){
