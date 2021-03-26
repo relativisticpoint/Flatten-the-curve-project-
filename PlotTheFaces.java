@@ -41,10 +41,15 @@ public class PlotTheFaces extends JPanel implements ActionListener {
 	public void actionPerformed (ActionEvent e){
 		if (e.getSource()==monChrono){
 			time = time + 100.0;
-			/*this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");*/
+			//this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
 			
-			faces.startTheInfection(time);						
-			faces.updateWorld();//error
+			faces.startTheInfection(time);
+			
+			if (time > 4000.0) {
+				faces.updateWorldLockdown();
+			}else{						
+				faces.updateWorld();
+			}
 			
 			repaint();
 			countToChangeVelocity++;
@@ -53,6 +58,7 @@ public class PlotTheFaces extends JPanel implements ActionListener {
 				faces.newVelocity();
 				countToChangeVelocity =0;
 			}
+	
 			
 		}
 	}
