@@ -16,8 +16,8 @@ public abstract class Person {
 	public static final double HOUSE_RADIUS = 50.0;
 	
 	public static final double INFECT_RADIUS = 14.0;
-	public static final double PERCENTAGE_TO_GET_INFECTED = 50.0;		//smileyface
-	public static final double PROBABILITY_TO_DIE = 40.0;		//illface
+	public static final double PERCENTAGE_TO_GET_INFECTED = 40.0;		//smileyface
+	public static final double PROBABILITY_TO_DIE = 30.0;		//illface
 		
 	public int familyNb;
 	public Vec address ;

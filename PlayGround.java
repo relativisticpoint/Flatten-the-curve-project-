@@ -7,10 +7,12 @@ import java.awt.event.*;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 
-public class PlayGround extends JFrame {
+public class PlayGround extends JFrame implements ActionListener{
 	public static final double ONE_DAY= 4000.0;
-	private double time =0.0;
-	//private Timer monChrono;
+	private double time = 0.0;
+	private Timer monChrono;
+
+	
 	private Population faces;
 	private PlotTheFaces movingObjects;
 	private int countToChangeVelocity =0;
@@ -155,6 +157,40 @@ public class PlayGround extends JFrame {
 		this.setResizable(true);
 		this.setVisible(true);//visibility of the window
 		
+		monChrono = new Timer (100,this);
+		monChrono.start();
+		
+		LockDown.addActionListener(this);
+		
+	}
+	
+	public void actionPerformed (ActionEvent e){
+		if (e.getSource() == LockDown) {
+			movingObjects.activateLockdown = !movingObjects.activateLockdown;
+		}
+		
+		if (e.getSource()==monChrono){
+			time = time + 100.0;
+			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
+			
+			movingObjects.faces.startTheInfection(time);
+			
+			if (movingObjects.activateLockdown) {
+				movingObjects.faces.updateWorldLockdown();
+			}else{						
+				movingObjects.faces.updateWorld();
+			}
+			
+			movingObjects.repaint();
+			countToChangeVelocity++;
+			
+			if (countToChangeVelocity==20) {
+				movingObjects.faces.newVelocity();
+				countToChangeVelocity =0;
+			}
+	
+			
+		}
 	}
 
 	

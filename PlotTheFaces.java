@@ -6,15 +6,17 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 
 
-public class PlotTheFaces extends JPanel implements ActionListener {
+public class PlotTheFaces extends JPanel {
 	
 	//attributes
 	public static final double ONE_DAY= 4000.0;
 	
 	private double time =0.0;
 	private Timer monChrono;
-	private Population faces;
+	public Population faces;
 	private int countToChangeVelocity =0;
+	
+	public boolean activateLockdown = false;
 	
 	//constructor
 	public PlotTheFaces(int initNbOfPeople){
@@ -22,8 +24,7 @@ public class PlotTheFaces extends JPanel implements ActionListener {
 		this.setSize(900,830);
 		this.setLocation (0,0);
 		this.setLayout (null);
-		monChrono = new Timer (100,this);
-		monChrono.start();
+
 	}
 
 	public void paintComponent(Graphics g){
@@ -37,32 +38,6 @@ public class PlotTheFaces extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
-	public void actionPerformed (ActionEvent e){
-		if (e.getSource()==monChrono){
-			time = time + 100.0;
-			//this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
-			
-			faces.startTheInfection(time);
-			
-			if (time > 4000.0) {
-				faces.updateWorldLockdown();
-			}else{						
-				faces.updateWorld();
-			}
-			
-			repaint();
-			countToChangeVelocity++;
-			
-			if (countToChangeVelocity==20) {
-				faces.newVelocity();
-				countToChangeVelocity =0;
-			}
-	
-			
-		}
-	}
-
 	
 	 
 }
