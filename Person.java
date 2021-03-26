@@ -15,15 +15,16 @@ public abstract class Person {
 	public static final double VELOCITY_MAX = 7.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
 	
 	public static final double INFECT_RADIUS = 20.0;
-	public static final double PERCENTAGE_TO_GET_INFECTED = 50.0;		//smileyface
-	public static final double PERCENTAGE_TO_RECOVER = 40.0;		//illface
-	public static final double PROBABILITY_TO_DIE = 40.0;		//illface
+	public static final double PERCENTAGE_TO_GET_INFECTED = 50.0;//smileyface
+	public static final double PERCENTAGE_TO_RECOVER = 40.0;//illface
+	public static final double PROBABILITY_TO_DIE = 40.0;//illface
 		
 	public Vec position;
 	public Vec velocity;
 	public double timeToBeInfected =0.0;
 	public double infectionTime =0.0;
-		
+	
+	//public Color status = Color.green;	
 		
 	public boolean wearMask = false;
 	//public LinkedList <Person> inRadiusPeople;	
@@ -38,6 +39,10 @@ public abstract class Person {
 	public Person (Vec initPosition, Vec initVelocity) {
 		position = initPosition;
 		velocity = initVelocity;
+	}
+	
+	public Vec setNewRandomVelocity() {
+		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
 	}
 
 	public Vec setNewRandomPosition() {
@@ -71,7 +76,6 @@ public abstract class Person {
 	}
 	
 	public abstract Person changeStatus ();
-	public abstract Vec setNewRandomVelocity(); 
 	public abstract Person hasRecovered ();
 	public abstract void drawFaces (Graphics g);
 	

@@ -3,9 +3,10 @@ import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.event.*;
 import java.awt.Graphics;
+import java.awt.Dimension;
 
 
-public class PlotTheFaces extends JFrame implements ActionListener {
+public class PlotTheFaces extends JPanel implements ActionListener {
 	
 	//attributes
 	public static final double ONE_DAY= 4000.0;
@@ -18,20 +19,14 @@ public class PlotTheFaces extends JFrame implements ActionListener {
 	//constructor
 	public PlotTheFaces(int initNbOfPeople){
 		faces = new Population(initNbOfPeople);
-		this.setTitle ("Flatten the Curve");
+		this.setSize(900,830);
+		this.setLocation (0,0);
 		this.setLayout (null);
-		this.setSize (1200,800);
-		this.setLocation (50,50);
-		this.setResizable(true);
-		this.setVisible (true);
-		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		monChrono = new Timer (100,this);
 		monChrono.start();
 	}
 
-	public void paint(Graphics g){
+	public void paintComponent(Graphics g){
 		g.setColor(Color.blue);
 		g.fillRect(0,0,this.getWidth(),this.getHeight());
 		if (!faces.everyone.isEmpty()){
@@ -46,7 +41,7 @@ public class PlotTheFaces extends JFrame implements ActionListener {
 	public void actionPerformed (ActionEvent e){
 		if (e.getSource()==monChrono){
 			time = time + 100.0;
-			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
+			/*this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");*/
 			
 			faces.startTheInfection(time);						
 			faces.updateWorld();//error

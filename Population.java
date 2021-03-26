@@ -54,9 +54,11 @@ public class Population {
 	
 	//To change everyone's velocity after some time
 	public void newVelocity () {
-		for (Person a : everyone) {			 
-			if (Math.random() <0.5) {
-				a.velocity =  a.setNewRandomVelocity();
+		for (Person a : everyone) {	
+			if (!(a instanceof DeadFace)){		 
+				if (Math.random() <0.5) {
+					a.velocity =  a.setNewRandomVelocity();
+				}
 			}		
 		}
 	}
