@@ -14,30 +14,42 @@ public class DeadFace extends Person {
 		super();
 	}
 	
-	public DeadFace (Vec initPosition, Vec initVelocity){
-		super(initPosition, initVelocity);
-	}
-	
-	public Person changeStatus (){
-		Vec newPosition = this.position;
-		Vec newVelocity = new Vec(0.0,0.0);
-		DeadFace newDeath = new DeadFace (newPosition,newVelocity);
-		return newDeath;
-	}
-	
+	public DeadFace (Vec initPosition, Vec initVelocity, int nb){
+		super(initPosition, initVelocity, nb);
+		this.velocity = new Vec(0.0,0.0);
+	}	
+
 	public Vec setNewRandomVelocity() {
 		return new Vec(0.0,0.0);
 	}
 	
+	public Vec goHome() {
+		return new Vec (0.0,0.0);
+	}
+	
+	public double distanceFromHome() {
+		return 0.0;
+	}
+	
+	public boolean goAwayFromHome() {
+		return false;
+	}
+	
 	public void drawFaces (Graphics g){
 		g.setColor(status);
-		g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
+		super.drawFaces(g);
 	}
 	
 	public Person hasRecovered (){
 		DeadFace newRecovered = null;
 		return newRecovered;
 	}
+	
+	public Person changeStatus(){
+		DeadFace newDeath = null;
+		return newDeath;
+	}
+	
 }
 
 
