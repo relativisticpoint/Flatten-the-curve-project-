@@ -70,4 +70,9 @@ class Vec {
     public double angleBetween(Vec v) {
         return acos(this.dot(v) / (this.mag() * v.mag()));
     }
+    
+    public String toString() {
+		return "("+x+", "+y+")";
+	}
+		
 }
