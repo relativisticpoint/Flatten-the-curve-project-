@@ -41,11 +41,11 @@ public abstract class Person {
 		position = initPosition;
 		velocity = initVelocity;
 		familyNb = nb;
-		address = new Vec(120+((familyNb+4)%5)*240,100+(int)((familyNb-1)/5)*200);
+		address = new Vec(90+((familyNb+4)%5)*180,100+(int)((familyNb-1)/5)*200);
 	}
 
 	public Vec setNewRandomPosition() {
-		return new Vec(1100*Math.random()+10,700*Math.random()+40);
+		return new Vec(800*Math.random()+10,700*Math.random()+40);
 	}
 	
 
@@ -56,7 +56,7 @@ public abstract class Person {
 	
 	//Method to verify if the person is still in the world window
 	public boolean outWindow() {
-		return ((boolean)(position.x + velocity.x <10) || (boolean)(position.x + velocity.x >1170) 
+		return ((boolean)(position.x + velocity.x <10) || (boolean)(position.x + velocity.x >870) 
 			|| (boolean)(position.y + velocity.y <40) || (boolean)(position.y + velocity.y >760));
 	}
 	
