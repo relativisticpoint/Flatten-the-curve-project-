@@ -189,17 +189,26 @@ public class Population {
 		int i =0;
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {
-				if (a.distanceFromHome() >a.HOUSE_RADIUS) { 
-					a.velocity = a.goHome();	
-				}
+				if (a.lockdownRespect) {
+					if (a.distanceFromHome() >a.HOUSE_RADIUS) { 
+						a.velocity = a.goHome();	
+					}
 					
-				while (this.movingImpossible(a) || a.goAwayFromHome()) {	
+					while (this.movingImpossible(a) || a.goAwayFromHome()) {	
 					
-					a.velocity = a.setNewRandomVelocity();
-					i++;
+						a.velocity = a.setNewRandomVelocity();
+						i++;
+					}
+				}else{
+					while (this.movingImpossible(a)) {	
+			
+						a.velocity = a.setNewRandomVelocity();
+						i++;
+					}
 				}
 				
 				a.movement();
+				
 			}
 		}
 	}

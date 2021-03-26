@@ -25,6 +25,7 @@ public abstract class Person {
 	public Vec velocity;
 	public double timeToBeInfected =0.0;
 	public double infectionTime =0.0;
+	public boolean lockdownRespect;
 		
 		
 	public boolean wearMask = false;
@@ -42,6 +43,7 @@ public abstract class Person {
 		velocity = initVelocity;
 		familyNb = nb;
 		address = new Vec(90+((familyNb+4)%5)*180,100+(int)((familyNb-1)/5)*200);
+		lockdownRespect = (boolean)(Math.random() <= 0.90);
 	}
 
 	public Vec setNewRandomPosition() {
