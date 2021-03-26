@@ -34,7 +34,7 @@ public class PlayGround extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //operation on closing
 		//GlobalPannel
 		JPanel GlobalPanel = new JPanel();
-		GlobalPanel.setBounds(0,0,1200,1000);
+		GlobalPanel.setBounds(0,0,1200,800);
 		GlobalPanel.setLayout(null);
 		GlobalPanel.setBackground(Color.yellow);
 		
