@@ -27,6 +27,8 @@ public class PlayGround extends JFrame implements ActionListener{
 	private JButton PlayorPause;
 	private JButton Restart;
 	
+
+	
 	
 
 	public PlayGround (){
@@ -161,12 +163,27 @@ public class PlayGround extends JFrame implements ActionListener{
 		monChrono.start();
 		
 		LockDown.addActionListener(this);
+		Mask.addActionListener(this);
+		
+		
 		
 	}
 	
 	public void actionPerformed (ActionEvent e){
 		if (e.getSource() == LockDown) {
 			movingObjects.activateLockdown = !movingObjects.activateLockdown;
+			if (movingObjects.activateLockdown) {
+				JOptionPane.showMessageDialog(this,"Our country goes into new lockdown. Stay at home and save lives!");
+				LockDown.setBackground(new Color (0,255,128));
+				LockDown.setForeground(Color.black);
+			} else {
+				JOptionPane.showMessageDialog(this,"The lockdown is lifted from now");
+				LockDown.setBackground(Color.red);
+				LockDown.setForeground(Color.white);
+			}
+		}
+		if (e.getSource() == Mask) {
+			movingObjects.wearMask = !movingObjects.wearMask;
 		}
 		
 		if (e.getSource()==monChrono){
@@ -180,6 +197,14 @@ public class PlayGround extends JFrame implements ActionListener{
 			}else{						
 				movingObjects.faces.updateWorld();
 			}
+			for (Person p : movingObjects.faces.everyone){
+				if (movingObjects.wearMask){
+					p.wearMask = true;  //Give masks for all people
+				} else {
+					p.wearMask = false;   //Take off the mask
+				}
+			}
+				
 			
 			movingObjects.repaint();
 			countToChangeVelocity++;

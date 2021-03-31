@@ -11,7 +11,7 @@ public abstract class Person {
 	//Parameters
 	public static final double ONE_DAY= 4000.0;
 		
-	public static final double RADIUS = 7.0;
+	public static final double RADIUS = 10.0;
 	public static final double VELOCITY_MAX = 5.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
 	public static final double HOUSE_RADIUS = 50.0;
 	

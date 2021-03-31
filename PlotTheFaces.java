@@ -17,6 +17,7 @@ public class PlotTheFaces extends JPanel {
 	private int countToChangeVelocity =0;
 	
 	public boolean activateLockdown = false;
+	public boolean wearMask = false;
 	
 	//constructor
 	public PlotTheFaces(int initNbOfPeople){
