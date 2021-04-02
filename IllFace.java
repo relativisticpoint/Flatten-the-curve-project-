@@ -44,6 +44,10 @@ public class IllFace extends Person {
 		g.setColor(status);
 		super.drawFaces(g);
 		g.drawOval ((int)(position.x-(INFECT_RADIUS-3.0)), (int)(position.y-(INFECT_RADIUS-3.0)),(int)(2*(INFECT_RADIUS-3.0)), (int)(2*(INFECT_RADIUS-3.0)));
+		if (wearMask) {
+			g.setColor(Color.white);
+			g.fillRect((int)(position.x-RADIUS) , (int)(position.y-(RADIUS-1)/2),(int)(2*RADIUS), (int)(0.7*RADIUS));
+		}
 	}
 }
 

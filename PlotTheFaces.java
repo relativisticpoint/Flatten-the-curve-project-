@@ -18,7 +18,7 @@ public class PlotTheFaces extends JPanel {
 	
 	public boolean activateLockdown = false;
 	public boolean activateSocialDistancing = false;
-	public boolean wearMask = false;
+	public boolean maskOn = false;
 	
 	//constructor
 	public PlotTheFaces(int initNbOfPeople){

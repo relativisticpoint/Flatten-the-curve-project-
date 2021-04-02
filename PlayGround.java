@@ -13,7 +13,7 @@ public class PlayGround extends JFrame implements ActionListener{
 	private Timer monChrono;
 
 	
-	private Population faces;
+	//private Population faces;
 	private PlotTheFaces movingObjects;
 	private int countToChangeVelocity =0;
 	private JTextArea TimeTextArea;
@@ -183,8 +183,9 @@ public class PlayGround extends JFrame implements ActionListener{
 				LockDown.setForeground(Color.white);
 			}
 		}
+		
 		if (e.getSource() == Mask) {
-			movingObjects.wearMask = !movingObjects.wearMask;
+			movingObjects.maskOn = !movingObjects.maskOn;
 		}
 		
 		if (e.getSource() == NbLimit) {
@@ -206,18 +207,11 @@ public class PlayGround extends JFrame implements ActionListener{
 			}else{						
 				movingObjects.faces.updateWorld();
 			}
-			
-			
-			for (Person p : movingObjects.faces.everyone){
-				if (movingObjects.wearMask){
-					p.wearMask = true;  //Give masks for all people
-				} else {
-					p.wearMask = false;   //Take off the mask
-				}
-			}
-				
+						
+			movingObjects.faces.toWearMask(movingObjects.maskOn);			
 			
 			movingObjects.repaint();
+			
 			countToChangeVelocity++;
 			
 			if (countToChangeVelocity==20) {

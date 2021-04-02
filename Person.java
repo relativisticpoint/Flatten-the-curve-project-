@@ -15,13 +15,13 @@ public abstract class Person {
 	public static final double HOUSE_RADIUS = 50.0;
 	
 	public static final double INFECT_RADIUS = 15.0;
-	public static final double PERCENTAGE_TO_GET_INFECTED = 40.0;		//smileyface
-	public static final double PROBABILITY_TO_DIE = 30.0;		//illface
+	public static final double PROBABILITY_TO_DIE = 30.0;		
 		
 	public int familyNb;
 	public Vec address ;
 	public Vec position;
 	public Vec velocity;
+	public double probabilityToGetInfected = 40.0;	
 	public double timeToBeInfected =0.0;
 	public double infectionTime =0.0;
 	public boolean lockdownRespect;
@@ -29,7 +29,7 @@ public abstract class Person {
 		
 		
 	public boolean wearMask = false;
-	//public LinkedList <Person> inRadiusPeople;	
+	
 
 	
 	//Constructor default

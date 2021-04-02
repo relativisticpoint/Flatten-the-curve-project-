@@ -114,7 +114,7 @@ public class Population {
 		if (x == ONE_DAY) {
 			for (int i =0; i< (int)(4*Math.random()+2); i++) {
 				int nb = 100;
-				while (nb >=79) {
+				while (nb >=70) {
 					nb = (int)(80.0*Math.random());
 				}
 				everyone.add(everyone.get(nb).changeStatus());
@@ -132,7 +132,7 @@ public class Population {
 			if (p.timeToBeInfected >0) {
 				if (p.timeToBeInfected == 3*ONE_DAY) {
 					p.timeToBeInfected = 0.0;
-					if (100.0*Math.random() < p.PERCENTAGE_TO_GET_INFECTED) {
+					if (100.0*Math.random() < p.probabilityToGetInfected) {
 						everyone.add(p.changeStatus());
 						everyone.remove(p);
 					}
@@ -174,16 +174,24 @@ public class Population {
 		}
 	}
 	
+	//To provide the people with masks
+	public void toWearMask (boolean mask) {
+		for (Person a : everyone) {
+			if (mask) {
+				a.wearMask = true;  //Give masks for all people
+				a.probabilityToGetInfected = 15.0;
+			}else{
+				a.wearMask = false;   //Take off the mask
+				a.probabilityToGetInfected = 40.0;
+			}
+		}
+	}
+	
 	//To create "the moving population"
-	public void updateWorldMovement () {
-		
+	public void updateWorldMovement () {		
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {								
-				while (this.movingImpossible(a)) {				
-					a.velocity = a.setNewRandomVelocity();					
-				}
-	
-				a.movement();
+				getMoving(a);
 			}
 		}
 	}
@@ -191,21 +199,12 @@ public class Population {
 	public void updateWorldMovementSocialDistancing () {
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {	
-				int count =0;
 				if (a.socialDistancingRespect) {
-					while (this.socialDistancingImpossible(a)) {					
-						a.velocity = a.setNewRandomVelocity();
-						count++;
-						if (count > 300) {
-							break;
-						}					
-					}				
+					getMovingSocialDistancing(a);				
 				}else{
-					while (this.movingImpossible(a) || a.goAwayFromHome()) {	
-						a.velocity = a.setNewRandomVelocity();
-					}
+					getMoving(a);
 				}
-				a.movement();
+				
 			}
 		}
 	}
@@ -214,32 +213,19 @@ public class Population {
 	
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {
-				int count =0;
 				if (a.lockdownRespect) {
 					if (a.distanceFromHome() >a.HOUSE_RADIUS) { 					
-						a.velocity = a.goHome();												
-							
+						a.velocity = a.goHome();																			
 					}
 					
-					while (this.socialDistancingImpossible(a) || a.goAwayFromHome()) {	
-					
-						a.velocity = a.setNewRandomVelocity();
-						count++;
-						if (count > 300) {
-							break;
-						}	
-					
+					if (a.socialDistancingRespect) {
+						getMovingSocialDistancing(a);
+					}else{
+						getMoving(a);
 					}
 				}else{
-					while (this.movingImpossible(a)) {	
-			
-						a.velocity = a.setNewRandomVelocity();
-						
-					}
-				}
-				
-				a.movement();
-				
+					getMoving(a);
+				}				
 			}
 		}
 	}
@@ -296,13 +282,26 @@ public class Population {
 		return (p.outWindow() || this.noRespectSocialDistancing(p1));
 	}
 	
-	public Vec newVelocity (Person a) {
-		Person a1 = new SmileyFace (a.position, a.velocity, a.familyNb);
-		while (this.movingImpossible(a1)) {				
-			return a1.setNewRandomVelocity();					
-		}	
-		return a1.velocity;
+	public void getMoving (Person a) {
+		while (this.movingImpossible(a)) {				
+			a.velocity = a.setNewRandomVelocity();					
+		}
+	
+		a.movement();
 	}
+	
+	public void getMovingSocialDistancing (Person a) {
+		int count =0;
+		while (this.socialDistancingImpossible(a)) {					
+			a.velocity = a.setNewRandomVelocity();
+			count++;
+			if (count > 300) {
+				break;
+			}					
+		}
+		a.movement();
+	}	
+		
 }
 	
 	
