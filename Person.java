@@ -1,5 +1,4 @@
 /*
- * This is just the basic version
  * To be improved...
 */
 
@@ -11,11 +10,11 @@ public abstract class Person {
 	//Parameters
 	public static final double ONE_DAY= 4000.0;
 		
-	public static final double RADIUS = 10.0;
+	public static final double RADIUS = 7.0;
 	public static final double VELOCITY_MAX = 5.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
 	public static final double HOUSE_RADIUS = 50.0;
 	
-	public static final double INFECT_RADIUS = 14.0;
+	public static final double INFECT_RADIUS = 15.0;
 	public static final double PERCENTAGE_TO_GET_INFECTED = 40.0;		//smileyface
 	public static final double PROBABILITY_TO_DIE = 30.0;		//illface
 		
@@ -26,6 +25,7 @@ public abstract class Person {
 	public double timeToBeInfected =0.0;
 	public double infectionTime =0.0;
 	public boolean lockdownRespect;
+	public boolean socialDistancingRespect;
 		
 		
 	public boolean wearMask = false;
@@ -44,6 +44,16 @@ public abstract class Person {
 		familyNb = nb;
 		address = new Vec(90+((familyNb+4)%5)*180,100+(int)((familyNb-1)/5)*200);
 		lockdownRespect = (boolean)(Math.random() <= 0.90);
+		socialDistancingRespect = (boolean)(Math.random() <= 0.90);
+	}
+	
+	public Person (Vec initPosition, Vec initVelocity, int nb, Vec initAddress, boolean ldRespect, boolean sdRespect) {
+		position = initPosition;
+		velocity = initVelocity;
+		familyNb = nb;
+		address = initAddress;
+		lockdownRespect = ldRespect;
+		socialDistancingRespect = sdRespect;
 	}
 
 	public Vec setNewRandomPosition() {
@@ -63,22 +73,26 @@ public abstract class Person {
 	}
 	
 	//Method to verify if it is the same person
-	public boolean different(Person p) {
+	public boolean differentFrom(Person p) {
 		return !((boolean)(this.position.x == p.position.x) && (boolean)(this.position.y == p.position.y));
 	}
 	
 	
 	//Method to check if a person gets too close to an infected person
 	public boolean getTooClose (Person p) {
-		if (!this.different(p)) {
+		if (!this.differentFrom(p)) {
 			return false;
 		}
-		return (boolean)(this.position.dist(p.position) < RADIUS+INFECT_RADIUS);
+		return (boolean)(this.position.dist(p.position) <= RADIUS+INFECT_RADIUS);
 	}
 	
 	
 	public Vec setNewRandomVelocity() {
 		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
+	}
+	
+	public void setVelocity (Vec v) {
+		this.velocity = new Vec(v.x,v.y);
 	}
 	
 	public Vec goHome() {
@@ -98,11 +112,10 @@ public abstract class Person {
 	}
 	
 	public void drawFaces (Graphics g){
-		g.fillOval ((int)(position.x), (int)(position.y),(int)(2*RADIUS), (int)(2*RADIUS));
+		g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
 	}
 	
 	public abstract Person changeStatus ();
 	public abstract Person hasRecovered ();
 	
 }
-

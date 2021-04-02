@@ -142,6 +142,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		NbLimit.setBounds (600,860,100,60);
 		NbLimit.setBackground(Color.red);//setting color of background
 		NbLimit.setForeground(Color.white);//setting color of foreground
+		NbLimit.addActionListener(this);
 		
 		//Adding buttons and area for moving objects
 		GlobalPanel.add(NbLimit);
@@ -186,6 +187,12 @@ public class PlayGround extends JFrame implements ActionListener{
 			movingObjects.wearMask = !movingObjects.wearMask;
 		}
 		
+		if (e.getSource() == NbLimit) {
+			if (!movingObjects.activateLockdown) {
+				movingObjects.activateSocialDistancing = !movingObjects.activateSocialDistancing;
+			}
+		}
+		
 		if (e.getSource()==monChrono){
 			time = time + 100.0;
 			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
@@ -194,9 +201,13 @@ public class PlayGround extends JFrame implements ActionListener{
 			
 			if (movingObjects.activateLockdown) {
 				movingObjects.faces.updateWorldLockdown();
+			}else if (movingObjects.activateSocialDistancing) {
+				movingObjects.faces.updateWorldSocialDistancing();
 			}else{						
 				movingObjects.faces.updateWorld();
 			}
+			
+			
 			for (Person p : movingObjects.faces.everyone){
 				if (movingObjects.wearMask){
 					p.wearMask = true;  //Give masks for all people
@@ -210,7 +221,7 @@ public class PlayGround extends JFrame implements ActionListener{
 			countToChangeVelocity++;
 			
 			if (countToChangeVelocity==20) {
-				movingObjects.faces.newVelocity();
+				movingObjects.faces.changeVelocity();
 				countToChangeVelocity =0;
 			}
 	

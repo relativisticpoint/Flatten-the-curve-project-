@@ -51,7 +51,7 @@ public class Population {
 	public boolean coincideWhenInitiate(Person p) {
 		if (!everyone.isEmpty()){
 			for (Person b : everyone) {
-				if (b.different(p)) {
+				if (b.differentFrom(p)) {
 					if (b.position.dist(p.position) <= 2*b.RADIUS) {
 						return true;
 					}
@@ -85,7 +85,7 @@ public class Population {
 	
 	
 	//To change everyone's velocity after some time
-	public void newVelocity () {
+	public void changeVelocity () {
 		for (Person a : everyone) {			 
 			if (Math.random() <0.5) {
 				a.velocity =  a.setNewRandomVelocity();
@@ -96,21 +96,27 @@ public class Population {
 	//To update the world in general
 	public void updateWorld() {
 		this.updateWorldInfection(); 
-		this.updateWorldMovement();
-		
+		this.updateWorldMovement();		
+	}
+	
+	public void updateWorldSocialDistancing() {
+		this.updateWorldInfection(); 
+		this.updateWorldMovementSocialDistancing();
 	}
 	
 	public void updateWorldLockdown() {
 		this.updateWorldInfection(); 
-		this.updateWorldMovementLockdown();
-		
+		this.updateWorldMovementLockdown();		
 	}
 	
 	//To start the infection
 	public void startTheInfection(double x) {
 		if (x == ONE_DAY) {
 			for (int i =0; i< (int)(4*Math.random()+2); i++) {
-				int nb = (int)(80.0*Math.random());
+				int nb = 100;
+				while (nb >=79) {
+					nb = (int)(80.0*Math.random());
+				}
 				everyone.add(everyone.get(nb).changeStatus());
 				everyone.remove(nb);
 			}
@@ -155,7 +161,8 @@ public class Population {
 				
 			}
 		}
-							
+		
+		//A healthy person may get infected if getting close to an infected person					
 		for (Person a : everyone) {
 			if (a instanceof IllFace) {
 				for (Person b : everyone) {
@@ -169,41 +176,65 @@ public class Population {
 	
 	//To create "the moving population"
 	public void updateWorldMovement () {
-		int i =0;
+		
+		if (!everyone.isEmpty()){					
+			for (Person a : everyone) {								
+				while (this.movingImpossible(a)) {				
+					a.velocity = a.setNewRandomVelocity();					
+				}
+	
+				a.movement();
+			}
+		}
+	}
+	
+	public void updateWorldMovementSocialDistancing () {
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {	
-				while (this.movingImpossible(a)) {	
-
-				
-					a.velocity = a.setNewRandomVelocity();
-					i++;
+				int count =0;
+				if (a.socialDistancingRespect) {
+					while (this.socialDistancingImpossible(a)) {					
+						a.velocity = a.setNewRandomVelocity();
+						count++;
+						if (count > 300) {
+							break;
+						}					
+					}				
+				}else{
+					while (this.movingImpossible(a) || a.goAwayFromHome()) {	
+						a.velocity = a.setNewRandomVelocity();
+					}
 				}
-					
-				
 				a.movement();
 			}
 		}
 	}
 	
 	public void updateWorldMovementLockdown () {
-		int i =0;
+	
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {
+				int count =0;
 				if (a.lockdownRespect) {
-					if (a.distanceFromHome() >a.HOUSE_RADIUS) { 
-						a.velocity = a.goHome();	
+					if (a.distanceFromHome() >a.HOUSE_RADIUS) { 					
+						a.velocity = a.goHome();												
+							
 					}
 					
-					while (this.movingImpossible(a) || a.goAwayFromHome()) {	
+					while (this.socialDistancingImpossible(a) || a.goAwayFromHome()) {	
 					
 						a.velocity = a.setNewRandomVelocity();
-						i++;
+						count++;
+						if (count > 300) {
+							break;
+						}	
+					
 					}
 				}else{
 					while (this.movingImpossible(a)) {	
 			
 						a.velocity = a.setNewRandomVelocity();
-						i++;
+						
 					}
 				}
 				
@@ -219,7 +250,7 @@ public class Population {
 		int count =0;
 		if (!everyone.isEmpty()){
 			for (Person b : everyone) {
-				if (b.different(p) && !(b instanceof DeadFace)) {
+				if (b.differentFrom(p) && !(b instanceof DeadFace)) {
 					if (b.position.dist(p.position) < 2*b.RADIUS) {
 						count++;
 						if (count==2) {
@@ -240,6 +271,38 @@ public class Population {
 		return (p.outWindow() || this.coincideAfterMoving(p1));
 	}
 	
+	public boolean noRespectSocialDistancing (Person p) {
+		int count =0;
+		if (!everyone.isEmpty()){
+			for (Person b : everyone) {
+				if (b.differentFrom(p) && !(b instanceof DeadFace)) {
+					if (p.getTooClose(b)) {
+						count++;
+						if (count==2) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean socialDistancingImpossible (Person p) {
+		if (p instanceof DeadFace) {
+			return false;
+		}
+		Person p1 = new SmileyFace (new Vec((p.position).x + (p.velocity).x, (p.position).y + (p.velocity).y), new Vec ((p.velocity).x,(p.velocity).y),1);
+		return (p.outWindow() || this.noRespectSocialDistancing(p1));
+	}
+	
+	public Vec newVelocity (Person a) {
+		Person a1 = new SmileyFace (a.position, a.velocity, a.familyNb);
+		while (this.movingImpossible(a1)) {				
+			return a1.setNewRandomVelocity();					
+		}	
+		return a1.velocity;
+	}
 }
 	
 	

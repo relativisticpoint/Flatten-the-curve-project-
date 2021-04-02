@@ -43,7 +43,7 @@ public class IllFace extends Person {
 	public void drawFaces (Graphics g){
 		g.setColor(status);
 		super.drawFaces(g);
-		//g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*(RADIUS+INFECT_RADIUS)), (int)(2*(RADIUS+INFECT_RADIUS)));
+		g.drawOval ((int)(position.x-(INFECT_RADIUS-3.0)), (int)(position.y-(INFECT_RADIUS-3.0)),(int)(2*(INFECT_RADIUS-3.0)), (int)(2*(INFECT_RADIUS-3.0)));
 	}
 }
 

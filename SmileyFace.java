@@ -36,7 +36,7 @@ public class SmileyFace extends Person{
 		super.drawFaces(g);
 		if (wearMask) {
 			g.setColor(Color.white);
-			g.fillRect((int)(position.x) , (int)(position.y+RADIUS/2),(int)(2*RADIUS), (int)(0.8*RADIUS));
+			g.fillRect((int)(position.x-RADIUS) , (int)(position.y-RADIUS/2),(int)(2*RADIUS), (int)(0.8*RADIUS));
 		}
 	}
 	
