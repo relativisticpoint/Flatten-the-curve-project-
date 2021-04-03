@@ -57,9 +57,17 @@ public abstract class Person {
 	}
 
 	public Vec setNewRandomPosition() {
-		return new Vec(800*Math.random()+10,700*Math.random()+40);
+		return new Vec(800*Math.random()+20,700*Math.random()+50);
 	}
 	
+	public Vec setNewRandomVelocity() {
+		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
+	}
+	
+	
+	public void setVelocity (Vec v) {
+		this.velocity = new Vec(v.x,v.y);
+	}
 
 	//To move a person
 	public void movement() {
@@ -68,8 +76,8 @@ public abstract class Person {
 	
 	//Method to verify if the person is still in the world window
 	public boolean outWindow() {
-		return ((boolean)(position.x + velocity.x <10) || (boolean)(position.x + velocity.x >870) 
-			|| (boolean)(position.y + velocity.y <40) || (boolean)(position.y + velocity.y >760));
+		return ((boolean)(position.x + velocity.x <20) || (boolean)(position.x + velocity.x >880) 
+			|| (boolean)(position.y + velocity.y <50) || (boolean)(position.y + velocity.y >770));
 	}
 	
 	//Method to verify if it is the same person
@@ -87,22 +95,14 @@ public abstract class Person {
 	}
 	
 	
-	public Vec setNewRandomVelocity() {
-		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
-	}
-	
-	public void setVelocity (Vec v) {
-		this.velocity = new Vec(v.x,v.y);
+	public double distanceFromHome() {
+		return position.dist(address);
 	}
 	
 	public Vec goHome() {
 		Vec direction = new Vec (address.x-position.x, address.y-position.y);
 		direction.normalize();
 		return new Vec (direction.x*VELOCITY_MAX, direction.y*VELOCITY_MAX);
-	}
-	
-	public double distanceFromHome() {
-		return position.dist(address);
 	}
 	
 	

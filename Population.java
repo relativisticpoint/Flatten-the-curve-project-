@@ -37,28 +37,12 @@ public class Population {
 			}			
 			everyone.add (newPerson);
 			
-			count++;
-			
+			count++;			
 			if (count >= familyMembersNb[family-1]) {
 				family ++;
 				count = 0;
 			}
-		}
-		
-	}
-	
-	//To verify all people are not "spawn on top of each other"
-	public boolean coincideWhenInitiate(Person p) {
-		if (!everyone.isEmpty()){
-			for (Person b : everyone) {
-				if (b.differentFrom(p)) {
-					if (b.position.dist(p.position) <= 2*b.RADIUS) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		}		
 	}
 	
 	//Method to distribute randomly people to a family consisting of from 2 to 6 people
@@ -84,6 +68,21 @@ public class Population {
 	}
 	
 	
+	//To verify all people are not "spawn on top of each other"
+	public boolean coincideWhenInitiate(Person p) {
+		if (!everyone.isEmpty()){
+			for (Person b : everyone) {
+				if (b.differentFrom(p)) {
+					if (b.position.dist(p.position) <= 2*b.RADIUS) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	
 	//To change everyone's velocity after some time
 	public void changeVelocity () {
 		for (Person a : everyone) {			 
@@ -93,21 +92,6 @@ public class Population {
 		}
 	}
 	
-	//To update the world in general
-	public void updateWorld() {
-		this.updateWorldInfection(); 
-		this.updateWorldMovement();		
-	}
-	
-	public void updateWorldSocialDistancing() {
-		this.updateWorldInfection(); 
-		this.updateWorldMovementSocialDistancing();
-	}
-	
-	public void updateWorldLockdown() {
-		this.updateWorldInfection(); 
-		this.updateWorldMovementLockdown();		
-	}
 	
 	//To start the infection
 	public void startTheInfection(double x) {
@@ -174,18 +158,13 @@ public class Population {
 		}
 	}
 	
-	//To provide the people with masks
-	public void toWearMask (boolean mask) {
-		for (Person a : everyone) {
-			if (mask) {
-				a.wearMask = true;  //Give masks for all people
-				a.probabilityToGetInfected = 15.0;
-			}else{
-				a.wearMask = false;   //Take off the mask
-				a.probabilityToGetInfected = 40.0;
-			}
-		}
+	
+	//To update the world in general
+	public void updateWorld() {
+		this.updateWorldInfection(); 
+		this.updateWorldMovement();		
 	}
+	
 	
 	//To create "the moving population"
 	public void updateWorldMovement () {		
@@ -196,40 +175,15 @@ public class Population {
 		}
 	}
 	
-	public void updateWorldMovementSocialDistancing () {
-		if (!everyone.isEmpty()){					
-			for (Person a : everyone) {	
-				if (a.socialDistancingRespect) {
-					getMovingSocialDistancing(a);				
-				}else{
-					getMoving(a);
-				}
-				
-			}
+	
+	public void getMoving (Person a) {
+		while (this.movingImpossible(a)) {				
+			a.velocity = a.setNewRandomVelocity();					
 		}
+	
+		a.movement();
 	}
 	
-	public void updateWorldMovementLockdown () {
-	
-		if (!everyone.isEmpty()){					
-			for (Person a : everyone) {
-				if (a.lockdownRespect) {
-					if (a.distanceFromHome() >a.HOUSE_RADIUS) { 					
-						a.velocity = a.goHome();																			
-					}
-					
-					if (a.socialDistancingRespect) {
-						getMovingSocialDistancing(a);
-					}else{
-						getMoving(a);
-					}
-				}else{
-					getMoving(a);
-				}				
-			}
-		}
-	}
-					
 	
 	//To verify all people do not "step onto each other" after moving
 	public boolean coincideAfterMoving(Person p) {
@@ -249,6 +203,7 @@ public class Population {
 		return false;
 	}
 	
+	
 	public boolean movingImpossible (Person p) {
 		if (p instanceof DeadFace) {
 			return false;
@@ -257,6 +212,41 @@ public class Population {
 		return (p.outWindow() || this.coincideAfterMoving(p1));
 	}
 	
+	
+	//To update the world while social distancing is on
+	public void updateWorldSocialDistancing() {
+		this.updateWorldInfection(); 
+		this.updateWorldMovementSocialDistancing();
+	}
+	
+	
+	//To create a "moving population" while social distancing is on
+	public void updateWorldMovementSocialDistancing () {
+		if (!everyone.isEmpty()){					
+			for (Person a : everyone) {	
+				if (a.socialDistancingRespect) {
+					getMovingSocialDistancing(a);				
+				}else{
+					getMoving(a);
+				}
+				
+			}
+		}
+	}
+	
+	public void getMovingSocialDistancing (Person a) {
+		int count =0;
+		while (this.socialDistancingImpossible(a)) {					
+			a.velocity = a.setNewRandomVelocity();
+			count++;
+			if (count > 300) {
+				break;
+			}					
+		}
+		a.movement();
+	}
+	
+	//To verify that people are not too close to each other
 	public boolean noRespectSocialDistancing (Person p) {
 		int count =0;
 		if (!everyone.isEmpty()){
@@ -282,25 +272,48 @@ public class Population {
 		return (p.outWindow() || this.noRespectSocialDistancing(p1));
 	}
 	
-	public void getMoving (Person a) {
-		while (this.movingImpossible(a)) {				
-			a.velocity = a.setNewRandomVelocity();					
-		}
 	
-		a.movement();
+	//To update world while lockdown is on
+	public void updateWorldLockdown() {
+		this.updateWorldInfection(); 
+		this.updateWorldMovementLockdown();		
 	}
 	
-	public void getMovingSocialDistancing (Person a) {
-		int count =0;
-		while (this.socialDistancingImpossible(a)) {					
-			a.velocity = a.setNewRandomVelocity();
-			count++;
-			if (count > 300) {
-				break;
-			}					
+	
+	//To create a "moving population" during the lockdown
+	public void updateWorldMovementLockdown () {	
+		if (!everyone.isEmpty()){					
+			for (Person a : everyone) {
+				if (a.lockdownRespect) {
+					if (a.distanceFromHome() >a.HOUSE_RADIUS) { 					
+						a.velocity = a.goHome();																			
+					}
+					
+					if (a.socialDistancingRespect) {
+						getMovingSocialDistancing(a);
+					}else{
+						getMoving(a);
+					}
+				}else{
+					getMoving(a);
+				}				
+			}
 		}
-		a.movement();
-	}	
+	}
+	
+	
+	//To provide the people with masks
+	public void toWearMask (boolean mask) {
+		for (Person a : everyone) {
+			if (mask) {
+				a.wearMask = true;  //Give masks for all people
+				a.probabilityToGetInfected = 15.0;
+			}else{
+				a.wearMask = false;   //Take off the mask
+				a.probabilityToGetInfected = 40.0;
+			}
+		}
+	}		
 		
 }
 	
