@@ -17,7 +17,7 @@ public class PlayGround extends JFrame implements ActionListener{
 	private PlotTheFaces movingObjects;
 	private int countToChangeVelocity =0;
 	private JTextArea TimeTextArea;
-	private JTextArea PeopleInjectedTextField;
+	private JTextArea PeopleInfectedTextField;
 	private JTextArea DeathRateTextField;
 	private JButton Handwash;
 	private JButton Mask;
@@ -27,7 +27,7 @@ public class PlayGround extends JFrame implements ActionListener{
 	private JButton PlayorPause;
 	private JButton Restart;
 	
-
+	//public  Population pop;
 	
 	
 
@@ -37,10 +37,12 @@ public class PlayGround extends JFrame implements ActionListener{
 		this.setLocation(0,0); //setting the location
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //operation on closing
 		//GlobalPannel
+		this.setResizable(false); 
 		JPanel GlobalPanel = new JPanel();
 		GlobalPanel.setBounds(0,0,1200,800);
 		GlobalPanel.setLayout(null);
 		GlobalPanel.setBackground(Color.yellow);
+		
 		
 		
 		/*Playground panel
@@ -64,20 +66,21 @@ public class PlayGround extends JFrame implements ActionListener{
 		TimeTextArea.setBounds(20,50,195,50);
 		TimePanel.add(TimeTextArea);
 		
+		
 		//people injected  panel
-		JPanel PeopleInjectedPanel = new JPanel();
-		PeopleInjectedPanel.setBounds(930,250,240,120);
-		PeopleInjectedPanel.setLayout(null);
-		PeopleInjectedPanel.setBackground(Color.green);
+		JPanel PeopleInfectedPanel = new JPanel();
+		PeopleInfectedPanel.setBounds(930,250,240,120);
+		PeopleInfectedPanel.setLayout(null);
+		PeopleInfectedPanel.setBackground(Color.green);
 		//people injected  label
-		JLabel PeopleInjectedLabel = new JLabel();
-		PeopleInjectedLabel.setText("People infected");
-		PeopleInjectedLabel.setBounds(70,10,230,50);
-		PeopleInjectedPanel.add(PeopleInjectedLabel); 
+		JLabel PeopleInfectedLabel = new JLabel();
+		PeopleInfectedLabel.setText("People infected");
+		PeopleInfectedLabel.setBounds(70,10,230,50);
+		PeopleInfectedPanel.add(PeopleInfectedLabel); 
 		// people injected text field 
-		PeopleInjectedTextField = new JTextArea();
-		PeopleInjectedTextField.setBounds(20,50,195,50);
-		PeopleInjectedPanel.add(PeopleInjectedTextField);
+		PeopleInfectedTextField = new JTextArea();
+		PeopleInfectedTextField.setBounds(20,50,195,50);
+		PeopleInfectedPanel.add(PeopleInfectedTextField);
 		
 		//Death Rate panel
 		JPanel DeathRatePanel = new JPanel();
@@ -148,7 +151,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		GlobalPanel.add(NbLimit);
 		GlobalPanel.add(Mask);
 		GlobalPanel.add(TimePanel);
-		GlobalPanel.add(PeopleInjectedPanel);
+		GlobalPanel.add(PeopleInfectedPanel);
 		GlobalPanel.add(DeathRatePanel);
 		
 		// Adding zone where the faces are moving
@@ -194,9 +197,13 @@ public class PlayGround extends JFrame implements ActionListener{
 			}
 		}
 		
-		if (e.getSource()==monChrono){
+		if (e.getSource() == monChrono){
 			time = time + 100.0;
 			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
+			TimeTextArea.setText((int)(time*24.0/this.ONE_DAY)+"h");
+			PeopleInfectedTextField.setText(String.valueOf(Population.infectedPeople.size()));
+			DeathRateTextField.setText(String.valueOf(Population.deadPeople.size()));
+			
 			
 			movingObjects.faces.startTheInfection(time);
 			

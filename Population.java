@@ -15,7 +15,9 @@ public class Population {
 	
 	public int nbOfPeople;
 	public ArrayList<Person> everyone;
-	public LinkedList<Person> infectedPeople = new LinkedList<Person>();
+	public static LinkedList<Person> infectedPeople = new LinkedList<Person>();
+	public static LinkedList<Person> deadPeople = new LinkedList<Person>();
+	
 	
 	//Constructor	
 	public Population(int initNb) {
@@ -103,6 +105,7 @@ public class Population {
 				}
 				everyone.add(everyone.get(nb).changeStatus());
 				everyone.remove(nb);
+				infectedPeople.add(everyone.get(nb).changeStatus()); 
 			}
 		}
 	}
@@ -119,6 +122,7 @@ public class Population {
 					if (100.0*Math.random() < p.probabilityToGetInfected) {
 						everyone.add(p.changeStatus());
 						everyone.remove(p);
+						infectedPeople.add(p.changeStatus()) ;
 					}
 				}else{
 					p.timeToBeInfected += 100.0;
@@ -134,12 +138,16 @@ public class Population {
 					everyone.add(p.hasRecovered());
 					everyone.remove(p);
 					p.infectionTime =0.0;
+					infectedPeople.remove(0) ;
+					
 				}else{
 					p.infectionTime += 100.0;
 					if (p.infectionTime == 10*ONE_DAY) {
 						everyone.add(0,p.changeStatus());
 						everyone.remove(p);
 						p.infectionTime = 0.0;
+						infectedPeople.remove(0);
+						deadPeople.add(p);
 					}
 				}
 				
