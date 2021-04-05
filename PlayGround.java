@@ -11,6 +11,8 @@ public class PlayGround extends JFrame implements ActionListener{
 	public static final double ONE_DAY= 4000.0;
 	private double time = 0.0;
 	private Timer monChrono;
+	private boolean pause = true ; 
+	
 
 	
 	//private Population faces;
@@ -27,18 +29,18 @@ public class PlayGround extends JFrame implements ActionListener{
 	private JButton PlayorPause;
 	private JButton Restart;
 	
-	//public  Population pop;
+    private JPanel GlobalPanel = new JPanel();
 	
 	
 
-	public PlayGround (){
+		public PlayGround (){
 		this.setTitle ("Play Ground"); //setting the title
 		this.setSize (1200,1000); //setting the size
 		this.setLocation(0,0); //setting the location
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //operation on closing
-		//GlobalPannel
+		//GlobalPanel
 		this.setResizable(false); 
-		JPanel GlobalPanel = new JPanel();
+		//JPanel GlobalPanel = new JPanel();
 		GlobalPanel.setBounds(0,0,1200,800);
 		GlobalPanel.setLayout(null);
 		GlobalPanel.setBackground(Color.yellow);
@@ -100,16 +102,16 @@ public class PlayGround extends JFrame implements ActionListener{
 		//button play or pause
 		PlayorPause = new JButton ("Play or Pause");//name of button
 		PlayorPause.setBounds (930,700,240,50);
-		PlayorPause.setBackground(new Color(10,144,10));//setting color of background
-		PlayorPause.setForeground(Color.white);//setting color of foreground
+		PlayorPause.setBackground(new Color(70,144,10));//setting color of background
+		PlayorPause.setForeground(Color.black);//setting color of foreground
 		GlobalPanel.add(PlayorPause);
 		//.addActionListener(this); //enabling a listener of actions
 		
 		//button Restart
 		Restart = new JButton ("Restart");//name of button
 		Restart.setBounds (930,770,240,50);
-		Restart.setBackground(new Color(10,144,10));//setting color of background
-		Restart.setForeground(Color.white);//setting color of foreground
+		Restart.setBackground(new Color(70,144,10));//setting color of background
+		Restart.setForeground(Color.black);//setting color of foreground
 		GlobalPanel.add(Restart);
 		
 		//button Mask
@@ -168,6 +170,9 @@ public class PlayGround extends JFrame implements ActionListener{
 		
 		LockDown.addActionListener(this);
 		Mask.addActionListener(this);
+		PlayorPause.addActionListener(this);
+		Restart.addActionListener(this);
+		
 		
 		
 		
@@ -187,17 +192,34 @@ public class PlayGround extends JFrame implements ActionListener{
 			}
 		}
 		
+		
+
+		
+		//Mask button 
 		if (e.getSource() == Mask) {
 			movingObjects.maskOn = !movingObjects.maskOn;
 		}
-		
+		//Play or Pause button 
+		if (e.getSource() == PlayorPause) {
+			pause = !pause;
+		}
+		//Reset button 
+		if (e.getSource() == Restart) {
+			GlobalPanel.remove(movingObjects);
+			movingObjects = new PlotTheFaces (80);
+			time = 0.0;
+			Population.infectedPeople.clear();
+			Population.deadPeople.clear();
+			GlobalPanel.add(movingObjects);
+		}
+		//NbLimit button 
 		if (e.getSource() == NbLimit) {
 			if (!movingObjects.activateLockdown) {
 				movingObjects.activateSocialDistancing = !movingObjects.activateSocialDistancing;
 			}
 		}
 		
-		if (e.getSource() == monChrono){
+		if (e.getSource() == monChrono && pause ){
 			time = time + 100.0;
 			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
 			TimeTextArea.setText((int)(time*24.0/this.ONE_DAY)+"h");

@@ -3,16 +3,5 @@ public class FlattenTheCurve {
 		
 		PlayGround game = new PlayGround();
 	}
-		
-
-
-
-
-
-
-
-
-
-
 
 }
