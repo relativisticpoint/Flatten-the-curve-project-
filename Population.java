@@ -1,7 +1,5 @@
 /*
  * This class is the set of all "Person"
- * This class should be used to create the GUI simulation
- * This is just the basic version to test if it can run
  * To be improved...
  */
 
@@ -12,12 +10,13 @@ public class Population {
 	
 	//Parameters
 	public static final double ONE_DAY = 4000.0;
+	public static final int NB_LIMIT = 4;
+	public static final double AREA_RADIUS = 40;
 	
 	public int nbOfPeople;
 	public ArrayList<Person> everyone;
-	public static LinkedList<Person> infectedPeople = new LinkedList<Person>();
-	public static LinkedList<Person> deadPeople = new LinkedList<Person>();
-	
+	public LinkedList<Person> infectedPeople = new LinkedList<Person>();
+	public LinkedList<Person> deadPeople = new LinkedList<Person>();
 	
 	//Constructor	
 	public Population(int initNb) {
@@ -233,7 +232,7 @@ public class Population {
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {	
 				if (a.socialDistancingRespect) {
-					getMovingSocialDistancing(a);				
+					getMovingSocialDistancing(a,true);				
 				}else{
 					getMoving(a);
 				}
@@ -242,12 +241,12 @@ public class Population {
 		}
 	}
 	
-	public void getMovingSocialDistancing (Person a) {
+	public void getMovingSocialDistancing (Person a, boolean bo) {
 		int count =0;
-		while (this.socialDistancingImpossible(a)) {					
+		while (this.socialDistancingImpossible(a,bo)) {					
 			a.velocity = a.setNewRandomVelocity();
 			count++;
-			if (count > 300) {
+			if (count > 200) {
 				break;
 			}					
 		}
@@ -259,10 +258,31 @@ public class Population {
 		int count =0;
 		if (!everyone.isEmpty()){
 			for (Person b : everyone) {
-				if (b.differentFrom(p) && !(b instanceof DeadFace)) {
-					if (p.getTooClose(b)) {
+				
+				if (p.getTooClose(b)) {
+					count++;
+					if (count==2) {
+						return true;
+					}
+				}
+				
+				
+			}
+			
+		}
+		return false;
+	}
+	
+	public boolean noRespectNbLimit (Person p) {
+		Vec center;
+		for (int i = -(int)(p.AREA_RADIUS-p.RADIUS); i <= (int)(p.AREA_RADIUS-p.RADIUS); i++) {
+			for (int j = -(int)(p.AREA_RADIUS-p.RADIUS); j <= (int)(p.AREA_RADIUS-p.RADIUS); j++) {
+				int count =0;
+				center = new Vec (p.position.x+j, p.position.y+i);
+				for (Person b : everyone) {
+					if (center.dist(b.position) < (p.AREA_RADIUS-p.RADIUS) && !(b instanceof DeadFace)) {
 						count++;
-						if (count==2) {
+						if (count ==6) {
 							return true;
 						}
 					}
@@ -272,11 +292,15 @@ public class Population {
 		return false;
 	}
 	
-	public boolean socialDistancingImpossible (Person p) {
+	public boolean socialDistancingImpossible (Person p, boolean bo) {
 		if (p instanceof DeadFace) {
 			return false;
 		}
 		Person p1 = new SmileyFace (new Vec((p.position).x + (p.velocity).x, (p.position).y + (p.velocity).y), new Vec ((p.velocity).x,(p.velocity).y),1);
+		
+		if (bo) {
+			return (p.outWindow() || this.noRespectSocialDistancing(p1) || this.noRespectNbLimit(p1));
+		}
 		return (p.outWindow() || this.noRespectSocialDistancing(p1));
 	}
 	
@@ -293,12 +317,12 @@ public class Population {
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {
 				if (a.lockdownRespect) {
-					if (a.distanceFromHome() >a.HOUSE_RADIUS) { 					
+					if (a.distanceFromHome() >(a.HOUSE_RADIUS - a.RADIUS)) { 					
 						a.velocity = a.goHome();																			
 					}
 					
-					if (a.socialDistancingRespect) {
-						getMovingSocialDistancing(a);
+					if (a.socialDistancingRespect && a.distanceFromHome() >(a.HOUSE_RADIUS-a.RADIUS)) {
+						getMovingSocialDistancing(a,false);
 					}else{
 						getMoving(a);
 					}
@@ -321,7 +345,8 @@ public class Population {
 				a.probabilityToGetInfected = 40.0;
 			}
 		}
-	}		
+	}
+		
 		
 }
 	
