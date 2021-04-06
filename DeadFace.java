@@ -17,6 +17,8 @@ public class DeadFace extends Person {
 	public DeadFace (Vec initPosition, Vec initVelocity, int nb){
 		super(initPosition, initVelocity, nb);
 		this.velocity = new Vec(0.0,0.0);
+		this.lockdownRespect = false;
+		this.socialDistancingRespect = false;
 	}	
 
 	public Vec setNewRandomVelocity() {

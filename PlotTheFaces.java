@@ -30,13 +30,20 @@ public class PlotTheFaces extends JPanel {
 	}
 
 	public void paintComponent(Graphics g){
+		int count =0;
 		g.setColor(Color.blue);
 		g.fillRect(0,0,this.getWidth(),this.getHeight());
 		if (!faces.everyone.isEmpty()){
 			for (Person p : faces.everyone){
 				
 				//draw all the faces
-				p.drawFaces(g);  							
+				p.drawFaces(g);  
+				
+				//draw the houses during lockdown
+				if	(activateLockdown) {
+					p.drawHouses(g);
+				}
+											
 			}
 		}
 	}

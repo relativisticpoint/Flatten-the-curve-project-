@@ -11,10 +11,11 @@ public abstract class Person {
 	public static final double ONE_DAY= 4000.0;
 		
 	public static final double RADIUS = 7.0;
-	public static final double VELOCITY_MAX = 5.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
-	public static final double HOUSE_RADIUS = 50.0;
+	public static final double VELOCITY_MAX = 4.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
+	public static final double HOUSE_RADIUS = 60.0;
+	public static final double AREA_RADIUS = 40.0;
 	
-	public static final double INFECT_RADIUS = 15.0;
+	public static final double INFECT_RADIUS = 14.0;
 	public static final double PROBABILITY_TO_DIE = 30.0;		
 		
 	public int familyNb;
@@ -26,7 +27,6 @@ public abstract class Person {
 	public double infectionTime =0.0;
 	public boolean lockdownRespect;
 	public boolean socialDistancingRespect;
-		
 		
 	public boolean wearMask = false;
 	
@@ -88,12 +88,18 @@ public abstract class Person {
 	
 	//Method to check if a person gets too close to an infected person
 	public boolean getTooClose (Person p) {
-		if (!this.differentFrom(p)) {
+		if (!this.differentFrom(p) || (p instanceof DeadFace)) {
 			return false;
 		}
 		return (boolean)(this.position.dist(p.position) <= RADIUS+INFECT_RADIUS);
 	}
 	
+	public boolean inTheSameArea (Person p) {
+		if (!this.differentFrom(p) || (p instanceof DeadFace)) {
+			return false;
+		}
+		return (boolean)(this.position.dist(p.position) <= (AREA_RADIUS-RADIUS));
+	}
 	
 	public double distanceFromHome() {
 		return position.dist(address);
@@ -113,6 +119,13 @@ public abstract class Person {
 	
 	public void drawFaces (Graphics g){
 		g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
+	}
+	
+	//To draw the "houses" during lockdown
+	public void drawHouses (Graphics g) {
+
+		g.setColor(Color.white);
+		g.drawRect ((int)(address.x-HOUSE_RADIUS), (int)(address.y-HOUSE_RADIUS), (int)(2*HOUSE_RADIUS), (int)(2*HOUSE_RADIUS));
 	}
 	
 	public abstract Person changeStatus ();
