@@ -179,6 +179,8 @@ public class PlayGround extends JFrame implements ActionListener{
 	}
 	
 	public void actionPerformed (ActionEvent e){
+		
+		//Lockdown button
 		if (e.getSource() == LockDown) {
 			movingObjects.activateLockdown = !movingObjects.activateLockdown;
 			if (movingObjects.activateLockdown) {
@@ -190,9 +192,7 @@ public class PlayGround extends JFrame implements ActionListener{
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
 			}
-		}
-		
-		
+		}		
 
 		
 		//Mask button 
@@ -208,8 +208,8 @@ public class PlayGround extends JFrame implements ActionListener{
 			GlobalPanel.remove(movingObjects);
 			movingObjects = new PlotTheFaces (80);
 			time = 0.0;
-			Population.infectedPeople.clear();
-			Population.deadPeople.clear();
+			movingObjects.faces.infectedPeople.clear();
+			movingObjects.faces.deadPeople.clear();
 			GlobalPanel.add(movingObjects);
 		}
 		//NbLimit button 
@@ -221,10 +221,10 @@ public class PlayGround extends JFrame implements ActionListener{
 		
 		if (e.getSource() == monChrono && pause ){
 			time = time + 100.0;
-			this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
+			//this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
 			TimeTextArea.setText((int)(time*24.0/this.ONE_DAY)+"h");
-			PeopleInfectedTextField.setText(String.valueOf(Population.infectedPeople.size()));
-			DeathRateTextField.setText(String.valueOf(Population.deadPeople.size()));
+			PeopleInfectedTextField.setText(String.valueOf(movingObjects.faces.infectedPeople.size()));
+			DeathRateTextField.setText(String.valueOf(movingObjects.faces.deadPeople.size()));
 			
 			
 			movingObjects.faces.startTheInfection(time);
