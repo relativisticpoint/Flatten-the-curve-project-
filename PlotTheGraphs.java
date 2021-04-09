@@ -9,29 +9,36 @@ import java.awt.Graphics;
 public class PlotTheGraphs extends JPanel {
 
 	//attribute
-	private ArrayList <Point> points;
+	public ArrayList <Point> pointsInfected;
+	public ArrayList <Point> pointsDead;
 	public int nbInfected;
+	public int nbDead;
 	public double time;
 	public int xCoordinate =0;
 	//constructor
 	public PlotTheGraphs (){
-		points = new ArrayList <Point>();
-		this.setSize(400,300);
+		pointsInfected = new ArrayList <Point>();
+		pointsDead = new ArrayList <Point>();
+		this.setSize(600,900);
 		this.setLocation (1200,0);
 		this.setLayout (null);
 	}
 	public void paintComponent(Graphics g){
 	
 		if (time%4000==0){
-			points.add(new Point (xCoordinate,this.nbInfected));
+			pointsInfected.add(new Point (xCoordinate,this.nbInfected));
+			pointsDead.add (new Point (xCoordinate,this.nbDead));
 			xCoordinate+=5;
 		}
-		
-		g.setColor(Color.blue);
-		
-		for (Point p :points){
-			g.fillRect((int)p.time,(int)(200-p.value*10),10,p.value*10);
-			}
+		for (Point p:pointsInfected){
+			g.setColor(Color.blue);
+			g.fillRect((int)p.time,(int)(300-p.value*10),10,p.value*10);
+			
+		}
+		for (Point p1:pointsDead){
+			g.setColor(Color.black);
+			g.fillRect((int)p1.time,(int)(850-p1.value*10),10,p1.value*10);
 		}
 	}
+}
 

@@ -215,7 +215,9 @@ public class PlayGround extends JFrame implements ActionListener{
 			time = 0.0;
 			movingObjects.faces.infectedPeople.clear();
 			movingObjects.faces.deadPeople.clear();
+			//graphs.points.clear();
 			GlobalPanel.add(movingObjects);
+			graphs.xCoordinate += 50; //make a gap between 2 graphs when clicking on restart
 		}
 		//NbLimit button 
 		if (e.getSource() == NbLimit) {
@@ -253,11 +255,13 @@ public class PlayGround extends JFrame implements ActionListener{
 				countToChangeVelocity =0;
 			}
 			
+			//Setting parameters to plot the graphs
 			graphs.nbInfected = movingObjects.faces.infectedPeople.size();
+			graphs.nbDead = movingObjects.faces.deadPeople.size();
 			graphs.time = this.time;
-			
 			repaint();
 				
+			//graphs.repaint();
 	
 			
 		}
