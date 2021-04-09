@@ -252,11 +252,12 @@ public class PlayGround extends JFrame implements ActionListener{
 				movingObjects.faces.changeVelocity();
 				countToChangeVelocity =0;
 			}
+			
 			graphs.nbInfected = movingObjects.faces.infectedPeople.size();
 			graphs.time = this.time;
+			
 			repaint();
 				
-			//graphs.repaint();
 	
 			
 		}

@@ -24,9 +24,11 @@ public class PlotTheGraphs extends JPanel {
 	
 		if (time%4000==0){
 			points.add(new Point (xCoordinate,this.nbInfected));
-			xCoordinate+=3;
+			xCoordinate+=5;
 		}
-			g.setColor(Color.blue);
+		
+		g.setColor(Color.blue);
+		
 		for (Point p :points){
 			g.fillRect((int)p.time,(int)(200-p.value*10),10,p.value*10);
 			}
