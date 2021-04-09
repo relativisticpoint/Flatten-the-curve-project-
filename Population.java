@@ -115,9 +115,9 @@ public class Population {
 		for(int i = 0; i <everyone.size(); i++) { 
 			Person p = everyone.get(i);
 			
-			//A healthy person may get infected after 3 days
+			//A healthy person may get infected after 2 days
 			if (p.timeToBeInfected >0) {
-				if (p.timeToBeInfected == 3*ONE_DAY) {
+				if (p.timeToBeInfected == 2*ONE_DAY) {
 					p.timeToBeInfected = 0.0;
 					if (100.0*Math.random() < p.probabilityToGetInfected) {
 						everyone.add(p.changeStatus());
@@ -129,9 +129,9 @@ public class Population {
 				}
 			}
 			
-			//An infected person may recover after 7 days or die after 10 days
+			//An infected person may recover after 5 days or die after 7 days
 			if (p instanceof IllFace) {
-				if (p.infectionTime < 7*ONE_DAY) {
+				if (p.infectionTime < 5*ONE_DAY) {
 					p.infectionTime += 100.0;
 				}else if (p.infectionTime == 7*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
 					
@@ -142,7 +142,7 @@ public class Population {
 					
 				}else{
 					p.infectionTime += 100.0;
-					if (p.infectionTime == 10*ONE_DAY) {
+					if (p.infectionTime == 7*ONE_DAY) {
 						everyone.add(0,p.changeStatus());
 						everyone.remove(p);
 						p.infectionTime = 0.0;
@@ -275,21 +275,21 @@ public class Population {
 	}
 	
 	public boolean noRespectNbLimit (Person p) {
-		Vec center;
+		/*Vec center;
 		for (int i = -(int)(p.AREA_RADIUS-p.RADIUS); i <= (int)(p.AREA_RADIUS-p.RADIUS); i++) {
 			for (int j = -(int)(p.AREA_RADIUS-p.RADIUS); j <= (int)(p.AREA_RADIUS-p.RADIUS); j++) {
+				center = new Vec (p.position.x+j, p.position.y+i);*/
 				int count =0;
-				center = new Vec (p.position.x+j, p.position.y+i);
 				for (Person b : everyone) {
-					if (center.dist(b.position) < (p.AREA_RADIUS-p.RADIUS) && !(b instanceof DeadFace)) {
+					if (p.position.dist(b.position) < (p.AREA_RADIUS-p.RADIUS) && !(b instanceof DeadFace)) {
 						count++;
 						if (count ==6) {
 							return true;
 						}
 					}
 				}
-			}
-		}
+			
+		
 		return false;
 	}
 	
