@@ -18,6 +18,7 @@ public class Population {
 	public LinkedList<Person> infectedPeople = new LinkedList<Person>();
 	public LinkedList<Person> deadPeople = new LinkedList<Person>();
 	
+	
 	//Constructor	
 	public Population(int initNb) {
 		nbOfPeople = initNb;

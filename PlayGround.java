@@ -17,6 +17,7 @@ public class PlayGround extends JFrame implements ActionListener{
 	
 	//private Population faces;
 	private PlotTheFaces movingObjects;
+	public PlotTheGraphs graphs;
 	private int countToChangeVelocity =0;
 	private JTextArea TimeTextArea;
 	private JTextArea PeopleInfectedTextField;
@@ -30,18 +31,19 @@ public class PlayGround extends JFrame implements ActionListener{
 	private JButton Restart;
 	
     private JPanel GlobalPanel = new JPanel();
+    private ArrayList <Point> points = new ArrayList<Point>();
 	
 	
 
 		public PlayGround (){
 		this.setTitle ("Play Ground"); //setting the title
-		this.setSize (1200,1000); //setting the size
+		this.setSize (1800,1000); //setting the size
 		this.setLocation(0,0); //setting the location
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //operation on closing
 		//GlobalPanel
 		this.setResizable(false); 
 		//JPanel GlobalPanel = new JPanel();
-		GlobalPanel.setBounds(0,0,1200,800);
+		GlobalPanel.setBounds(0,0,1800,800);
 		GlobalPanel.setLayout(null);
 		GlobalPanel.setBackground(Color.yellow);
 		
@@ -159,6 +161,8 @@ public class PlayGround extends JFrame implements ActionListener{
 		// Adding zone where the faces are moving
 		movingObjects = new PlotTheFaces (80);
 		GlobalPanel.add(movingObjects);
+		graphs = new PlotTheGraphs ();
+		GlobalPanel.add(graphs);
 		
 		//Display the playground
 		this.add(GlobalPanel);
@@ -175,8 +179,9 @@ public class PlayGround extends JFrame implements ActionListener{
 		
 		
 		
-		
+	
 	}
+	
 	
 	public void actionPerformed (ActionEvent e){
 		
@@ -239,7 +244,7 @@ public class PlayGround extends JFrame implements ActionListener{
 						
 			movingObjects.faces.toWearMask(movingObjects.maskOn);			
 			
-			movingObjects.repaint();
+			
 			
 			countToChangeVelocity++;
 			
@@ -247,6 +252,11 @@ public class PlayGround extends JFrame implements ActionListener{
 				movingObjects.faces.changeVelocity();
 				countToChangeVelocity =0;
 			}
+			graphs.nbInfected = movingObjects.faces.infectedPeople.size();
+			graphs.time = this.time;
+			repaint();
+				
+			//graphs.repaint();
 	
 			
 		}
