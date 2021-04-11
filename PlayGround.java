@@ -10,14 +10,14 @@ import java.awt.GridLayout;
 public class PlayGround extends JFrame implements ActionListener{
 	public static final double ONE_DAY= 4000.0;
 	private double time = 0.0;
+	private double timeStartLockdown =0.0;
 	private Timer monChrono;
-	private boolean pause = true ; 
+	private boolean notPause = true ; 
 	
 
-	
-	//private Population faces;
 	private PlotTheFaces movingObjects;
 	public PlotTheGraphs graphs;
+	
 	private int countToChangeVelocity =0;
 	private JTextArea TimeTextArea;
 	private JTextArea PeopleInfectedTextField;
@@ -36,10 +36,12 @@ public class PlayGround extends JFrame implements ActionListener{
 	
 
 		public PlayGround (){
-		this.setTitle ("Play Ground"); //setting the title
+		this.setTitle ("Flatten the Curve"); //setting the title
 		this.setSize (1800,1000); //setting the size
 		this.setLocation(0,0); //setting the location
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //operation on closing
+		
+		
 		//GlobalPanel
 		this.setResizable(false); 
 		//JPanel GlobalPanel = new JPanel();
@@ -47,13 +49,6 @@ public class PlayGround extends JFrame implements ActionListener{
 		GlobalPanel.setLayout(null);
 		GlobalPanel.setBackground(Color.yellow);
 		
-		
-		
-		/*Playground panel
-		JPanel PlayGroundPanel = new JPanel();
-		PlayGroundPanel.setBounds(0,0,900,800);
-		PlayGroundPanel.setLayout(null);
-		PlayGroundPanel.setBackground(Color.blue);*/
 		
 		//time panel
 		JPanel TimePanel = new JPanel();
@@ -187,26 +182,29 @@ public class PlayGround extends JFrame implements ActionListener{
 		
 		//Lockdown button
 		if (e.getSource() == LockDown) {
-			movingObjects.activateLockdown = !movingObjects.activateLockdown;
-			if (movingObjects.activateLockdown) {
-				JOptionPane.showMessageDialog(this,"Our country goes into new lockdown. Stay at home and save lives!");
+			movingObjects.faces.activateLockdown = !movingObjects.faces.activateLockdown;
+			if (movingObjects.faces.activateLockdown) {
 				LockDown.setBackground(new Color (0,255,128));
 				LockDown.setForeground(Color.black);
+				timeStartLockdown = time;
+				JOptionPane.showMessageDialog(this,"Our country goes into new lockdown. Stay at home and save lives!");
 			} else {
-				JOptionPane.showMessageDialog(this,"The lockdown is lifted from now");
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
+				timeStartLockdown = 0.0;
+				JOptionPane.showMessageDialog(this,"The lockdown is lifted from now");
 			}
 		}		
 
 		
 		//Mask button 
 		if (e.getSource() == Mask) {
-			movingObjects.maskOn = !movingObjects.maskOn;
+			movingObjects.faces.maskOn = !movingObjects.faces.maskOn;
+			movingObjects.faces.toWearMask();
 		}
 		//Play or Pause button 
 		if (e.getSource() == PlayorPause) {
-			pause = !pause;
+			notPause = !notPause;
 		}
 		//Reset button 
 		if (e.getSource() == Restart) {
@@ -219,24 +217,33 @@ public class PlayGround extends JFrame implements ActionListener{
 			GlobalPanel.add(movingObjects);
 			graphs.xCoordinate += 50; //make a gap between 2 graphs when clicking on restart
 		}
+		
 		//NbLimit button 
 		if (e.getSource() == NbLimit) {
-			if (!movingObjects.activateLockdown) {
+			if (!movingObjects.faces.activateLockdown) {
 				movingObjects.activateSocialDistancing = !movingObjects.activateSocialDistancing;
 			}
 		}
 		
-		if (e.getSource() == monChrono && pause ){
+		if (e.getSource() == monChrono && notPause ){
 			time = time + 100.0;
 			//this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
+			
 			TimeTextArea.setText((int)(time*24.0/this.ONE_DAY)+"h");
 			PeopleInfectedTextField.setText(String.valueOf(movingObjects.faces.infectedPeople.size()));
 			DeathRateTextField.setText(String.valueOf(movingObjects.faces.deadPeople.size()));
 			
+			if ((time - timeStartLockdown) == 20000.0 && timeStartLockdown !=0) {
+				movingObjects.faces.activateLockdown = false;
+				LockDown.setBackground(Color.red);
+				LockDown.setForeground(Color.white);
+				timeStartLockdown = 0.0;
+			}
+							
 			
 			movingObjects.faces.startTheInfection(time);
 			
-			if (movingObjects.activateLockdown) {
+			if (movingObjects.faces.activateLockdown) {
 				movingObjects.faces.updateWorldLockdown();
 			}else if (movingObjects.activateSocialDistancing) {
 				movingObjects.faces.updateWorldSocialDistancing();
@@ -244,7 +251,6 @@ public class PlayGround extends JFrame implements ActionListener{
 				movingObjects.faces.updateWorld();
 			}
 						
-			movingObjects.faces.toWearMask(movingObjects.maskOn);			
 			
 			
 			

@@ -18,6 +18,9 @@ public class Population {
 	public LinkedList<Person> infectedPeople = new LinkedList<Person>();
 	public LinkedList<Person> deadPeople = new LinkedList<Person>();
 	
+	public boolean maskOn = false;
+	public boolean activateLockdown = false;
+	
 	
 	//Constructor	
 	public Population(int initNb) {
@@ -185,6 +188,10 @@ public class Population {
 	
 	
 	public void getMoving (Person a) {
+		if (maskOn && !activateLockdown) {
+			a.wearMask = true;
+		}
+		
 		while (this.movingImpossible(a)) {				
 			a.velocity = a.setNewRandomVelocity();					
 		}
@@ -275,19 +282,16 @@ public class Population {
 	}
 	
 	public boolean noRespectNbLimit (Person p) {
-		/*Vec center;
-		for (int i = -(int)(p.AREA_RADIUS-p.RADIUS); i <= (int)(p.AREA_RADIUS-p.RADIUS); i++) {
-			for (int j = -(int)(p.AREA_RADIUS-p.RADIUS); j <= (int)(p.AREA_RADIUS-p.RADIUS); j++) {
-				center = new Vec (p.position.x+j, p.position.y+i);*/
-				int count =0;
-				for (Person b : everyone) {
-					if (p.position.dist(b.position) < (p.AREA_RADIUS-p.RADIUS) && !(b instanceof DeadFace)) {
-						count++;
-						if (count ==6) {
-							return true;
-						}
-					}
+		
+		int count =0;
+		for (Person b : everyone) {
+			if (p.position.dist(b.position) < (p.AREA_RADIUS-p.RADIUS) && !(b instanceof DeadFace)) {
+				count++;
+				if (count ==6) {
+					return true;
 				}
+			}
+		}
 			
 		
 		return false;
@@ -322,6 +326,10 @@ public class Population {
 						a.velocity = a.goHome();																			
 					}
 					
+					if (a.distanceFromHome() <= (a.HOUSE_RADIUS - a.RADIUS)) {
+						a.wearMask = false;
+					}
+					
 					if (a.socialDistancingRespect && a.distanceFromHome() >(a.HOUSE_RADIUS-a.RADIUS)) {
 						getMovingSocialDistancing(a,false);
 					}else{
@@ -336,9 +344,9 @@ public class Population {
 	
 	
 	//To provide the people with masks
-	public void toWearMask (boolean mask) {
+	public void toWearMask () {
 		for (Person a : everyone) {
-			if (mask) {
+			if (maskOn) {
 				a.wearMask = true;  //Give masks for all people
 				a.probabilityToGetInfected = 15.0;
 			}else{

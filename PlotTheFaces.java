@@ -16,9 +16,9 @@ public class PlotTheFaces extends JPanel {
 	public Population faces;
 	private int countToChangeVelocity =0;
 	
-	public boolean activateLockdown = false;
+	//public boolean activateLockdown = false;
 	public boolean activateSocialDistancing = false;
-	public boolean maskOn = false;
+	//public boolean maskOn = false;
 	
 	//constructor
 	public PlotTheFaces(int initNbOfPeople){
@@ -40,7 +40,7 @@ public class PlotTheFaces extends JPanel {
 				p.drawFaces(g);  
 				
 				//draw the houses during lockdown
-				if	(activateLockdown) {
+				if	(faces.activateLockdown) {
 					p.drawHouses(g);
 				}
 											
