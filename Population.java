@@ -19,6 +19,7 @@ public class Population {
 	public LinkedList<Person> deadPeople = new LinkedList<Person>();
 	
 	public boolean maskOn = false;
+	public boolean activateSocialDistancing = false;
 	public boolean activateLockdown = false;
 	
 	

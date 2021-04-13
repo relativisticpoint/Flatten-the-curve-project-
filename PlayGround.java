@@ -11,12 +11,13 @@ public class PlayGround extends JFrame implements ActionListener{
 	public static final double ONE_DAY= 4000.0;
 	private double time = 0.0;
 	private double timeStartLockdown =0.0;
+	private double lockdownDuration =0.0;
 	private Timer monChrono;
 	private boolean notPause = true ; 
 	
 
 	private PlotTheFaces movingObjects;
-	public PlotTheGraphs graphs;
+	private PlotTheGraphs graphs;
 	
 	private int countToChangeVelocity =0;
 	private JTextArea TimeTextArea;
@@ -26,7 +27,7 @@ public class PlayGround extends JFrame implements ActionListener{
 	private JButton Mask;
 	private JButton LockDown;
 	private JButton Vaccine;
-	private JButton NbLimit;
+	private JButton SocialDistancing;
 	private JButton PlayorPause;
 	private JButton Restart;
 	
@@ -139,15 +140,15 @@ public class PlayGround extends JFrame implements ActionListener{
 		Vaccine.setForeground(Color.white);//setting color of foreground
 		GlobalPanel.add(Vaccine);
 		
-		//button NbLimit
-		NbLimit= new JButton ("NbLimit");//name of button
-		NbLimit.setBounds (600,860,100,60);
-		NbLimit.setBackground(Color.red);//setting color of background
-		NbLimit.setForeground(Color.white);//setting color of foreground
-		NbLimit.addActionListener(this);
+		//button SocialDistancing
+		SocialDistancing= new JButton ("SocialDist");//name of button
+		SocialDistancing.setBounds (600,860,100,60);
+		SocialDistancing.setBackground(Color.red);//setting color of background
+		SocialDistancing.setForeground(Color.white);//setting color of foreground
+		SocialDistancing.addActionListener(this);
 		
 		//Adding buttons and area for moving objects
-		GlobalPanel.add(NbLimit);
+		GlobalPanel.add(SocialDistancing);
 		GlobalPanel.add(Mask);
 		GlobalPanel.add(TimePanel);
 		GlobalPanel.add(PeopleInfectedPanel);
@@ -187,12 +188,30 @@ public class PlayGround extends JFrame implements ActionListener{
 				LockDown.setBackground(new Color (0,255,128));
 				LockDown.setForeground(Color.black);
 				timeStartLockdown = time;
-				JOptionPane.showMessageDialog(this,"Our country goes into new lockdown. Stay at home and save lives!");
+
+				while (lockdownDuration < 5.0 || lockdownDuration > 14.0) {
+					notPause = false;
+					String toSet = JOptionPane.showInputDialog(this,"How long does the lockdown last? (between 5 and 14 days)");
+					if (toSet == null) {
+						movingObjects.faces.activateLockdown =false;
+						LockDown.setBackground(Color.red);
+						LockDown.setForeground(Color.white);
+						break;
+					}
+					lockdownDuration = Double.parseDouble(toSet);
+					
+				}				
+				notPause = true;
+				
+				if (lockdownDuration >= 5.0 && lockdownDuration <= 14.0) {
+					JOptionPane.showMessageDialog(this,"Our country goes into new lockdown in " + (int)(lockdownDuration) +" days. Stay at home and save lives!");
+				}
+
 			} else {
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
-				timeStartLockdown = 0.0;
 				JOptionPane.showMessageDialog(this,"The lockdown is lifted from now");
+				lockdownDuration =0.0;
 			}
 		}		
 
@@ -208,36 +227,48 @@ public class PlayGround extends JFrame implements ActionListener{
 		}
 		//Reset button 
 		if (e.getSource() == Restart) {
+			time = 0.0;
+			
 			GlobalPanel.remove(movingObjects);
 			movingObjects = new PlotTheFaces (80);
-			time = 0.0;
 			movingObjects.faces.infectedPeople.clear();
 			movingObjects.faces.deadPeople.clear();
+			
+			LockDown.setBackground(Color.red);
+			LockDown.setForeground(Color.white);
+			
 			//graphs.points.clear();
 			GlobalPanel.add(movingObjects);
 			graphs.xCoordinate += 50; //make a gap between 2 graphs when clicking on restart
 		}
 		
-		//NbLimit button 
-		if (e.getSource() == NbLimit) {
+		//SocialDistancing button 
+		if (e.getSource() == SocialDistancing) {
 			if (!movingObjects.faces.activateLockdown) {
-				movingObjects.activateSocialDistancing = !movingObjects.activateSocialDistancing;
+				movingObjects.faces.activateSocialDistancing = !movingObjects.faces.activateSocialDistancing;
+				
+				if (movingObjects.faces.activateSocialDistancing) {
+					SocialDistancing.setBackground(new Color (0,255,128));
+					SocialDistancing.setForeground(Color.black);
+				}else {
+					SocialDistancing.setBackground(Color.red);
+					SocialDistancing.setForeground(Color.white);
+				}
 			}
 		}
 		
 		if (e.getSource() == monChrono && notPause ){
 			time = time + 100.0;
-			//this.setTitle ("Flatten the curve - Playing time: "+(int)(time*24.0/this.ONE_DAY)+"h");
 			
 			TimeTextArea.setText((int)(time*24.0/this.ONE_DAY)+"h");
 			PeopleInfectedTextField.setText(String.valueOf(movingObjects.faces.infectedPeople.size()));
 			DeathRateTextField.setText(String.valueOf(movingObjects.faces.deadPeople.size()));
 			
-			if ((time - timeStartLockdown) == 20000.0 && timeStartLockdown !=0) {
+			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*ONE_DAY)) {
 				movingObjects.faces.activateLockdown = false;
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
-				timeStartLockdown = 0.0;
+				lockdownDuration =0.0;
 			}
 							
 			
@@ -245,7 +276,7 @@ public class PlayGround extends JFrame implements ActionListener{
 			
 			if (movingObjects.faces.activateLockdown) {
 				movingObjects.faces.updateWorldLockdown();
-			}else if (movingObjects.activateSocialDistancing) {
+			}else if (movingObjects.faces.activateSocialDistancing) {
 				movingObjects.faces.updateWorldSocialDistancing();
 			}else{						
 				movingObjects.faces.updateWorld();
@@ -272,7 +303,7 @@ public class PlayGround extends JFrame implements ActionListener{
 			
 		}
 	}
-
+	
 	
 }
 

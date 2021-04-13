@@ -17,7 +17,7 @@ public class PlotTheFaces extends JPanel {
 	private int countToChangeVelocity =0;
 	
 	//public boolean activateLockdown = false;
-	public boolean activateSocialDistancing = false;
+	//public boolean activateSocialDistancing = false;
 	//public boolean maskOn = false;
 	
 	//constructor
@@ -34,16 +34,25 @@ public class PlotTheFaces extends JPanel {
 		g.setColor(Color.blue);
 		g.fillRect(0,0,this.getWidth(),this.getHeight());
 		if (!faces.everyone.isEmpty()){
-			for (Person p : faces.everyone){
+			if (faces.activateSocialDistancing) {
+				for (Person p : faces.everyone){
 				
-				//draw all the faces
-				p.drawFaces(g);  
+					//draw all the faces				
+					p.drawFaces(g, true);  
 				
-				//draw the houses during lockdown
-				if	(faces.activateLockdown) {
-					p.drawHouses(g);
+					//draw the houses during lockdown
+					if	(faces.activateLockdown) {
+						p.drawHouses(g);
+					}
 				}
 											
+			}else{
+				for (Person p : faces.everyone){			
+					p.drawFaces(g, false); 
+					if	(faces.activateLockdown) {
+						p.drawHouses(g);
+					}
+				}
 			}
 		}
 	}
