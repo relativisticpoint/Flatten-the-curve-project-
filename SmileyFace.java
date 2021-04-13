@@ -7,9 +7,6 @@ import javax.swing.*;
 
 public class SmileyFace extends Person{ 
 	
-	//attributes
-	private Color status = Color.green;
-	
 	//constructor
 	public SmileyFace (){
 		super();
@@ -31,9 +28,13 @@ public class SmileyFace extends Person{
 	
 	
 	//representation 
-	public void drawFaces (Graphics g){
-		g.setColor(status);
-		super.drawFaces(g);
+	public void drawFaces (Graphics g, boolean socialDist){
+		g.setColor(Color.green);
+		super.drawFaces(g,socialDist);
+		
+		if (socialDist && this.socialDistancingRespect) {
+			g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*INFECT_RADIUS), (int)(2*INFECT_RADIUS));
+		}
 		if (wearMask) {
 			g.setColor(Color.white);
 			g.fillRect((int)(position.x-RADIUS) , (int)(position.y-(RADIUS-1)/2),(int)(2*RADIUS), (int)(0.7*RADIUS));

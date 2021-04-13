@@ -6,10 +6,6 @@ import javax.swing.*;
 
 
 public class IllFace extends Person { 
-	//attributes
-	private Color status = Color.red;
-	
-	private int INFECT_RADIUS = 20;
 	
 	//constructor
 	public IllFace (){
@@ -40,10 +36,16 @@ public class IllFace extends Person {
 	
 	
 	//representation	
-	public void drawFaces (Graphics g){
-		g.setColor(status);
-		super.drawFaces(g);
-		g.drawOval ((int)(position.x-(INFECT_RADIUS-3.0)), (int)(position.y-(INFECT_RADIUS-3.0)),(int)(2*(INFECT_RADIUS-3.0)), (int)(2*(INFECT_RADIUS-3.0)));
+	public void drawFaces (Graphics g, boolean socialDist){
+		g.setColor(Color.red);
+		super.drawFaces(g,socialDist);
+		g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*INFECT_RADIUS), (int)(2*INFECT_RADIUS));
+		
+		if (socialDist && this.socialDistancingRespect) {
+			g.setColor(Color.green);
+			g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*INFECT_RADIUS), (int)(2*INFECT_RADIUS));
+		}
+		
 		if (wearMask) {
 			g.setColor(Color.white);
 			g.fillRect((int)(position.x-RADIUS) , (int)(position.y-(RADIUS-1)/2),(int)(2*RADIUS), (int)(0.7*RADIUS));

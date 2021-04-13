@@ -15,7 +15,7 @@ public abstract class Person {
 	public static final double HOUSE_RADIUS = 60.0;
 	public static final double AREA_RADIUS = 40.0;
 	
-	public static final double INFECT_RADIUS = 14.0;
+	public static final double INFECT_RADIUS = 16.0;
 	public static final double PROBABILITY_TO_DIE = 30.0;		
 		
 	public int familyNb;
@@ -25,12 +25,12 @@ public abstract class Person {
 	public double probabilityToGetInfected = 40.0;	
 	public double timeToBeInfected =0.0;
 	public double infectionTime =0.0;
+	
 	public boolean lockdownRespect;
 	public boolean socialDistancingRespect;
 		
 	public boolean wearMask = false;
 	
-
 	
 	//Constructor default
 	public Person () {
@@ -44,17 +44,17 @@ public abstract class Person {
 		familyNb = nb;
 		address = new Vec(90+((familyNb+4)%5)*180,100+(int)((familyNb-1)/5)*200);
 		lockdownRespect = (boolean)(Math.random() <= 0.90);
-		socialDistancingRespect = (boolean)(Math.random() <= 0.90);
+		socialDistancingRespect = (boolean)(Math.random() <= 0.60);
 	}
 	
-	public Person (Vec initPosition, Vec initVelocity, int nb, Vec initAddress, boolean ldRespect, boolean sdRespect) {
+	/*public Person (Vec initPosition, Vec initVelocity, int nb, Vec initAddress, boolean ldRespect, boolean sdRespect) {
 		position = initPosition;
 		velocity = initVelocity;
 		familyNb = nb;
 		address = initAddress;
 		lockdownRespect = ldRespect;
 		socialDistancingRespect = sdRespect;
-	}
+	}*/
 
 	public Vec setNewRandomPosition() {
 		return new Vec(800*Math.random()+20,700*Math.random()+50);
@@ -117,7 +117,7 @@ public abstract class Person {
 		return (boolean)((position.dist(address) < HOUSE_RADIUS) && (newPosition.dist(address) > HOUSE_RADIUS));
 	}
 	
-	public void drawFaces (Graphics g){
+	public void drawFaces (Graphics g, boolean socialDist){
 		g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
 	}
 	

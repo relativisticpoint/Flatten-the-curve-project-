@@ -6,8 +6,6 @@ import javax.swing.*;
 
 
 public class DeadFace extends Person { 
-	//attributes
-	private Color status = Color.black;
 	
 	//constructor
 	public DeadFace (){
@@ -37,9 +35,9 @@ public class DeadFace extends Person {
 		return false;
 	}
 	
-	public void drawFaces (Graphics g){
-		g.setColor(status);
-		super.drawFaces(g);
+	public void drawFaces (Graphics g, boolean socialDist){
+		g.setColor(Color.black);
+		super.drawFaces(g,socialDist);
 	}
 	
 	public Person hasRecovered (){
