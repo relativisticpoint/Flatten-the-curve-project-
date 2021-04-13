@@ -132,6 +132,18 @@ public abstract class Person {
 		
 	}
 	
+	//To draw the bubbles when a person washes her/his hands
+	public void washHands (Graphics g){
+		g.setColor(Color.white);
+		g.fillOval ((int)(position.x+20), (int)(position.y+20),2,2);
+		g.fillOval ((int)(position.x+20), (int)(position.y),5,5);
+		g.fillOval ((int) (position.x-15), (int)(position.y)-15,3,3);
+		g.fillOval ((int) (position.x), (int)(position.y)-15,4,4);
+		g.fillOval ((int) (position.x-15), (int)(position.y)+15,5,5);
+		g.fillOval ((int) (position.x+20), (int)(position.y)-15,5,5);
+		
+	}
+	
 	public abstract Person changeStatus ();
 	public abstract Person hasRecovered ();
 	
