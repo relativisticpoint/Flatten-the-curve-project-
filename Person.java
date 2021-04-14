@@ -30,7 +30,7 @@ public abstract class Person {
 	public boolean socialDistancingRespect;
 		
 	public boolean wearMask = false;
-	
+	public boolean vaccinated = false; 
 	
 	//Constructor default
 	public Person () {

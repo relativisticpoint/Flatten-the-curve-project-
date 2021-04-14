@@ -21,6 +21,7 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 	//public boolean activateLockdown = false;
 	//public boolean activateSocialDistancing = false;
 	//public boolean maskOn = false;
+	//public boolean vaccineOn = false ; 
 	
 	//constructor
 	public PlotTheFaces(int initNbOfPeople){

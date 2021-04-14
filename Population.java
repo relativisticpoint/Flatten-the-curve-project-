@@ -19,6 +19,7 @@ public class Population {
 	public LinkedList<Person> deadPeople = new LinkedList<Person>();
 	
 	public boolean maskOn = false;
+	public boolean vaccineOn= false ; 
 	public boolean activateSocialDistancing = false;
 	public boolean activateLockdown = false;
 	
@@ -134,7 +135,7 @@ public class Population {
 			}
 			
 			//An infected person may recover after 5 days or die after 7 days
-			if (p instanceof IllFace) {
+			if (p instanceof IllFace && vaccineOn == false) {
 				if (p.infectionTime < 5*ONE_DAY) {
 					p.infectionTime += 100.0;
 				}else if (p.infectionTime == 7*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
@@ -156,8 +157,8 @@ public class Population {
 				}
 				
 			}
+
 		}
-		
 		//A healthy person may get infected if getting close to an infected person					
 		for (Person a : everyone) {
 			if (a instanceof IllFace) {
@@ -357,7 +358,29 @@ public class Population {
 		}
 	}
 		
-		
+		 public void togetvaccinated () {
+		for (Person a : everyone) {
+			if (vaccineOn && everyone.indexOf(a) < (PlayGround.percentagevaccinated * everyone.size())/100) {
+				a.vaccinated = true ; 
+				
+				if (a instanceof IllFace) {
+				if (a.infectionTime < 1*ONE_DAY) {
+					a.infectionTime += 100.0;
+					
+				}else if (a.infectionTime == 1*ONE_DAY && 100.0*Math.random() > a.PROBABILITY_TO_DIE) {
+					everyone.add(a.hasRecovered());
+					everyone.remove(a);
+					a.infectionTime =0.0;
+					infectedPeople.remove(0) ;
+				}
+			}	
+			}else{
+				a.vaccinated = false;   
+				
+				
+			}
+		}
+	}
 }
 	
 	

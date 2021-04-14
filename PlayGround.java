@@ -12,6 +12,7 @@ public class PlayGround extends JFrame implements ActionListener{
 	private double time = 0.0;
 	private double timeStartLockdown =0.0;
 	private double lockdownDuration =0.0;
+	public static double percentagevaccinated=0.0;
 	private Timer monChrono;
 	private boolean notPause = true ; 
 	
@@ -153,6 +154,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		GlobalPanel.add(TimePanel);
 		GlobalPanel.add(PeopleInfectedPanel);
 		GlobalPanel.add(DeathRatePanel);
+		GlobalPanel.add(Vaccine);
 		
 		// Adding zone where the faces are moving
 		movingObjects = new PlotTheFaces (80);
@@ -172,6 +174,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		Mask.addActionListener(this);
 		PlayorPause.addActionListener(this);
 		Restart.addActionListener(this);
+		Vaccine.addActionListener(this);
 		
 		
 		
@@ -221,6 +224,38 @@ public class PlayGround extends JFrame implements ActionListener{
 			movingObjects.faces.maskOn = !movingObjects.faces.maskOn;
 			movingObjects.faces.toWearMask();
 		}
+		// vaccine button
+		if (e.getSource() == Vaccine) {
+			movingObjects.faces.vaccineOn = !movingObjects.faces.vaccineOn;
+			movingObjects.faces.togetvaccinated(); 
+			if (movingObjects.faces.vaccineOn ) {
+				Vaccine.setBackground(new Color (0,255,128));
+				Vaccine.setForeground(Color.black);
+
+				
+					while (percentagevaccinated <= 0.0 || percentagevaccinated > 100.0  ) {
+					String vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate?");
+					if (vactoSet == null) {
+						movingObjects.faces.vaccineOn =false;
+						LockDown.setBackground(Color.red);
+						LockDown.setForeground(Color.white);
+						break;
+					}
+					percentagevaccinated = Double.parseDouble(vactoSet);
+					}
+					if (percentagevaccinated > 0.0 && percentagevaccinated <= 100.0) {
+					JOptionPane.showMessageDialog(this, + (int)(percentagevaccinated) +" % of the population are now vaccinated! ");
+					
+					}			
+				}else {
+				LockDown.setBackground(Color.red);
+				LockDown.setForeground(Color.white);
+				JOptionPane.showMessageDialog(this,"From now on , no one is vaccinated. ");
+				percentagevaccinated =0.0;
+			}
+				
+
+			} 
 		//Play or Pause button 
 		if (e.getSource() == PlayorPause) {
 			notPause = !notPause;
