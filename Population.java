@@ -23,6 +23,8 @@ public class Population {
 	public boolean activateSocialDistancing = false;
 	public boolean activateLockdown = false;
 	
+	public double pctVaccinated;
+	
 	
 	//Constructor	
 	public Population(int initNb) {
@@ -135,26 +137,39 @@ public class Population {
 			}
 			
 			//An infected person may recover after 5 days or die after 7 days
-			if (p instanceof IllFace && vaccineOn == false) {
-				if (p.infectionTime < 5*ONE_DAY) {
-					p.infectionTime += 100.0;
-				}else if (p.infectionTime == 7*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
+			if (p instanceof IllFace) {
+				if (!vaccineOn || !p.vaccinated) {
+					if (p.infectionTime < 5*ONE_DAY) {
+						p.infectionTime += 100.0;
+					}else if (p.infectionTime == 7*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
 					
-					everyone.add(p.hasRecovered());
-					everyone.remove(p);
-					p.infectionTime =0.0;
-					infectedPeople.remove(0) ;
-					
-				}else{
-					p.infectionTime += 100.0;
-					if (p.infectionTime == 7*ONE_DAY) {
-						everyone.add(0,p.changeStatus());
+						everyone.add(p.hasRecovered());
 						everyone.remove(p);
-						p.infectionTime = 0.0;
-						infectedPeople.remove(0);
-						deadPeople.add(p);
+						p.infectionTime =0.0;
+						infectedPeople.remove(0) ;
+						
+					}else{
+						p.infectionTime += 100.0;
+						if (p.infectionTime == 7*ONE_DAY) {
+							everyone.add(0,p.changeStatus());
+							everyone.remove(p);
+							p.infectionTime = 0.0;
+							infectedPeople.remove(0);
+							deadPeople.add(p);
+						}
 					}
-				}
+				
+				}else{
+					if (p.infectionTime < 1*ONE_DAY) {
+						p.infectionTime += 100.0;
+					
+					}else{   
+						everyone.add(p.hasRecovered());
+						everyone.remove(p);
+						p.infectionTime =0.0;
+						infectedPeople.remove(0) ;
+					}
+				}	
 				
 			}
 
@@ -358,27 +373,13 @@ public class Population {
 		}
 	}
 		
-		 public void togetvaccinated () {
+	public void togetvaccinated () {
 		for (Person a : everyone) {
-			if (vaccineOn && everyone.indexOf(a) < (PlayGround.percentagevaccinated * everyone.size())/100) {
+			if (vaccineOn && everyone.indexOf(a) <= (pctVaccinated*everyone.size()/100.0)) {
 				a.vaccinated = true ; 
 				
-				if (a instanceof IllFace) {
-				if (a.infectionTime < 1*ONE_DAY) {
-					a.infectionTime += 100.0;
-					
-				}else if (a.infectionTime == 1*ONE_DAY && 100.0*Math.random() > a.PROBABILITY_TO_DIE) {
-					everyone.add(a.hasRecovered());
-					everyone.remove(a);
-					a.infectionTime =0.0;
-					infectedPeople.remove(0) ;
-				}
-			}	
-			}else{
-				a.vaccinated = false;   
-				
-				
 			}
+			
 		}
 	}
 }

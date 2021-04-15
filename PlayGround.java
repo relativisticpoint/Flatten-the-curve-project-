@@ -12,9 +12,10 @@ public class PlayGround extends JFrame implements ActionListener{
 	private double time = 0.0;
 	private double timeStartLockdown =0.0;
 	private double lockdownDuration =0.0;
-	public static double percentagevaccinated=0.0;
 	private Timer monChrono;
 	private boolean notPause = true ; 
+	
+	public double percentageVaccinated = 0.0;
 	
 
 	private PlotTheFaces movingObjects;
@@ -103,14 +104,15 @@ public class PlayGround extends JFrame implements ActionListener{
 		PlayorPause.setBounds (930,700,240,50);
 		PlayorPause.setBackground(new Color(70,144,10));//setting color of background
 		PlayorPause.setForeground(Color.black);//setting color of foreground
+		PlayorPause.addActionListener(this);
 		GlobalPanel.add(PlayorPause);
-		//.addActionListener(this); //enabling a listener of actions
-		
+				
 		//button Restart
 		Restart = new JButton ("Restart");//name of button
 		Restart.setBounds (930,770,240,50);
 		Restart.setBackground(new Color(70,144,10));//setting color of background
 		Restart.setForeground(Color.black);//setting color of foreground
+		Restart.addActionListener(this);
 		GlobalPanel.add(Restart);
 		
 		//button Mask
@@ -118,6 +120,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		Mask.setBounds (750,860,100,60);
 		Mask.setBackground(Color.red);//setting color of background
 		Mask.setForeground(Color.white);//setting color of foreground
+		Mask.addActionListener(this);
 		GlobalPanel.add(Mask);
 		
 		//button Handwash
@@ -125,6 +128,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		Handwash.setBounds (150,860,100,60);
 		Handwash.setBackground(Color.red);//setting color of background
 		Handwash.setForeground(Color.white);//setting color of foreground
+		Handwash.addActionListener(this);
 		GlobalPanel.add(Handwash);
 		
 		//button LockDown
@@ -132,6 +136,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		LockDown.setBounds (300,860,100,60);
 		LockDown.setBackground(Color.red);//setting color of background
 		LockDown.setForeground(Color.white);//setting color of foreground
+		LockDown.addActionListener(this);
 		GlobalPanel.add(LockDown);
 		
 		//button Vaccine
@@ -139,7 +144,9 @@ public class PlayGround extends JFrame implements ActionListener{
 		Vaccine.setBounds (450,860,100,60);
 		Vaccine.setBackground(Color.red);//setting color of background
 		Vaccine.setForeground(Color.white);//setting color of foreground
+		Vaccine.addActionListener(this);
 		GlobalPanel.add(Vaccine);
+
 		
 		//button SocialDistancing
 		SocialDistancing= new JButton ("SocialDist");//name of button
@@ -168,15 +175,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		this.setVisible(true);//visibility of the window
 		
 		monChrono = new Timer (100,this);
-		monChrono.start();
-		
-		LockDown.addActionListener(this);
-		Mask.addActionListener(this);
-		PlayorPause.addActionListener(this);
-		Restart.addActionListener(this);
-		Vaccine.addActionListener(this);
-		
-		
+		monChrono.start();		
 		
 	
 	}
@@ -224,16 +223,28 @@ public class PlayGround extends JFrame implements ActionListener{
 			movingObjects.faces.maskOn = !movingObjects.faces.maskOn;
 			movingObjects.faces.toWearMask();
 		}
-		// vaccine button
+		
+		//Handwash button
+		if (e.getSource() == Handwash) {
+			movingObjects.getHandwash = !movingObjects.getHandwash;
+			if (movingObjects.getHandwash) {
+					Handwash.setBackground(new Color (0,255,128));
+					Handwash.setForeground(Color.black);
+			}else {
+				Handwash.setBackground(Color.red);
+				Handwash.setForeground(Color.white);
+			}
+		}
+		
+		//vaccine button
 		if (e.getSource() == Vaccine) {
 			movingObjects.faces.vaccineOn = !movingObjects.faces.vaccineOn;
-			movingObjects.faces.togetvaccinated(); 
 			if (movingObjects.faces.vaccineOn ) {
 				Vaccine.setBackground(new Color (0,255,128));
 				Vaccine.setForeground(Color.black);
 
 				
-					while (percentagevaccinated <= 0.0 || percentagevaccinated > 100.0  ) {
+				while (percentageVaccinated <= 0.0 || percentageVaccinated > 100.0  ) {
 					String vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate?");
 					if (vactoSet == null) {
 						movingObjects.faces.vaccineOn =false;
@@ -241,21 +252,23 @@ public class PlayGround extends JFrame implements ActionListener{
 						LockDown.setForeground(Color.white);
 						break;
 					}
-					percentagevaccinated = Double.parseDouble(vactoSet);
-					}
-					if (percentagevaccinated > 0.0 && percentagevaccinated <= 100.0) {
-					JOptionPane.showMessageDialog(this, + (int)(percentagevaccinated) +" % of the population are now vaccinated! ");
+					percentageVaccinated = Double.parseDouble(vactoSet);
+				}
+				if (percentageVaccinated > 0.0 && percentageVaccinated <= 100.0) {
+					JOptionPane.showMessageDialog(this, + (int)(percentageVaccinated) +" % of the population are now vaccinated! ");
 					
-					}			
-				}else {
+				}			
+			}else {
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
 				JOptionPane.showMessageDialog(this,"From now on , no one is vaccinated. ");
-				percentagevaccinated =0.0;
+				percentageVaccinated =0.0;
 			}
-				
-
-			} 
+			
+			movingObjects.faces.pctVaccinated = percentageVaccinated;	
+			movingObjects.faces.togetvaccinated(); 
+		}
+		 
 		//Play or Pause button 
 		if (e.getSource() == PlayorPause) {
 			notPause = !notPause;
