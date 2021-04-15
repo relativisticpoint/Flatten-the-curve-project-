@@ -1,9 +1,13 @@
 import javax.swing.*;
-import java.util.ArrayList; 
+import java.util.ArrayList;
+import java.util.LinkedList; 
 import java.awt.Color;
 import java.awt.event.*;
 import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 
 public class PlotTheFaces extends JPanel implements MouseListener{
@@ -15,16 +19,14 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 	private Timer monChrono;
 	public Population faces;
 	private int countToChangeVelocity =0;
-	private ArrayList <Vec> gelDistributorLocation = new ArrayList <Vec>(); 
-	public static final double RADIUS = 7.0;
 	
-	//public boolean activateLockdown = false;
-	//public boolean activateSocialDistancing = false;
-	//public boolean maskOn = false;
-	//public boolean vaccineOn = false ; 
+	public boolean getHandwash = false;
+	private LinkedList <Vec> gelDistributorLocation;
+	public static final double RADIUS = 7.0;	
 	
 	//constructor
 	public PlotTheFaces(int initNbOfPeople){
+		gelDistributorLocation = new LinkedList <Vec>();
 		faces = new Population(initNbOfPeople);
 		this.setSize(900,830);
 		this.setLocation (0,0);
@@ -34,30 +36,24 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 	}
 //override
 	public void mouseClicked (MouseEvent e){
-		Vec aPositionOfGel = new Vec (e.getX(),e.getY());
-		gelDistributorLocation.add(aPositionOfGel); 
-		JLabel imageGel = new JLabel (new ImageIcon ("gel50.png"));
-		imageGel.setBounds ((int)(e.getX()),(int)(e.getY()), 50, 50);
-		this.add(imageGel);	
-			
-	}
-	//override
-	public void mouseExited (MouseEvent e){
-	}
-	//override
-	public void mouseReleased (MouseEvent e){
-	}
-	//override
-	public void mousePressed (MouseEvent e){
-	}
-	//override
-	public void mouseEntered (MouseEvent e){
+		if (getHandwash) {
+			Vec aPositionOfGel = new Vec (e.getX(),e.getY());
+			gelDistributorLocation.add(aPositionOfGel); 
+		}	
 	}
 
 	public void paintComponent(Graphics g){
 		int count =0;
 		g.setColor(Color.blue);
 		g.fillRect(0,0,this.getWidth(),this.getHeight());
+		
+		if (!gelDistributorLocation.isEmpty()) {
+			for (Vec v: gelDistributorLocation) {
+				Image imageGel = new ImageIcon("gel50.png").getImage();
+				g.drawImage(imageGel, (int)(v.x)-25, (int)(v.y)-25, null);
+			}	
+		}
+		
 		if (!faces.everyone.isEmpty()){
 			for (Person p : faces.everyone){
 				for (Vec v: gelDistributorLocation){
@@ -82,6 +78,11 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 			}
 		}
 	}
+	
+	public void mouseExited (MouseEvent e){}
+	public void mouseReleased (MouseEvent e){}
+	public void mousePressed (MouseEvent e){}
+	public void mouseEntered (MouseEvent e){}
 	
 	 
 }
