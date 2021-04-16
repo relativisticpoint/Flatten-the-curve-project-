@@ -1,5 +1,3 @@
-
-
 import javax.swing.*;
 import java.util.ArrayList; 
 import java.awt.Color;
@@ -25,6 +23,7 @@ public class PlayGround extends JFrame implements ActionListener{
 	private JTextArea TimeTextArea;
 	private JTextArea PeopleInfectedTextField;
 	private JTextArea DeathRateTextField;
+	private JTextArea VaccineTextField;
 	private JButton Handwash;
 	private JButton Mask;
 	private JButton LockDown;
@@ -86,7 +85,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		
 		//Death Rate panel
 		JPanel DeathRatePanel = new JPanel();
-		DeathRatePanel.setBounds(930,500,240,120);
+		DeathRatePanel.setBounds(930,450,240,120);
 		DeathRatePanel.setLayout(null);
 		DeathRatePanel.setBackground(Color.green);
 		//Death Rate  label
@@ -99,9 +98,24 @@ public class PlayGround extends JFrame implements ActionListener{
 		DeathRateTextField.setBounds(20,50,195,50);
 		DeathRatePanel.add(DeathRateTextField);
 		
+		//Vaccination Pct panel
+		JPanel VaccinePctPanel = new JPanel();
+		VaccinePctPanel.setBounds(930,650,240,120);
+		VaccinePctPanel.setLayout(null);
+		VaccinePctPanel.setBackground(Color.green);
+		//VaccineationPct label
+		JLabel VaccinePctLabel = new JLabel();
+		VaccinePctLabel.setText("Vaccination Percentage");
+		VaccinePctLabel.setBounds(40,10,230,50);
+		VaccinePctPanel.add(VaccinePctLabel); 
+		//VaccinationPct text field 
+		VaccineTextField = new JTextArea();
+		VaccineTextField.setBounds(20,50,195,50);
+		VaccinePctPanel.add(VaccineTextField);
+		
 		//button play or pause
 		PlayorPause = new JButton ("Play or Pause");//name of button
-		PlayorPause.setBounds (930,700,240,50);
+		PlayorPause.setBounds (930,800,240,50);
 		PlayorPause.setBackground(new Color(70,144,10));//setting color of background
 		PlayorPause.setForeground(Color.black);//setting color of foreground
 		PlayorPause.addActionListener(this);
@@ -109,7 +123,7 @@ public class PlayGround extends JFrame implements ActionListener{
 				
 		//button Restart
 		Restart = new JButton ("Restart");//name of button
-		Restart.setBounds (930,770,240,50);
+		Restart.setBounds (930,870,240,50);
 		Restart.setBackground(new Color(70,144,10));//setting color of background
 		Restart.setForeground(Color.black);//setting color of foreground
 		Restart.addActionListener(this);
@@ -154,14 +168,14 @@ public class PlayGround extends JFrame implements ActionListener{
 		SocialDistancing.setBackground(Color.red);//setting color of background
 		SocialDistancing.setForeground(Color.white);//setting color of foreground
 		SocialDistancing.addActionListener(this);
+		GlobalPanel.add(SocialDistancing);
 		
 		//Adding buttons and area for moving objects
-		GlobalPanel.add(SocialDistancing);
-		GlobalPanel.add(Mask);
+		
 		GlobalPanel.add(TimePanel);
 		GlobalPanel.add(PeopleInfectedPanel);
 		GlobalPanel.add(DeathRatePanel);
-		GlobalPanel.add(Vaccine);
+		GlobalPanel.add(VaccinePctPanel);
 		
 		// Adding zone where the faces are moving
 		movingObjects = new PlotTheFaces (80);
@@ -183,113 +197,6 @@ public class PlayGround extends JFrame implements ActionListener{
 	
 	public void actionPerformed (ActionEvent e){
 		
-		//Lockdown button
-		if (e.getSource() == LockDown) {
-			movingObjects.faces.activateLockdown = !movingObjects.faces.activateLockdown;
-			if (movingObjects.faces.activateLockdown) {
-				LockDown.setBackground(new Color (0,255,128));
-				LockDown.setForeground(Color.black);
-				timeStartLockdown = time;
-
-				while (lockdownDuration < 5.0 || lockdownDuration > 14.0) {
-					notPause = false;
-					String toSet = JOptionPane.showInputDialog(this,"How long does the lockdown last? (between 5 and 14 days)");
-					if (toSet == null) {
-						movingObjects.faces.activateLockdown =false;
-						LockDown.setBackground(Color.red);
-						LockDown.setForeground(Color.white);
-						break;
-					}
-					lockdownDuration = Double.parseDouble(toSet);
-					
-				}				
-				notPause = true;
-				
-				if (lockdownDuration >= 5.0 && lockdownDuration <= 14.0) {
-					JOptionPane.showMessageDialog(this,"Our country goes into new lockdown in " + (int)(lockdownDuration) +" days. Stay at home and save lives!");
-				}
-
-			} else {
-				LockDown.setBackground(Color.red);
-				LockDown.setForeground(Color.white);
-				JOptionPane.showMessageDialog(this,"The lockdown is lifted from now");
-				lockdownDuration =0.0;
-			}
-		}		
-
-		
-		//Mask button 
-		if (e.getSource() == Mask) {
-			movingObjects.faces.maskOn = !movingObjects.faces.maskOn;
-			movingObjects.faces.toWearMask();
-		}
-		
-		//Handwash button
-		if (e.getSource() == Handwash) {
-			movingObjects.getHandwash = !movingObjects.getHandwash;
-			if (movingObjects.getHandwash) {
-					Handwash.setBackground(new Color (0,255,128));
-					Handwash.setForeground(Color.black);
-			}else {
-				Handwash.setBackground(Color.red);
-				Handwash.setForeground(Color.white);
-			}
-		}
-		
-		//vaccine button
-		if (e.getSource() == Vaccine) {
-			movingObjects.faces.vaccineOn = !movingObjects.faces.vaccineOn;
-			if (movingObjects.faces.vaccineOn ) {
-				Vaccine.setBackground(new Color (0,255,128));
-				Vaccine.setForeground(Color.black);
-
-				
-				while (percentageVaccinated <= 0.0 || percentageVaccinated > 100.0  ) {
-					String vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate?");
-					if (vactoSet == null) {
-						movingObjects.faces.vaccineOn =false;
-						LockDown.setBackground(Color.red);
-						LockDown.setForeground(Color.white);
-						break;
-					}
-					percentageVaccinated = Double.parseDouble(vactoSet);
-				}
-				if (percentageVaccinated > 0.0 && percentageVaccinated <= 100.0) {
-					JOptionPane.showMessageDialog(this, + (int)(percentageVaccinated) +" % of the population are now vaccinated! ");
-					
-				}			
-			}else {
-				LockDown.setBackground(Color.red);
-				LockDown.setForeground(Color.white);
-				JOptionPane.showMessageDialog(this,"From now on , no one is vaccinated. ");
-				percentageVaccinated =0.0;
-			}
-			
-			movingObjects.faces.pctVaccinated = percentageVaccinated;	
-			movingObjects.faces.togetvaccinated(); 
-		}
-		 
-		//Play or Pause button 
-		if (e.getSource() == PlayorPause) {
-			notPause = !notPause;
-		}
-		//Reset button 
-		if (e.getSource() == Restart) {
-			time = 0.0;
-			
-			GlobalPanel.remove(movingObjects);
-			movingObjects = new PlotTheFaces (80);
-			movingObjects.faces.infectedPeople.clear();
-			movingObjects.faces.deadPeople.clear();
-			
-			LockDown.setBackground(Color.red);
-			LockDown.setForeground(Color.white);
-			
-			//graphs.points.clear();
-			GlobalPanel.add(movingObjects);
-			graphs.xCoordinate += 50; //make a gap between 2 graphs when clicking on restart
-		}
-		
 		//SocialDistancing button 
 		if (e.getSource() == SocialDistancing) {
 			if (!movingObjects.faces.activateLockdown) {
@@ -305,12 +212,149 @@ public class PlayGround extends JFrame implements ActionListener{
 			}
 		}
 		
+		//Lockdown button
+		if (e.getSource() == LockDown) {
+
+			if (lockdownDuration ==0.0) {
+				while (lockdownDuration < 5.0 || lockdownDuration > 14.0) {
+					notPause = false;
+					String toSet = JOptionPane.showInputDialog(this,"How long does the lockdown last? (between 5 and 14 days)");
+					
+					if (toSet == null) {
+						movingObjects.faces.activateLockdown =false;
+						LockDown.setBackground(Color.red);
+						LockDown.setForeground(Color.white);
+						break;
+					}
+					
+					if (toSet.isEmpty()) {
+						continue;
+					}
+					lockdownDuration = Double.parseDouble(toSet);
+					
+				}				
+				notPause = true;
+				
+				if (lockdownDuration >= 5.0 && lockdownDuration <= 14.0) {
+					movingObjects.faces.activateLockdown = true;
+					LockDown.setBackground(new Color (0,255,128));
+					LockDown.setForeground(Color.black);
+					timeStartLockdown = time;
+					
+					movingObjects.faces.activateSocialDistancing = true;
+					SocialDistancing.setBackground(new Color (0,255,128));
+					SocialDistancing.setForeground(Color.black);
+					
+					JOptionPane.showMessageDialog(this,"Our country goes into new lockdown in " + (int)(lockdownDuration) +" days. Stay at home and save lives!");
+				}
+
+			}else{
+				movingObjects.faces.activateLockdown = false;
+				LockDown.setBackground(Color.red);
+				LockDown.setForeground(Color.white);
+				JOptionPane.showMessageDialog(this,"The lockdown is lifted from now");
+				lockdownDuration =0.0;
+			}
+		}		
+
+		
+		//Mask button 
+		if (e.getSource() == Mask) {
+			movingObjects.faces.maskOn = !movingObjects.faces.maskOn;
+			movingObjects.faces.toWearMask();
+			if (movingObjects.faces.maskOn) {
+				Mask.setBackground(new Color (0,255,128));
+				Mask.setForeground(Color.black);
+			}else{
+				Mask.setBackground(Color.red);
+				Mask.setForeground(Color.white);
+			}
+		}
+		
+		//Handwash button
+		if (e.getSource() == Handwash) {
+			movingObjects.getHandwash = !movingObjects.getHandwash;
+			if (movingObjects.getHandwash) {
+				Handwash.setBackground(new Color (0,255,128));
+				Handwash.setForeground(Color.black);
+			}else {
+				Handwash.setBackground(Color.red);
+				Handwash.setForeground(Color.white);
+			}
+		}
+		
+		//vaccine button
+		if (e.getSource() == Vaccine) {
+			double pctToVaccinate = 0.0;
+			while (pctToVaccinate <= 0.0 || pctToVaccinate + percentageVaccinated > 100.0  ) {
+				String vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate? (From 1% to " +(int)(100.0-percentageVaccinated)+ "%)");
+				
+				if (vactoSet == null) {
+					break;
+				}
+				
+				if (vactoSet.isEmpty()) {
+					continue;
+				}
+				pctToVaccinate = Double.parseDouble(vactoSet);
+			}
+			percentageVaccinated += pctToVaccinate;
+			if (percentageVaccinated > 0.0 && percentageVaccinated <= 100.0 && pctToVaccinate != 0.0) {					
+				Vaccine.setBackground(new Color (0,255,128));
+				Vaccine.setForeground(Color.black);
+				
+				movingObjects.faces.togetvaccinated(percentageVaccinated); 
+				JOptionPane.showMessageDialog(this, + (int)(percentageVaccinated) +" % of the population are now vaccinated! ");
+				
+				movingObjects.faces.vaccineOn = true;
+			}
+			
+					
+		}
+		 
+		//Play or Pause button 
+		if (e.getSource() == PlayorPause) {
+			notPause = !notPause;
+		}
+		//Reset button 
+		if (e.getSource() == Restart) {
+			time = 0.0;
+			percentageVaccinated = 0.0;
+			lockdownDuration = 0.0;
+			
+			GlobalPanel.remove(movingObjects);
+			movingObjects = new PlotTheFaces (80);
+			
+			Handwash.setBackground(Color.red);
+			Handwash.setForeground(Color.white);
+			
+			LockDown.setBackground(Color.red);
+			LockDown.setForeground(Color.white);
+			
+			Vaccine.setBackground(Color.red);
+			Vaccine.setForeground(Color.white);
+			
+			SocialDistancing.setBackground(Color.red);
+			SocialDistancing.setForeground(Color.white);
+			
+			Mask.setBackground(Color.red);
+			Mask.setForeground(Color.white);
+			
+			//graphs.points.clear();
+			GlobalPanel.add(movingObjects);
+			graphs.xCoordinate += 50; //make a gap between 2 graphs when clicking on restart
+			
+
+		}
+		
+		
 		if (e.getSource() == monChrono && notPause ){
 			time = time + 100.0;
-			
+					
 			TimeTextArea.setText((int)(time*24.0/this.ONE_DAY)+"h");
-			PeopleInfectedTextField.setText(String.valueOf(movingObjects.faces.infectedPeople.size()));
-			DeathRateTextField.setText(String.valueOf(movingObjects.faces.deadPeople.size()));
+			PeopleInfectedTextField.setText(String.valueOf((int)((movingObjects.faces.infectedPeople.size()/80.0)*100.0)));
+			DeathRateTextField.setText(String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0)));
+			VaccineTextField.setText(String.valueOf((int)(percentageVaccinated)));
 			
 			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*ONE_DAY)) {
 				movingObjects.faces.activateLockdown = false;

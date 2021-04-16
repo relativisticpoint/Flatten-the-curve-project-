@@ -23,7 +23,6 @@ public class Population {
 	public boolean activateSocialDistancing = false;
 	public boolean activateLockdown = false;
 	
-	public double pctVaccinated;
 	
 	
 	//Constructor	
@@ -39,10 +38,10 @@ public class Population {
 		
 		//To generate a population with the desired number of people
 		while (everyone.size() < nbOfPeople) {						
-			newPerson = new SmileyFace (newPerson.setNewRandomPosition(),newPerson.setNewRandomVelocity(), family); 
+			newPerson = new SmileyFace (newPerson.setNewRandomPosition(),newPerson.setNewRandomVelocity(), family, 50.0, false, false); 
 			  					
 			while (this.coincideWhenInitiate(newPerson)) {
-				newPerson = new SmileyFace(newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity(), family);
+				newPerson = new SmileyFace(newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity(), family, 50.0, false, false);
 			}			
 			everyone.add (newPerson);
 			
@@ -110,9 +109,9 @@ public class Population {
 				while (nb >=70) {
 					nb = (int)(80.0*Math.random());
 				}
-				everyone.add(everyone.get(nb).changeStatus());
+				everyone.add(everyone.get(nb).getInfected());
 				everyone.remove(nb);
-				infectedPeople.add(everyone.get(nb).changeStatus()); 
+				infectedPeople.add(everyone.get(nb).getInfected()); 
 			}
 		}
 	}
@@ -122,14 +121,26 @@ public class Population {
 		for(int i = 0; i <everyone.size(); i++) { 
 			Person p = everyone.get(i);
 			
+			if (p.washHandsTime < 0.5*ONE_DAY) {
+				p.washHandsTime += 100.0;
+			}else{
+				if (p.vaccinated) {
+					p.probabilityToGetInfected = 5.0;
+				}else if (p.wearMask){
+					p.probabilityToGetInfected = 15.0;
+				}else{
+					p.probabilityToGetInfected = 50.0;
+				}
+			}
+			
 			//A healthy person may get infected after 2 days
 			if (p.timeToBeInfected >0) {
 				if (p.timeToBeInfected == 2*ONE_DAY) {
 					p.timeToBeInfected = 0.0;
 					if (100.0*Math.random() < p.probabilityToGetInfected) {
-						everyone.add(p.changeStatus());
+						everyone.add(p.getInfected());
 						everyone.remove(p);
-						infectedPeople.add(p.changeStatus()) ;
+						infectedPeople.add(p.getInfected()) ;
 					}
 				}else{
 					p.timeToBeInfected += 100.0;
@@ -138,42 +149,29 @@ public class Population {
 			
 			//An infected person may recover after 5 days or die after 7 days
 			if (p instanceof IllFace) {
-				if (!vaccineOn || !p.vaccinated) {
-					if (p.infectionTime < 5*ONE_DAY) {
-						p.infectionTime += 100.0;
-					}else if (p.infectionTime == 7*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
+				if (p.infectionTime < 5*ONE_DAY) {
+					p.infectionTime += 100.0;
+				}else if (p.infectionTime == 5*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
 					
-						everyone.add(p.hasRecovered());
-						everyone.remove(p);
-						p.infectionTime =0.0;
-						infectedPeople.remove(0) ;
+					everyone.add(p.hasRecovered());
+					everyone.remove(p);
+					p.infectionTime =0.0;
+					infectedPeople.remove(0) ;
 						
-					}else{
-						p.infectionTime += 100.0;
-						if (p.infectionTime == 7*ONE_DAY) {
-							everyone.add(0,p.changeStatus());
-							everyone.remove(p);
-							p.infectionTime = 0.0;
-							infectedPeople.remove(0);
-							deadPeople.add(p);
-						}
-					}
-				
 				}else{
-					if (p.infectionTime < 1*ONE_DAY) {
-						p.infectionTime += 100.0;
-					
-					}else{   
-						everyone.add(p.hasRecovered());
+					p.infectionTime += 100.0;
+					if (p.infectionTime == 7*ONE_DAY) {
+						everyone.add(0,p.die());
 						everyone.remove(p);
-						p.infectionTime =0.0;
-						infectedPeople.remove(0) ;
+						p.infectionTime = 0.0;
+						infectedPeople.remove(0);
+						deadPeople.add(p);
 					}
-				}	
+				}
 				
-			}
-
+			}	
 		}
+	
 		//A healthy person may get infected if getting close to an infected person					
 		for (Person a : everyone) {
 			if (a instanceof IllFace) {
@@ -209,11 +207,18 @@ public class Population {
 			a.wearMask = true;
 		}
 		
+		int count =0;
+		boolean boo = true;
 		while (this.movingImpossible(a)) {				
-			a.velocity = a.setNewRandomVelocity();					
+			a.velocity = a.setNewRandomVelocity();
+			count++;
+			if (count >200) {
+				boo =false;
+				break;
+			}					
 		}
 	
-		a.movement();
+		a.movement(boo);
 	}
 	
 	
@@ -240,7 +245,7 @@ public class Population {
 		if (p instanceof DeadFace) {
 			return false;
 		}
-		Person p1 = new SmileyFace (new Vec((p.position).x + (p.velocity).x, (p.position).y + (p.velocity).y), new Vec ((p.velocity).x,(p.velocity).y),1);
+		Person p1 = new SmileyFace (new Vec((p.position).x + (p.velocity).x, (p.position).y + (p.velocity).y), new Vec ((p.velocity).x,(p.velocity).y),1, 0.0, false,false);
 		return (p.outWindow() || this.coincideAfterMoving(p1));
 	}
 	
@@ -275,7 +280,7 @@ public class Population {
 				break;
 			}					
 		}
-		a.movement();
+		a.movement(true);
 	}
 	
 	//To verify that people are not too close to each other
@@ -318,7 +323,7 @@ public class Population {
 		if (p instanceof DeadFace) {
 			return false;
 		}
-		Person p1 = new SmileyFace (new Vec((p.position).x + (p.velocity).x, (p.position).y + (p.velocity).y), new Vec ((p.velocity).x,(p.velocity).y),1);
+		Person p1 = new SmileyFace (new Vec((p.position).x + (p.velocity).x, (p.position).y + (p.velocity).y), new Vec ((p.velocity).x,(p.velocity).y),1, 0.0, false,false);
 		
 		if (bo) {
 			return (p.outWindow() || this.noRespectSocialDistancing(p1) || this.noRespectNbLimit(p1));
@@ -365,19 +370,31 @@ public class Population {
 		for (Person a : everyone) {
 			if (maskOn) {
 				a.wearMask = true;  //Give masks for all people
-				a.probabilityToGetInfected = 15.0;
+				if (a.vaccinated) {
+					a.probabilityToGetInfected = 1.0;
+				}else{
+					a.probabilityToGetInfected = 15.0;
+				}
 			}else{
 				a.wearMask = false;   //Take off the mask
-				a.probabilityToGetInfected = 40.0;
+				if (a.vaccinated) {
+					a.probabilityToGetInfected = 5.0;
+				}else{
+					a.probabilityToGetInfected = 50.0;
+				}
 			}
 		}
 	}
 		
-	public void togetvaccinated () {
+	public void togetvaccinated (double pctVaccinated) {
 		for (Person a : everyone) {
-			if (vaccineOn && everyone.indexOf(a) <= (pctVaccinated*everyone.size()/100.0)) {
+			if (everyone.indexOf(a) <= (pctVaccinated*everyone.size()/100.0)) {
 				a.vaccinated = true ; 
-				
+				if (a.wearMask) {
+					a.probabilityToGetInfected = 1.0;
+				}else{
+					a.probabilityToGetInfected = 5.0;
+				}
 			}
 			
 		}
