@@ -60,8 +60,10 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 					if (p.position.x < (v.x+30) && p.position.x>(v.x-30) && p.position.y <(v.y+30) && p.position.y > (v.y-30)){
 						if (!(p instanceof DeadFace)) {
 							p.washHands(g);
-							if (!p.wearMask) {
-								p.probabilityToGetInfected = 15.0;
+							if (p.vaccinated) {
+								p.probabilityToGetInfected = 1.0;
+							}else if (p.wearMask) {
+								p.probabilityToGetInfected = 10.0;
 							}else{
 								p.probabilityToGetInfected = 40.0;
 							}								
