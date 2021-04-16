@@ -5,7 +5,7 @@
 import java.util.*;
 import java.awt.*;
 
-public abstract class Person {
+public class Person {
 	
 	//Parameters
 	public static final double ONE_DAY= 4000.0;
@@ -22,15 +22,17 @@ public abstract class Person {
 	public Vec address ;
 	public Vec position;
 	public Vec velocity;
-	public double probabilityToGetInfected = 40.0;	
+	public double probabilityToGetInfected;	  //The initial probability should be 0.5 from the construction of the population
+	
 	public double timeToBeInfected =0.0;
 	public double infectionTime =0.0;
+	public double washHandsTime = 0.0;
 	
 	public boolean lockdownRespect;
 	public boolean socialDistancingRespect;
 		
-	public boolean wearMask = false;
-	public boolean vaccinated = false; 
+	public boolean wearMask;
+	public boolean vaccinated; 
 	
 	//Constructor default
 	public Person () {
@@ -38,23 +40,26 @@ public abstract class Person {
 	}
 	
 	//Constructor
-	public Person (Vec initPosition, Vec initVelocity, int nb) {
+	public Person (Vec initPosition, Vec initVelocity, int nb, double probToGetInfected, boolean mask, boolean vaccine) {
 		position = initPosition;
 		velocity = initVelocity;
 		familyNb = nb;
 		address = new Vec(90+((familyNb+4)%5)*180,100+(int)((familyNb-1)/5)*200);
+		probabilityToGetInfected = probToGetInfected;
+		wearMask = mask;
+		vaccinated = vaccine;
+		
 		lockdownRespect = (boolean)(Math.random() <= 0.90);
 		socialDistancingRespect = (boolean)(Math.random() <= 0.60);
 	}
 	
-	/*public Person (Vec initPosition, Vec initVelocity, int nb, Vec initAddress, boolean ldRespect, boolean sdRespect) {
+	public Person (Vec initPosition, Vec initVelocity, int nb, Vec initAddress, boolean ldRespect, boolean sdRespect) {
 		position = initPosition;
 		velocity = initVelocity;
 		familyNb = nb;
 		address = initAddress;
-		lockdownRespect = ldRespect;
-		socialDistancingRespect = sdRespect;
-	}*/
+		
+	}
 
 	public Vec setNewRandomPosition() {
 		return new Vec(800*Math.random()+20,700*Math.random()+50);
@@ -63,15 +68,12 @@ public abstract class Person {
 	public Vec setNewRandomVelocity() {
 		return new Vec(2*VELOCITY_MAX*Math.random()-VELOCITY_MAX,2*VELOCITY_MAX*Math.random()-VELOCITY_MAX);
 	}
-	
-	
-	public void setVelocity (Vec v) {
-		this.velocity = new Vec(v.x,v.y);
-	}
 
 	//To move a person
-	public void movement() {
-		position.add(velocity);
+	public void movement(boolean boo) {
+		if (boo) {
+			position.add(velocity);
+		}
 	}
 	
 	//Method to verify if the person is still in the world window
@@ -92,6 +94,18 @@ public abstract class Person {
 			return false;
 		}
 		return (boolean)(this.position.dist(p.position) <= RADIUS+INFECT_RADIUS);
+	}
+	
+	public SmileyFace hasRecovered() {
+		return new SmileyFace (this.position, this.velocity, this.familyNb, this.probabilityToGetInfected, this.wearMask, this.vaccinated);
+	}
+	
+	public IllFace getInfected() {
+		return new IllFace (this.position, this.velocity, this.familyNb, this.probabilityToGetInfected, this.wearMask, this.vaccinated);
+	}
+	
+	public DeadFace die() {
+		return new DeadFace (this.position, this.velocity, this.familyNb, this.probabilityToGetInfected, this.wearMask, this.vaccinated);
 	}
 	
 	public boolean inTheSameArea (Person p) {
@@ -134,6 +148,7 @@ public abstract class Person {
 	
 	//To draw the bubbles when a person washes her/his hands
 	public void washHands (Graphics g){
+		washHandsTime =0.0;
 		g.setColor(Color.white);
 		g.fillOval ((int)(position.x+20), (int)(position.y+20),2,2);
 		g.fillOval ((int)(position.x+20), (int)(position.y),5,5);
@@ -144,7 +159,5 @@ public abstract class Person {
 		
 	}
 	
-	public abstract Person changeStatus ();
-	public abstract Person hasRecovered ();
 	
 }

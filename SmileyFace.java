@@ -12,18 +12,8 @@ public class SmileyFace extends Person{
 		super();
 	}
 	
-	public SmileyFace (Vec initPosition, Vec initVelocity, int nb){
-		super(initPosition,initVelocity, nb);
-		
-	}
-	
-	//when a healthy person is infected by virus
-	public Person changeStatus (){
-		Vec newPosition = this.position;
-		Vec newVelocity = this.velocity;
-		int nbFamily = this.familyNb;
-		IllFace newPatient = new IllFace (newPosition,newVelocity, nbFamily);
-		return newPatient;
+	public SmileyFace (Vec initPosition, Vec initVelocity, int nb, double probToGetInfected, boolean mask, boolean vaccine){
+		super(initPosition,initVelocity, nb, probToGetInfected, mask, vaccine);		
 	}
 	
 	
@@ -41,10 +31,7 @@ public class SmileyFace extends Person{
 		}
 	}
 	
-	public Person hasRecovered (){
-		SmileyFace newRecovered = null;
-		return newRecovered;
-	}
+
 }
 
 

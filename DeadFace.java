@@ -12,11 +12,13 @@ public class DeadFace extends Person {
 		super();
 	}
 	
-	public DeadFace (Vec initPosition, Vec initVelocity, int nb){
-		super(initPosition, initVelocity, nb);
+	public DeadFace (Vec initPosition, Vec initVelocity, int nb, double probToGetInfected, boolean mask, boolean vaccine){
+		super(initPosition, initVelocity, nb, probToGetInfected, mask, vaccine);
 		this.velocity = new Vec(0.0,0.0);
 		this.lockdownRespect = false;
 		this.socialDistancingRespect = false;
+		this.wearMask = false;
+		this.vaccinated = false;
 	}	
 
 	public Vec setNewRandomVelocity() {
@@ -40,15 +42,6 @@ public class DeadFace extends Person {
 		super.drawFaces(g,socialDist);
 	}
 	
-	public Person hasRecovered (){
-		DeadFace newRecovered = null;
-		return newRecovered;
-	}
-	
-	public Person changeStatus(){
-		DeadFace newDeath = null;
-		return newDeath;
-	}
 	
 }
 

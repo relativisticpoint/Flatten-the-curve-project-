@@ -12,26 +12,8 @@ public class IllFace extends Person {
 		super();
 	}
 	
-	public IllFace (Vec initPosition, Vec initVelocity, int nb){
-		super(initPosition, initVelocity, nb);
-	}
-	
-	//when a patient dies
-	public Person changeStatus (){
-		Vec newPosition = this.position;
-		Vec nilVelo = new Vec (0.0,0.0);
-		int newFamilyNb = this.familyNb;
-		DeadFace newDeath = new DeadFace (newPosition,nilVelo,newFamilyNb);
-		return newDeath;
-	}
-	
-	//when a patient has recovered
-	public Person hasRecovered (){
-		Vec newPos = this.position;
-		Vec newVelo = this.velocity;
-		int newFamilyNb = this.familyNb;
-		SmileyFace newRecovered = new SmileyFace (newPos,newVelo, newFamilyNb);
-		return newRecovered;
+	public IllFace (Vec initPosition, Vec initVelocity, int nb, double probToGetInfected, boolean mask, boolean vaccine){
+		super(initPosition, initVelocity, nb, probToGetInfected, mask, vaccine);
 	}
 	
 	
