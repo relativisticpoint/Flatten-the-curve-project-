@@ -21,7 +21,7 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 	private int countToChangeVelocity =0;
 	
 	public boolean getHandwash = false;
-	private LinkedList <Vec> gelDistributorLocation;
+	public LinkedList <Vec> gelDistributorLocation;
 	public static final double RADIUS = 7.0;	
 	
 	//constructor
@@ -38,6 +38,9 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 	public void mouseClicked (MouseEvent e){
 		if (getHandwash) {
 			Vec aPositionOfGel = new Vec (e.getX(),e.getY());
+			if (gelDistributorLocation.size() >=4) {
+				gelDistributorLocation.remove(0);
+			}
 			gelDistributorLocation.add(aPositionOfGel); 
 		}	
 	}
@@ -60,13 +63,7 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 					if (p.position.x < (v.x+30) && p.position.x>(v.x-30) && p.position.y <(v.y+30) && p.position.y > (v.y-30)){
 						if (!(p instanceof DeadFace)) {
 							p.washHands(g);
-							if (p.vaccinated) {
-								p.probabilityToGetInfected = 1.0;
-							}else if (p.wearMask) {
-								p.probabilityToGetInfected = 10.0;
-							}else{
-								p.probabilityToGetInfected = 40.0;
-							}								
+								
 						}
 					}
 				}								

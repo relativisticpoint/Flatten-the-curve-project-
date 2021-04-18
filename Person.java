@@ -156,7 +156,13 @@ public class Person {
 		g.fillOval ((int) (position.x), (int)(position.y)-15,4,4);
 		g.fillOval ((int) (position.x-15), (int)(position.y)+15,5,5);
 		g.fillOval ((int) (position.x+20), (int)(position.y)-15,5,5);
-		
+		if (this.vaccinated) {
+			probabilityToGetInfected = 1.0;
+		}else if (this.wearMask) {
+			probabilityToGetInfected = 10.0;
+		}else{
+			probabilityToGetInfected = 40.0;
+		}
 	}
 	
 	

@@ -102,18 +102,17 @@ public class Population {
 	
 	
 	//To start the infection
-	public void startTheInfection(double x) {
-		if (x == ONE_DAY) {
-			for (int i =0; i< (int)(4*Math.random()+2); i++) {
-				int nb = 100;
-				while (nb >=70) {
-					nb = (int)(80.0*Math.random());
-				}
-				everyone.add(everyone.get(nb).getInfected());
-				everyone.remove(nb);
-				infectedPeople.add(everyone.get(nb).getInfected()); 
+	public void startTheInfection() {
+		for (int i =0; i< (int)(4*Math.random()+2); i++) {
+			int nb = 100;
+			while (nb >=70) {
+				nb = (int)(80.0*Math.random());
 			}
+			everyone.add(everyone.get(nb).getInfected());
+			everyone.remove(nb);
+			infectedPeople.add(everyone.get(nb).getInfected()); 
 		}
+		
 	}
 	
 	//To update the world with disease	
