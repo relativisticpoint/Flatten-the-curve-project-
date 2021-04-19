@@ -16,7 +16,7 @@ public class Person {
 	public static final double AREA_RADIUS = 40.0;
 	
 	public static final double INFECT_RADIUS = 16.0;
-	public static final double PROBABILITY_TO_DIE = 30.0;		
+	public static final double PROBABILITY_TO_DIE = 20.0;		
 		
 	public int familyNb;
 	public Vec address ;

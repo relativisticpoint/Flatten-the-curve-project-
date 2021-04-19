@@ -38,10 +38,10 @@ public class Population {
 		
 		//To generate a population with the desired number of people
 		while (everyone.size() < nbOfPeople) {						
-			newPerson = new SmileyFace (newPerson.setNewRandomPosition(),newPerson.setNewRandomVelocity(), family, 50.0, false, false); 
+			newPerson = new SmileyFace (newPerson.setNewRandomPosition(),newPerson.setNewRandomVelocity(), family, 60.0, false, false); 
 			  					
 			while (this.coincideWhenInitiate(newPerson)) {
-				newPerson = new SmileyFace(newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity(), family, 50.0, false, false);
+				newPerson = new SmileyFace(newPerson.setNewRandomPosition(), newPerson.setNewRandomVelocity(), family, 60.0, false, false);
 			}			
 			everyone.add (newPerson);
 			

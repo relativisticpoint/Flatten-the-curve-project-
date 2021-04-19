@@ -62,7 +62,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		GlobalPanel.setBackground(Color.yellow);
 		GlobalPanel.setBorder(border);
 				
-		JLabel graphTitle = new JLabel("Graphs area");
+		JLabel graphTitle = new JLabel("The evolution of the pandemic as a function of time");
 		graphTitle.setBounds(1400,40,200,50);
 		graphTitle.setFont(new Font("Arial", Font.BOLD, 24));
 		GlobalPanel.add(graphTitle); 
