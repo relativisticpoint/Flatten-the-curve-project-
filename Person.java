@@ -11,7 +11,7 @@ public class Person {
 	public static final double ONE_DAY= 4000.0;
 		
 	public static final double RADIUS = 7.0;
-	public static final double VELOCITY_MAX = 4.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
+	public static final double VELOCITY_MAX = 5.0;   //The velocity is in [-VELOCITY_MAX, VELOCITY_MAX]
 	public static final double HOUSE_RADIUS = 60.0;
 	public static final double AREA_RADIUS = 40.0;
 	
@@ -70,8 +70,8 @@ public class Person {
 	}
 
 	//To move a person
-	public void movement(boolean boo) {
-		if (boo) {
+	public void movement(boolean move) {
+		if (move) {
 			position.add(velocity);
 		}
 	}
