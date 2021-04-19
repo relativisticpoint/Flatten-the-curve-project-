@@ -47,8 +47,6 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 
 	public void paintComponent(Graphics g){
 		int count =0;
-		g.setColor(Color.blue);
-		g.fillRect(0,0,this.getWidth(),this.getHeight());
 		
 		if (!gelDistributorLocation.isEmpty()) {
 			for (Vec v: gelDistributorLocation) {
