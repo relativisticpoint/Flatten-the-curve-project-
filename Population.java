@@ -351,7 +351,7 @@ public class Population {
 						a.wearMask = false;
 					}
 					
-					if (a.socialDistancingRespect && a.distanceFromHome() >(a.HOUSE_RADIUS-a.RADIUS)) {
+					if (a.distanceFromHome() >(a.HOUSE_RADIUS-a.RADIUS) || a instanceof IllFace) {
 						getMovingSocialDistancing(a,false);
 					}else{
 						getMoving(a);
