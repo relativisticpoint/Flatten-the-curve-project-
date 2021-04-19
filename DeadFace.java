@@ -38,8 +38,9 @@ public class DeadFace extends Person {
 	}
 	
 	public void drawFaces (Graphics g, boolean socialDist){
-		g.setColor(Color.black);
 		super.drawFaces(g,socialDist);
+		g.setColor(Color.black);
+		g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
 	}
 	
 	

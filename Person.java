@@ -132,14 +132,15 @@ public class Person {
 	}
 	
 	public void drawFaces (Graphics g, boolean socialDist){
-		g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
+		g.setColor(Color.black);
+		g.drawOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
 	}
 	
 	//To draw the "houses" during lockdown
 	public void drawHouses (Graphics g) {
 		Vec rooftop = new Vec (address.x, address.y-HOUSE_RADIUS - 30.0);
 		
-		g.setColor(Color.white);
+		g.setColor(Color.black);
 		g.drawRect ((int)(address.x-HOUSE_RADIUS), (int)(address.y-HOUSE_RADIUS), (int)(2*HOUSE_RADIUS), (int)(2*HOUSE_RADIUS));
 		g.drawLine ((int)(address.x-HOUSE_RADIUS), (int)(address.y-HOUSE_RADIUS), (int)(rooftop.x), (int)(rooftop.y));
 		g.drawLine ((int)(rooftop.x), (int)(rooftop.y), (int)(address.x+HOUSE_RADIUS), (int)(address.y-HOUSE_RADIUS));
@@ -149,13 +150,15 @@ public class Person {
 	//To draw the bubbles when a person washes her/his hands
 	public void washHands (Graphics g){
 		washHandsTime =0.0;
-		g.setColor(Color.white);
-		g.fillOval ((int)(position.x+20), (int)(position.y+20),2,2);
-		g.fillOval ((int)(position.x+20), (int)(position.y),5,5);
-		g.fillOval ((int) (position.x-15), (int)(position.y)-15,3,3);
-		g.fillOval ((int) (position.x), (int)(position.y)-15,4,4);
-		g.fillOval ((int) (position.x-15), (int)(position.y)+15,5,5);
-		g.fillOval ((int) (position.x+20), (int)(position.y)-15,5,5);
+		if (washHandsTime < 0.5*ONE_DAY) {
+			g.setColor(Color.white);
+			g.fillOval ((int)(position.x+20), (int)(position.y+20),2,2);
+			g.fillOval ((int)(position.x+20), (int)(position.y),5,5);
+			g.fillOval ((int) (position.x-15), (int)(position.y)-15,3,3);
+			g.fillOval ((int) (position.x), (int)(position.y)-15,4,4);
+			g.fillOval ((int) (position.x-15), (int)(position.y)+15,5,5);
+			g.fillOval ((int) (position.x+20), (int)(position.y)-15,5,5);
+		}
 		if (this.vaccinated) {
 			probabilityToGetInfected = 1.0;
 		}else if (this.wearMask) {
