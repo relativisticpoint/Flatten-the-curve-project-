@@ -19,7 +19,6 @@ public class PlayGround extends JFrame implements ActionListener{
 	
 	public double percentageVaccinated = 0.0;
 	
-
 	private PlotTheFaces movingObjects;
 	private PlotTheGraphs graphs;
 	
@@ -42,7 +41,6 @@ public class PlayGround extends JFrame implements ActionListener{
 	private JLabel Background;
 	
     private JPanel GlobalPanel = new JPanel();
-    private ArrayList <Point> points = new ArrayList<Point>();
 		
 
 	public PlayGround (){
@@ -62,8 +60,8 @@ public class PlayGround extends JFrame implements ActionListener{
 		GlobalPanel.setBackground(Color.yellow);
 		GlobalPanel.setBorder(border);
 				
-		JLabel graphTitle = new JLabel("The evolution of the pandemic as a function of time");
-		graphTitle.setBounds(1400,40,200,50);
+		JLabel graphTitle = new JLabel("<html> <div style='text-align: center'> The evolution of the pandemic <br/> as a function of time </div></html>",SwingConstants.CENTER);
+		graphTitle.setBounds(1200,40,500,50);
 		graphTitle.setFont(new Font("Arial", Font.BOLD, 24));
 		GlobalPanel.add(graphTitle); 
 		
@@ -84,8 +82,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		TimeTextField.setBounds(20,50,195,50);
 		TimeTextField.setFont(font2);
 		TimeTextField.setHorizontalAlignment(JTextField.CENTER);
-		TimePanel.add(TimeTextField);
-		
+		TimePanel.add(TimeTextField);		
 		
 		//people infected  panel
 		JPanel PeopleInfectedPanel = new JPanel();
@@ -341,8 +338,7 @@ public class PlayGround extends JFrame implements ActionListener{
 			if (startInfection) {
 				double pctToVaccinate = 0.0;
 				while (pctToVaccinate <= 0.0 || pctToVaccinate + percentageVaccinated > 100.0  ) {
-					String vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate? (From 1% to " +(int)(100.0-percentageVaccinated)+ "%)");
-				
+					String vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate? (From 1% to " +(int)(100.0-percentageVaccinated)+ "%)");			
 					if (vactoSet == null) {
 						break;
 					}
@@ -358,8 +354,7 @@ public class PlayGround extends JFrame implements ActionListener{
 					Vaccine.setForeground(Color.black);
 				
 					movingObjects.faces.togetvaccinated(percentageVaccinated); 
-					JOptionPane.showMessageDialog(this, + (int)(percentageVaccinated) +" % of the population are now vaccinated! ");
-				
+					JOptionPane.showMessageDialog(this, + (int)(percentageVaccinated) +" % of the population are now vaccinated! ");				
 					movingObjects.faces.vaccineOn = true;
 				}
 			}
@@ -442,8 +437,7 @@ public class PlayGround extends JFrame implements ActionListener{
 			
 
 		}
-		
-		
+				
 		if (e.getSource() == monChrono && notPause ){
 			if (startInfection) {
 				time = time + 100.0;
@@ -459,20 +453,9 @@ public class PlayGround extends JFrame implements ActionListener{
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
 				lockdownDuration =0.0;
-			}
-							
-			
-			if (movingObjects.faces.activateLockdown) {
-				movingObjects.faces.updateWorldLockdown();
-			}else if (movingObjects.faces.activateSocialDistancing) {
-				movingObjects.faces.updateWorldSocialDistancing();
-			}else{						
-				movingObjects.faces.updateWorld();
-			}
-						
-			
-			
-			
+			}						
+								
+			movingObjects.faces.updateWorld();		
 			countToChangeVelocity++;
 			
 			if (countToChangeVelocity==20) {
