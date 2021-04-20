@@ -20,8 +20,10 @@ public class SmileyFace extends Person{
 	//representation 
 	public void drawFaces (Graphics g, boolean socialDist){
 		super.drawFaces(g,socialDist);
-		g.setColor(Color.green);
-		g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
+		if (!this.vaccinated) {
+			g.setColor(new Color(0,240,0));
+			g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
+		}
 		
 		if (socialDist && this.socialDistancingRespect) {
 			g.drawOval ((int)(position.x-INFECT_RADIUS), (int)(position.y-INFECT_RADIUS),(int)(2*INFECT_RADIUS), (int)(2*INFECT_RADIUS));

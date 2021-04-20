@@ -134,6 +134,10 @@ public class Person {
 	public void drawFaces (Graphics g, boolean socialDist){
 		g.setColor(Color.black);
 		g.drawOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
+		if (this.vaccinated) {
+			g.setColor(Color.yellow);
+			g.fillOval ((int)(position.x-RADIUS), (int)(position.y-RADIUS),(int)(2*RADIUS), (int)(2*RADIUS));
+		}
 	}
 	
 	//To draw the "houses" during lockdown
