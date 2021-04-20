@@ -248,13 +248,13 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 	
 	public void playSound(String soundName) {
 		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile( ));
-			Clip clip = AudioSystem.getClip( );
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+			Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
-			clip.start( );
+			clip.start();
 		} catch(Exception ex) {
 			System.out.println("Error with playing sound.");
-			ex.printStackTrace( );
+			ex.printStackTrace();
 		}
 	}
 	
@@ -281,8 +281,6 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		if (e.getSource() == LockDown) {
 			if (startInfection) {
 				if (lockdownDuration ==0.0) {
-					
-					playSound("Cloche.wav");
 					while (lockdownDuration < 5.0 || lockdownDuration > 14.0) {
 						notPause = false;
 						String toSet = JOptionPane.showInputDialog(this,"How long does the lockdown last? (between 5 and 14 days)");
@@ -303,6 +301,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 					notPause = true;
 				
 					if (lockdownDuration >= 5.0 && lockdownDuration <= 14.0) {
+						playSound("Cloche.wav");
+						
 						movingObjects.faces.activateLockdown = true;
 						LockDown.setBackground(new Color (0,255,128));
 						LockDown.setForeground(Color.black);
@@ -462,7 +462,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			movingObjects.faces.percentageVaccinated = (movingObjects.faces.nbVaccinated*100.0/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()));
 					
 			TimeTextField.setText((int)(time*24.0/this.ONE_DAY)+"h");
-			PeopleInfectedTextField.setText(String.valueOf((int)(movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/80.0)*100.0))+"%)");
+			PeopleInfectedTextField.setText(String.valueOf((int)(movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
 			DeathRateTextField.setText(String.valueOf((int)(movingObjects.faces.deadPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
 			VaccineTextField.setText(String.valueOf((int)(movingObjects.faces.percentageVaccinated)));
 			
