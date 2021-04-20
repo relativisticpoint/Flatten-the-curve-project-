@@ -13,27 +13,27 @@ public class Population {
 	public static final int NB_LIMIT = 4;
 	public static final double AREA_RADIUS = 40;
 	
-	public int nbOfPeople;
+	public int nbVaccinated =0;
 	public ArrayList<Person> everyone;
 	public LinkedList<Person> infectedPeople = new LinkedList<Person>();
 	public LinkedList<Person> deadPeople = new LinkedList<Person>();
 	
 	public boolean maskOn = false;
-	public boolean vaccineOn= false ; 
 	public boolean activateSocialDistancing = false;
 	public boolean activateLockdown = false;
+	
+	public double percentageVaccinated = 0.0;
 	
 	
 	//Constructor	
 	public Population(int initNb) {
-		nbOfPeople = initNb;
 		everyone = new ArrayList<Person>();		
 		Person newPerson = new SmileyFace ();		
 		int[] familyMembersNb = this.generateNbOfMembers();
 		int count =0;
 		int family =1;
 		
-		while (everyone.size() < nbOfPeople) {						
+		while (everyone.size() < initNb) {						
 			newPerson = new SmileyFace (newPerson.setNewRandomPosition(),newPerson.setNewRandomVelocity(), family, 60.0, false, false); 
 			  					
 			while (this.coincideWhenInitiate(newPerson)) {
@@ -379,16 +379,21 @@ public class Population {
 		
 	public void togetvaccinated (double pctVaccinated) {
 		for (Person a : everyone) {
-			if (everyone.indexOf(a) <= (pctVaccinated*everyone.size()/100.0)) {
+			if (a instanceof SmileyFace) {
 				a.vaccinated = true ; 
 				if (a.wearMask) {
 					a.probabilityToGetInfected = 1.0;
 				}else{
 					a.probabilityToGetInfected = 5.0;
 				}
+				nbVaccinated++;
+				if (nbVaccinated >= (int)(pctVaccinated*(everyone.size()-deadPeople.size())/100.0)) {
+					break;
+				}
 			}
 			
 		}
+		percentageVaccinated = (nbVaccinated*100.0/(everyone.size()-deadPeople.size())); 
 	}
 }
 	

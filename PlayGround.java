@@ -8,7 +8,12 @@ import java.awt.event.*;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 
-public class PlayGround extends JFrame implements ActionListener{
+import java.io.File;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioSystem;
+
+public class PlayGround extends JFrame implements ActionListener, WindowListener{
 	public static final double ONE_DAY= 4000.0;
 	private double time = 0.0;
 	private double timeStartLockdown =0.0;
@@ -16,8 +21,6 @@ public class PlayGround extends JFrame implements ActionListener{
 	private Timer monChrono;
 	private boolean notPause = true;
 	private boolean startInfection = false; 
-	
-	public double percentageVaccinated = 0.0;
 	
 	private PlotTheFaces movingObjects;
 	private PlotTheGraphs graphs;
@@ -236,12 +239,24 @@ public class PlayGround extends JFrame implements ActionListener{
 		this.add(GlobalPanel);
 		this.setResizable(true);
 		this.setVisible(true);//visibility of the window
+		addWindowListener(this);
 		
 		monChrono = new Timer (100,this);	
 		monChrono.start();
 	
 	}
 	
+	public void playSound(String soundName) {
+		try {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile( ));
+			Clip clip = AudioSystem.getClip( );
+			clip.open(audioInputStream);
+			clip.start( );
+		} catch(Exception ex) {
+			System.out.println("Error with playing sound.");
+			ex.printStackTrace( );
+		}
+	}
 	
 	public void actionPerformed (ActionEvent e){
 		
@@ -266,6 +281,8 @@ public class PlayGround extends JFrame implements ActionListener{
 		if (e.getSource() == LockDown) {
 			if (startInfection) {
 				if (lockdownDuration ==0.0) {
+					
+					playSound("Cloche.wav");
 					while (lockdownDuration < 5.0 || lockdownDuration > 14.0) {
 						notPause = false;
 						String toSet = JOptionPane.showInputDialog(this,"How long does the lockdown last? (between 5 and 14 days)");
@@ -336,9 +353,10 @@ public class PlayGround extends JFrame implements ActionListener{
 		//vaccine button
 		if (e.getSource() == Vaccine) {
 			if (startInfection) {
-				double pctToVaccinate = 0.0;
-				while (pctToVaccinate <= 0.0 || pctToVaccinate + percentageVaccinated > 100.0  ) {
-					String vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate? (From 1% to " +(int)(100.0-percentageVaccinated)+ "%)");			
+				double pctToVaccinate = movingObjects.faces.percentageVaccinated;
+				String vactoSet = null;
+				while (pctToVaccinate <= movingObjects.faces.percentageVaccinated || pctToVaccinate > 100.0  ) {
+					vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate? (From "+ (int)(movingObjects.faces.percentageVaccinated+1.0) +"% to 100%)");			
 					if (vactoSet == null) {
 						break;
 					}
@@ -348,14 +366,13 @@ public class PlayGround extends JFrame implements ActionListener{
 					}
 					pctToVaccinate = Double.parseDouble(vactoSet);
 				}
-				percentageVaccinated += pctToVaccinate;
-				if (percentageVaccinated > 0.0 && percentageVaccinated <= 100.0 && pctToVaccinate != 0.0) {					
+				movingObjects.faces.percentageVaccinated = pctToVaccinate;
+				if (pctToVaccinate >0.0 && pctToVaccinate <= 100.0 && vactoSet != null) {					
 					Vaccine.setBackground(new Color (0,255,128));
 					Vaccine.setForeground(Color.black);
 				
-					movingObjects.faces.togetvaccinated(percentageVaccinated); 
-					JOptionPane.showMessageDialog(this, + (int)(percentageVaccinated) +" % of the population are now vaccinated! ");				
-					movingObjects.faces.vaccineOn = true;
+					movingObjects.faces.togetvaccinated(movingObjects.faces.percentageVaccinated); 
+					JOptionPane.showMessageDialog(this, + (int)(movingObjects.faces.percentageVaccinated) +" % of the population are now vaccinated! ");				
 				}
 			}
 					
@@ -399,7 +416,7 @@ public class PlayGround extends JFrame implements ActionListener{
 		//Reset button 
 		if (e.getSource() == Restart) {
 			time = 0.0;
-			percentageVaccinated = 0.0;
+			movingObjects.faces.percentageVaccinated = 0.0;
 			lockdownDuration = 0.0;
 			startInfection = false;
 			
@@ -442,20 +459,21 @@ public class PlayGround extends JFrame implements ActionListener{
 			if (startInfection) {
 				time = time + 100.0;
 			}
+			movingObjects.faces.percentageVaccinated = (movingObjects.faces.nbVaccinated*100.0/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()));
 					
 			TimeTextField.setText((int)(time*24.0/this.ONE_DAY)+"h");
 			PeopleInfectedTextField.setText(String.valueOf((int)(movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/80.0)*100.0))+"%)");
 			DeathRateTextField.setText(String.valueOf((int)(movingObjects.faces.deadPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
-			VaccineTextField.setText(String.valueOf((int)(percentageVaccinated)));
+			VaccineTextField.setText(String.valueOf((int)(movingObjects.faces.percentageVaccinated)));
 			
 			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*ONE_DAY)) {
 				movingObjects.faces.activateLockdown = false;
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
 				lockdownDuration =0.0;
-			}						
+			}									
 								
-			movingObjects.faces.updateWorld();		
+			movingObjects.faces.updateWorld();				
 			countToChangeVelocity++;
 			
 			if (countToChangeVelocity==20) {
@@ -471,6 +489,22 @@ public class PlayGround extends JFrame implements ActionListener{
 			
 		}
 	}	
+
+	//override
+	public void windowIconified(WindowEvent e) {
+        monChrono.stop();
+    }
+    
+     public void windowDeiconified(WindowEvent e) {
+        monChrono.start();
+    }
+    
+    public void windowClosed(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {}
+    public void windowActivated(WindowEvent e) {}
+    public void windowDeactivated(WindowEvent e) {}
+    public void windowClosing(WindowEvent e) {}
+
 }
 
 
