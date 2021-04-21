@@ -389,19 +389,19 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 				startInfection = true;
 				
 				JLabel day1 = new JLabel("Days");
-				day1.setBounds(75,430,30,30);
+				day1.setBounds(100,430,30,30);
 				graphs.add(day1);
 				
 				JLabel day2 = new JLabel("Days");			
-				day2.setBounds(75,880,30,30);
+				day2.setBounds(100,880,30,30);
 				graphs.add(day2);
 				
 				JLabel nbCasesInfection = new JLabel("<html>Total <br/> cases </html>");
-				nbCasesInfection.setBounds(0,370,60,50);
+				nbCasesInfection.setBounds(25,370,60,50);
 				graphs.add(nbCasesInfection);
 				
 				JLabel nbCasesDeath = new JLabel("<html>Total <br/> death </html>");
-				nbCasesDeath.setBounds(0,820,60,50);
+				nbCasesDeath.setBounds(25,820,60,50);
 				graphs.add(nbCasesDeath);
 				
 				movingObjects.gelDistributorLocation.clear();
@@ -462,7 +462,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			movingObjects.faces.percentageVaccinated = (movingObjects.faces.nbVaccinated*100.0/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()));
 					
 			TimeTextField.setText((int)(time*24.0/this.ONE_DAY)+"h");
-			PeopleInfectedTextField.setText(String.valueOf((int)(movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
+			PeopleInfectedTextField.setText(String.valueOf((int)(movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(80.0-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
 			DeathRateTextField.setText(String.valueOf((int)(movingObjects.faces.deadPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
 			VaccineTextField.setText(String.valueOf((int)(movingObjects.faces.percentageVaccinated)));
 			

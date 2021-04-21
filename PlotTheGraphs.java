@@ -19,7 +19,7 @@ public class PlotTheGraphs extends JPanel {
 	public int nbInfected = 0;
 	public int nbDead = 0;
 	public double time;
-	public int xCoordinate =75;
+	public int xCoordinate =100;
 	
 	//constructor
 	public PlotTheGraphs (){
@@ -39,7 +39,7 @@ public class PlotTheGraphs extends JPanel {
 			
 			if ((xCoordinate/5)%5 == 0) {
 				JLabel xInfectionCoor = new JLabel();
-				xInfectionCoor.setText(String.valueOf(xCoordinate/5-14));
+				xInfectionCoor.setText(String.valueOf(xCoordinate/5-19));
 				xInfectionCoor.setBounds(xCoordinate,405,30,30);
 				this.add(xInfectionCoor);
 			}
@@ -47,13 +47,13 @@ public class PlotTheGraphs extends JPanel {
 			for (int i =0; i<= (int)(nbInfected/10); i++) {
 				JLabel yInfectionCoor = new JLabel();
 				yInfectionCoor.setText(String.valueOf(10*i));
-				yInfectionCoor.setBounds(45,390-i*50,20,20);
+				yInfectionCoor.setBounds(70,390-i*50,20,20);
 				this.add(yInfectionCoor);
 			}
 			
 			if ((xCoordinate/5)%5 == 0) {
 				JLabel xDeathCoor = new JLabel();
-				xDeathCoor.setText(String.valueOf(xCoordinate/5-14));
+				xDeathCoor.setText(String.valueOf(xCoordinate/5-19));
 				xDeathCoor.setBounds(xCoordinate,855,30,30);
 				this.add(xDeathCoor);
 			}
@@ -61,7 +61,7 @@ public class PlotTheGraphs extends JPanel {
 			for (int i =0; i<= (int)(nbDead/10); i++) {
 				JLabel yDeathCoor = new JLabel();
 				yDeathCoor.setText(String.valueOf(10*i));
-				yDeathCoor.setBounds(45,840-i*50,20,20);
+				yDeathCoor.setBounds(70,840-i*50,20,20);
 				this.add(yDeathCoor);
 			}
 			
