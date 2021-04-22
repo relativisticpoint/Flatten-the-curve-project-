@@ -178,7 +178,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		
 		Mask = new JButton ("Mask");
-		Mask.setBounds (750,860,100,60);
+		Mask.setBounds (700,860,100,60);
 		Mask.setBackground(Color.red);
 		Mask.setForeground(Color.white);
 		Mask.setBorder(border);
@@ -187,7 +187,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		
 		Handwash= new JButton ("Handwash");
-		Handwash.setBounds (150,860,100,60);
+		Handwash.setBounds (100,860,100,60);
 		Handwash.setBackground(Color.red);
 		Handwash.setForeground(Color.white);
 		Handwash.setBorder(border);
@@ -196,7 +196,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 
 		LockDown= new JButton ("LockDown");
-		LockDown.setBounds (300,860,100,60);
+		LockDown.setBounds (250,860,100,60);
 		LockDown.setBackground(Color.red);
 		LockDown.setForeground(Color.white);
 		LockDown.setBorder(border);
@@ -205,7 +205,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 
 		Vaccine= new JButton ("Vaccine");
-		Vaccine.setBounds (450,860,100,60);
+		Vaccine.setBounds (400,860,100,60);
 		Vaccine.setBackground(Color.red);
 		Vaccine.setForeground(Color.white);
 		Vaccine.setBorder(border);
@@ -214,7 +214,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 
 		
 		SocialDistancing= new JButton ("SocialDist");
-		SocialDistancing.setBounds (600,860,100,60);
+		SocialDistancing.setBounds (550,860,100,60);
 		SocialDistancing.setBackground(Color.red);
 		SocialDistancing.setForeground(Color.white);
 		SocialDistancing.setBorder(border);
