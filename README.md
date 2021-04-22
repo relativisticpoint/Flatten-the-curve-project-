@@ -1,6 +1,6 @@
 # Flaten-the-curve-project-
 # About
-With the COVID-19 epidemic still raging around the world, we have decidedto raise public awareness by carrying out the “Flatten The Curve” project. The main idea of our project is to simulate our world where the virus propagates as well as some protocols established in many countries in order to reduce the number of infected people in addition to the role of some parameters when it comes to stopping the virus.
+With the COVID-19 pandemic still raging around the world, we have decidedto raise public awareness by carrying out the “Flatten The Curve” project. The main idea of our project is to simulate our world where the virus propagates as well as some protocols established in many countries in order to reduce the number of infected people in addition to the role of some parameters when it comes to stopping the virus.
 The user can start the simulation by excecuting the class class `FlattenTheCurve.java`
 # Dots
 The dots represent humans, they mimic the behavior of a crowd of people moving randomly during the day.
