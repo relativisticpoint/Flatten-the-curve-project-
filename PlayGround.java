@@ -13,7 +13,6 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioSystem;
 
 public class PlayGround extends JFrame implements ActionListener, WindowListener{
-	public static final double ONE_DAY= 4000.0;
 	private double time = 0.0;
 	private double timeStartLockdown =0.0;
 	private double lockdownDuration =0.0;
@@ -449,12 +448,12 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			}
 			movingObjects.faces.percentageVaccinated = (movingObjects.faces.nbVaccinated*100.0/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()));
 					
-			TimeTextField.setText((int)(time*24.0/this.ONE_DAY)+"h");
+			TimeTextField.setText((int)(time*24.0/movingObjects.ONE_DAY)+"h");
 			PeopleInfectedTextField.setText(String.valueOf((int)(movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(80.0-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
 			DeathRateTextField.setText(String.valueOf((int)(movingObjects.faces.deadPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
 			VaccineTextField.setText(String.valueOf((int)(movingObjects.faces.percentageVaccinated)));
 			
-			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*ONE_DAY)) {
+			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*movingObjects.ONE_DAY)) {
 				movingObjects.faces.activateLockdown = false;
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);

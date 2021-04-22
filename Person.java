@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Person {
 	
-	protected static final double ONE_DAY= 4000.0;		
+	public static final double ONE_DAY= 4000.0;		
 	public static final double RADIUS = 7.0;
 	public static final double VELOCITY_MAX = 5.0;  
 	public static final double HOUSE_RADIUS = 60.0;
@@ -97,7 +97,7 @@ public class Person {
 	}
 	
 	
-	public boolean inTheSameArea (Person p) {
+	public boolean inTheSameAreaWith (Person p) {
 		if (!this.differentFrom(p) || (p instanceof DeadFace)) {
 			return false;
 		}

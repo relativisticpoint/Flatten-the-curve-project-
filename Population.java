@@ -3,9 +3,7 @@ import java.awt.*;
 
 public class Population {
 	
-	public static final double ONE_DAY = 4000.0;
-	public static final int NB_LIMIT = 4;
-	public static final double AREA_RADIUS = 40;
+	public static final int NB_LIMIT = 5;
 	
 	public int nbVaccinated =0;
 	public double percentageVaccinated = 0.0;
@@ -104,7 +102,7 @@ public class Population {
 		for(int i = 0; i <everyone.size(); i++) { 
 			Person p = everyone.get(i);
 			
-			if (p.washHandsTime < 0.5*ONE_DAY) {
+			if (p.washHandsTime < 0.5*p.ONE_DAY) {
 				p.washHandsTime += 100.0;
 			}else{
 				if (p.vaccinated) {
@@ -118,7 +116,7 @@ public class Population {
 			
 			
 			if (p.timeToBeInfected >0) {
-				if (p.timeToBeInfected == 2*ONE_DAY) {
+				if (p.timeToBeInfected == 2*p.ONE_DAY) {
 					p.timeToBeInfected = 0.0;
 					if (100.0*Math.random() < p.probabilityToGetInfected) {
 						everyone.add(p.getInfected());
@@ -132,9 +130,9 @@ public class Population {
 			
 			
 			if (p instanceof IllFace) {
-				if (p.infectionTime < 5*ONE_DAY) {
+				if (p.infectionTime < 5*p.ONE_DAY) {
 					p.infectionTime += 100.0;
-				}else if (p.infectionTime == 5*ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
+				}else if (p.infectionTime == 5*p.ONE_DAY && 100.0*Math.random() > p.PROBABILITY_TO_DIE) {
 					
 					everyone.add(p.hasRecovered());
 					everyone.remove(p);
@@ -143,7 +141,7 @@ public class Population {
 						
 				}else{
 					p.infectionTime += 100.0;
-					if (p.infectionTime == 7*ONE_DAY) {
+					if (p.infectionTime == 7*p.ONE_DAY) {
 						everyone.add(0,p.die());
 						everyone.remove(p);
 						p.infectionTime = 0.0;
@@ -281,9 +279,9 @@ public class Population {
 	public boolean noRespectNbLimit (Person p) {	
 		int count =0;
 		for (Person b : everyone) {
-			if (p.position.dist(b.position) < (p.AREA_RADIUS-p.RADIUS) && !(b instanceof DeadFace)) {
+			if (p.inTheSameAreaWith(b)) {
 				count++;
-				if (count ==6) {
+				if (count == NB_LIMIT+1) {
 					return true;
 				}
 			}

@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 
 public class PlotTheFaces extends JPanel implements MouseListener{
 	
-	private static final double ONE_DAY= 4000.0;
+	public static final double ONE_DAY= 4000.0;
 	
 	public Population faces;
 	public boolean getHandwash = false;
