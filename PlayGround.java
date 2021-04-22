@@ -237,14 +237,14 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		monChrono.start();	
 	}
 	
-	public void playSound(String soundName) {
+	public void playSoundFile(String soundName) {
 		try {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 			clip.start();
 		} catch(Exception ex) {
-			System.out.println("Error with playing sound.");
+			System.out.println("Error with playing this sound file.");
 			ex.printStackTrace();
 		}
 	}
@@ -286,7 +286,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 					notPause = true;
 				
 					if (lockdownDuration >= 5.0 && lockdownDuration <= 14.0) {
-						playSound("Cloche.wav");
+						playSoundFile("Cloche.wav");
 						
 						movingObjects.faces.activateLockdown = true;
 						LockDown.setBackground(new Color (0,255,128));
