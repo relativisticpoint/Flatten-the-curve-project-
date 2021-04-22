@@ -136,7 +136,7 @@ public class Person {
 	public void drawHouses (Graphics g) {
 		Vec rooftop = new Vec (address.x, address.y-HOUSE_RADIUS - 30.0);
 		
-		g.setColor(Color.black);
+		g.setColor(Color.white);
 		g.drawRect ((int)(address.x-HOUSE_RADIUS), (int)(address.y-HOUSE_RADIUS), (int)(2*HOUSE_RADIUS), (int)(2*HOUSE_RADIUS));
 		g.drawLine ((int)(address.x-HOUSE_RADIUS), (int)(address.y-HOUSE_RADIUS), (int)(rooftop.x), (int)(rooftop.y));
 		g.drawLine ((int)(rooftop.x), (int)(rooftop.y), (int)(address.x+HOUSE_RADIUS), (int)(address.y-HOUSE_RADIUS));		
