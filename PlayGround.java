@@ -13,6 +13,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioSystem;
 
 public class PlayGround extends JFrame implements ActionListener, WindowListener{
+	public static final double ONE_DAY= 4000.0;
 	private double time = 0.0;
 	private double timeStartLockdown =0.0;
 	private double lockdownDuration =0.0;
@@ -55,19 +56,26 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		GlobalPanel.setBounds(0,0,1800,800);
 		GlobalPanel.setLayout(null);
-		GlobalPanel.setBackground(Color.yellow);
+		GlobalPanel.setBackground(new Color(234,228,203));
 		GlobalPanel.setBorder(border);
 			
+		JPanel Bar = new JPanel();
+		Bar.setBounds(1210,20,5,900);
+		Bar.setLayout(null);
+		Bar.setBackground(new Color(62,60,60));
+		Bar.setBorder(border);
+		GlobalPanel.add(Bar);
 			
 		JPanel TimePanel = new JPanel();
 		TimePanel.setBounds(930,50,240,120);
 		TimePanel.setLayout(null);
-		TimePanel.setBackground(Color.green);
+		TimePanel.setBackground(new Color(62,60,60));
 		TimePanel.setBorder(border);
 
 		JLabel TimeLabel = new JLabel();
 		TimeLabel.setText("Time");
 		TimeLabel.setBounds(100,10,230,50);
+		TimeLabel.setForeground(Color.white);
 		TimeLabel.setFont(font1);
 		TimePanel.add(TimeLabel); 
 
@@ -82,11 +90,12 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		JPanel PeopleInfectedPanel = new JPanel();
 		PeopleInfectedPanel.setBounds(930,200,240,120);
 		PeopleInfectedPanel.setLayout(null);
-		PeopleInfectedPanel.setBackground(Color.green);
+		PeopleInfectedPanel.setBackground(new Color(62,60,60));
 		PeopleInfectedPanel.setBorder(border);
 
 		JLabel PeopleInfectedLabel = new JLabel("Total infection cases");
 		PeopleInfectedLabel.setBounds(40,10,230,50);
+		PeopleInfectedLabel.setForeground(Color.white);
 		PeopleInfectedLabel.setFont(font1);
 		PeopleInfectedPanel.add(PeopleInfectedLabel); 
 
@@ -102,11 +111,12 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		JPanel DeathRatePanel = new JPanel();
 		DeathRatePanel.setBounds(930,350,240,120);
 		DeathRatePanel.setLayout(null);
-		DeathRatePanel.setBackground(Color.green);
+		DeathRatePanel.setBackground(new Color(62,60,60));
 		DeathRatePanel.setBorder(border);
 
 		JLabel DeathRateLabel = new JLabel("Total death cases");
 		DeathRateLabel.setBounds(50,10,230,50);
+		DeathRateLabel.setForeground(Color.white);
 		DeathRateLabel.setFont(font1);
 		DeathRatePanel.add(DeathRateLabel); 
 
@@ -122,11 +132,12 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		JPanel VaccinePctPanel = new JPanel();
 		VaccinePctPanel.setBounds(930,500,240,120);
 		VaccinePctPanel.setLayout(null);
-		VaccinePctPanel.setBackground(Color.green);
+		VaccinePctPanel.setBackground(new Color(62,60,60));
 		VaccinePctPanel.setBorder(border);
 		
 		JLabel VaccinePctLabel = new JLabel("Vaccination Percentage (%)");
 		VaccinePctLabel.setBounds(20,10,230,50);
+		VaccinePctLabel.setForeground(Color.white);
 		VaccinePctLabel.setFont(font1);
 		VaccinePctPanel.add(VaccinePctLabel); 
 		
@@ -141,8 +152,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		PlayorPause = new JButton ("Play or Pause");
 		PlayorPause.setBounds (930,730,240,50);
-		PlayorPause.setBackground(new Color(70,144,10));
-		PlayorPause.setForeground(Color.black);
+		PlayorPause.setBackground(new Color(62,60,60));
+		PlayorPause.setForeground(Color.white);
 		PlayorPause.setBorder(border);
 		PlayorPause.addActionListener(this);
 		GlobalPanel.add(PlayorPause);
@@ -150,8 +161,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		StartInfection = new JButton ("StartTheInfection");
 		StartInfection.setBounds (930,800,240,50);
-		StartInfection.setBackground(new Color(70,144,10));
-		StartInfection.setForeground(Color.black);
+		StartInfection.setBackground(new Color(62,60,60));
+		StartInfection.setForeground(Color.white);
 		StartInfection.setBorder(border);
 		StartInfection.addActionListener(this);
 		GlobalPanel.add(StartInfection);
@@ -159,8 +170,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		Restart = new JButton ("Restart");
 		Restart.setBounds (930,870,240,50);
-		Restart.setBackground(new Color(70,144,10));
-		Restart.setForeground(Color.black);
+		Restart.setBackground(new Color(62,60,60));
+		Restart.setForeground(Color.white);
 		Restart.setBorder(border);
 		Restart.addActionListener(this);
 		GlobalPanel.add(Restart);
@@ -449,12 +460,12 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			}
 			movingObjects.faces.percentageVaccinated = (movingObjects.faces.nbVaccinated*100.0/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()));
 					
-			TimeTextField.setText((int)(time*24.0/movingObjects.ONE_DAY)+"h");
-			PeopleInfectedTextField.setText(String.valueOf((movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(80.0-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
-			DeathRateTextField.setText(String.valueOf((movingObjects.faces.deadPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
+			TimeTextField.setText((int)(time*24.0/this.ONE_DAY)+"h");
+			PeopleInfectedTextField.setText(String.valueOf(movingObjects.faces.infectedPeople.size())+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(80.0-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
+			DeathRateTextField.setText(String.valueOf(movingObjects.faces.deadPeople.size())+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
 			VaccineTextField.setText(String.valueOf((int)(movingObjects.faces.percentageVaccinated)));
 			
-			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*movingObjects.ONE_DAY)) {
+			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*ONE_DAY)) {
 				movingObjects.faces.activateLockdown = false;
 				LockDown.setBackground(Color.red);
 				LockDown.setForeground(Color.white);
