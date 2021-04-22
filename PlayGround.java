@@ -55,26 +55,19 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		GlobalPanel.setBounds(0,0,1800,800);
 		GlobalPanel.setLayout(null);
-		GlobalPanel.setBackground(new Color(234,228,203));
+		GlobalPanel.setBackground(Color.yellow);
 		GlobalPanel.setBorder(border);
 			
-		JPanel Bar = new JPanel();
-		Bar.setBounds(1210,20,5,900);
-		Bar.setLayout(null);
-		Bar.setBackground(new Color(62,60,60));
-		Bar.setBorder(border);
-		GlobalPanel.add(Bar);
 			
 		JPanel TimePanel = new JPanel();
 		TimePanel.setBounds(930,50,240,120);
 		TimePanel.setLayout(null);
-		TimePanel.setBackground(new Color(62,60,60));
+		TimePanel.setBackground(Color.green);
 		TimePanel.setBorder(border);
 
 		JLabel TimeLabel = new JLabel();
 		TimeLabel.setText("Time");
 		TimeLabel.setBounds(100,10,230,50);
-		TimeLabel.setForeground(Color.white);
 		TimeLabel.setFont(font1);
 		TimePanel.add(TimeLabel); 
 
@@ -89,12 +82,11 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		JPanel PeopleInfectedPanel = new JPanel();
 		PeopleInfectedPanel.setBounds(930,200,240,120);
 		PeopleInfectedPanel.setLayout(null);
-		PeopleInfectedPanel.setBackground(new Color(62,60,60));
+		PeopleInfectedPanel.setBackground(Color.green);
 		PeopleInfectedPanel.setBorder(border);
 
 		JLabel PeopleInfectedLabel = new JLabel("Total infection cases");
 		PeopleInfectedLabel.setBounds(40,10,230,50);
-		PeopleInfectedLabel.setForeground(Color.white);
 		PeopleInfectedLabel.setFont(font1);
 		PeopleInfectedPanel.add(PeopleInfectedLabel); 
 
@@ -110,12 +102,11 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		JPanel DeathRatePanel = new JPanel();
 		DeathRatePanel.setBounds(930,350,240,120);
 		DeathRatePanel.setLayout(null);
-		DeathRatePanel.setBackground(new Color(62,60,60));
+		DeathRatePanel.setBackground(Color.green);
 		DeathRatePanel.setBorder(border);
 
 		JLabel DeathRateLabel = new JLabel("Total death cases");
 		DeathRateLabel.setBounds(50,10,230,50);
-		DeathRateLabel.setForeground(Color.white);
 		DeathRateLabel.setFont(font1);
 		DeathRatePanel.add(DeathRateLabel); 
 
@@ -131,12 +122,11 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		JPanel VaccinePctPanel = new JPanel();
 		VaccinePctPanel.setBounds(930,500,240,120);
 		VaccinePctPanel.setLayout(null);
-		VaccinePctPanel.setBackground(new Color(62,60,60));
+		VaccinePctPanel.setBackground(Color.green);
 		VaccinePctPanel.setBorder(border);
 		
 		JLabel VaccinePctLabel = new JLabel("Vaccination Percentage (%)");
 		VaccinePctLabel.setBounds(20,10,230,50);
-		VaccinePctLabel.setForeground(Color.white);
 		VaccinePctLabel.setFont(font1);
 		VaccinePctPanel.add(VaccinePctLabel); 
 		
@@ -151,8 +141,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		PlayorPause = new JButton ("Play or Pause");
 		PlayorPause.setBounds (930,730,240,50);
-		PlayorPause.setBackground(new Color(62,60,60));
-		PlayorPause.setForeground(Color.white);
+		PlayorPause.setBackground(new Color(70,144,10));
+		PlayorPause.setForeground(Color.black);
 		PlayorPause.setBorder(border);
 		PlayorPause.addActionListener(this);
 		GlobalPanel.add(PlayorPause);
@@ -160,8 +150,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		StartInfection = new JButton ("StartTheInfection");
 		StartInfection.setBounds (930,800,240,50);
-		StartInfection.setBackground(new Color(62,60,60));
-		StartInfection.setForeground(Color.white);
+		StartInfection.setBackground(new Color(70,144,10));
+		StartInfection.setForeground(Color.black);
 		StartInfection.setBorder(border);
 		StartInfection.addActionListener(this);
 		GlobalPanel.add(StartInfection);
@@ -169,8 +159,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		
 		Restart = new JButton ("Restart");
 		Restart.setBounds (930,870,240,50);
-		Restart.setBackground(new Color(62,60,60));
-		Restart.setForeground(Color.white);
+		Restart.setBackground(new Color(70,144,10));
+		Restart.setForeground(Color.black);
 		Restart.setBorder(border);
 		Restart.addActionListener(this);
 		GlobalPanel.add(Restart);
