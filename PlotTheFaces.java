@@ -12,19 +12,13 @@ import javax.imageio.ImageIO;
 
 public class PlotTheFaces extends JPanel implements MouseListener{
 	
-	//attributes
-	public static final double ONE_DAY= 4000.0;
+	private static final double ONE_DAY= 4000.0;
 	
-	private double time =0.0;
-	private Timer monChrono;
 	public Population faces;
-	private int countToChangeVelocity =0;
-	
 	public boolean getHandwash = false;
 	public LinkedList <Vec> gelDistributorLocation;
-	public static final double RADIUS = 7.0;	
 	
-	//constructor
+
 	public PlotTheFaces(int initNbOfPeople){
 		gelDistributorLocation = new LinkedList <Vec>();
 		faces = new Population(initNbOfPeople);
@@ -32,18 +26,8 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 		this.setLocation (0,0);
 		this.setLayout (null);
 		addMouseListener(this);
+	}
 
-	}
-//override
-	public void mouseClicked (MouseEvent e){
-		if (getHandwash) {
-			Vec aPositionOfGel = new Vec (e.getX(),e.getY());
-			if (gelDistributorLocation.size() >=4) {
-				gelDistributorLocation.remove(0);
-			}
-			gelDistributorLocation.add(aPositionOfGel); 
-		}	
-	}
 
 	public void paintComponent(Graphics g){
 		int count =0;
@@ -64,12 +48,10 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 								
 						}
 					}
-				}								
-				if (faces.activateSocialDistancing) {
-					//draw all the faces				
+				}		
+										
+				if (faces.activateSocialDistancing) {				
 					p.drawFaces(g, true);  
-				
-					//draw the houses during lockdown
 					if	(faces.activateLockdown) {
 						p.drawHouses(g);
 					}
@@ -81,6 +63,17 @@ public class PlotTheFaces extends JPanel implements MouseListener{
 				}
 			}
 		}
+	}
+	
+	
+	public void mouseClicked (MouseEvent e){
+		if (getHandwash) {
+			Vec aPositionOfGel = new Vec (e.getX(),e.getY());
+			if (gelDistributorLocation.size() >=4) {
+				gelDistributorLocation.remove(0);
+			}
+			gelDistributorLocation.add(aPositionOfGel); 
+		}	
 	}
 	
 	public void mouseExited (MouseEvent e){}

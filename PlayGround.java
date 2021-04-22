@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.event.*;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.Clip;
@@ -18,6 +17,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 	private double time = 0.0;
 	private double timeStartLockdown =0.0;
 	private double lockdownDuration =0.0;
+	private int countToChangeVelocity =0;
 	private Timer monChrono;
 	private boolean notPause = true;
 	private boolean startInfection = false; 
@@ -25,7 +25,6 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 	private PlotTheFaces movingObjects;
 	private PlotTheGraphs graphs;
 	
-	private int countToChangeVelocity =0;
 	private JTextField TimeTextField;
 	private JTextField PeopleInfectedTextField;
 	private JTextField DeathRateTextField;
@@ -41,209 +40,201 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 	private Border border;
 	private Font font1;
 	private Font font2;
-	private JLabel Background;
-	
-    private JPanel GlobalPanel = new JPanel();
-		
+	private JLabel Background;	
+    private JPanel GlobalPanel = new JPanel();		
 
 	public PlayGround (){
-		this.setTitle ("Flatten the Curve"); //setting the title
-		this.setSize (1800,1000); //setting the size
-		this.setLocation(0,0); //setting the location
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //operation on closing
+		this.setTitle ("Flatten the Curve");
+		this.setSize (1800,1000);
+		this.setLocation(0,0);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
+		this.setResizable(false); 
 		
 		border = BorderFactory.createLineBorder(Color.black,1);
 		font1 = new Font("TimesNewRoman",Font.BOLD, 14);
 		font2 = new Font("TimesNewRoman",Font.PLAIN, 16);
 		
-		//GlobalPanel
-		this.setResizable(false); 
 		GlobalPanel.setBounds(0,0,1800,800);
 		GlobalPanel.setLayout(null);
 		GlobalPanel.setBackground(Color.yellow);
 		GlobalPanel.setBorder(border);
-				
-		JLabel graphTitle = new JLabel("<html> <div style='text-align: center'> The evolution of the pandemic <br/> as a function of time </div></html>",SwingConstants.CENTER);
-		graphTitle.setBounds(1200,40,500,50);
-		graphTitle.setFont(new Font("Arial", Font.BOLD, 24));
-		GlobalPanel.add(graphTitle); 
-		
-		//time panel
+			
+			
 		JPanel TimePanel = new JPanel();
 		TimePanel.setBounds(930,50,240,120);
 		TimePanel.setLayout(null);
 		TimePanel.setBackground(Color.green);
 		TimePanel.setBorder(border);
-		//time label
+
 		JLabel TimeLabel = new JLabel();
 		TimeLabel.setText("Time");
 		TimeLabel.setBounds(100,10,230,50);
 		TimeLabel.setFont(font1);
 		TimePanel.add(TimeLabel); 
-		// time text field 
+
 		TimeTextField = new JTextField();
 		TimeTextField.setBounds(20,50,195,50);
 		TimeTextField.setFont(font2);
 		TimeTextField.setHorizontalAlignment(JTextField.CENTER);
-		TimePanel.add(TimeTextField);		
+		TimePanel.add(TimeTextField);	
+		GlobalPanel.add(TimePanel);	
 		
-		//people infected  panel
+
 		JPanel PeopleInfectedPanel = new JPanel();
 		PeopleInfectedPanel.setBounds(930,200,240,120);
 		PeopleInfectedPanel.setLayout(null);
 		PeopleInfectedPanel.setBackground(Color.green);
 		PeopleInfectedPanel.setBorder(border);
-		//people infected  label
+
 		JLabel PeopleInfectedLabel = new JLabel("Total infection cases");
 		PeopleInfectedLabel.setBounds(40,10,230,50);
 		PeopleInfectedLabel.setFont(font1);
 		PeopleInfectedPanel.add(PeopleInfectedLabel); 
-		// people infected text field 
+
 		PeopleInfectedTextField = new JTextField();
 		PeopleInfectedTextField.setBounds(20,50,195,50);
 		PeopleInfectedTextField.setBorder(border);
 		PeopleInfectedTextField.setFont(font2);
 		PeopleInfectedTextField.setHorizontalAlignment(JTextField.CENTER);
 		PeopleInfectedPanel.add(PeopleInfectedTextField);
+		GlobalPanel.add(PeopleInfectedPanel);
 		
-		//Death Rate panel
+
 		JPanel DeathRatePanel = new JPanel();
 		DeathRatePanel.setBounds(930,350,240,120);
 		DeathRatePanel.setLayout(null);
 		DeathRatePanel.setBackground(Color.green);
 		DeathRatePanel.setBorder(border);
-		//Death Rate  label
+
 		JLabel DeathRateLabel = new JLabel("Total death cases");
 		DeathRateLabel.setBounds(50,10,230,50);
 		DeathRateLabel.setFont(font1);
 		DeathRatePanel.add(DeathRateLabel); 
-		// Death Rate text field 
+
 		DeathRateTextField = new JTextField();
 		DeathRateTextField.setBounds(20,50,195,50);
 		DeathRateTextField.setBorder(border);
 		DeathRateTextField.setFont(font2);
 		DeathRateTextField.setHorizontalAlignment(JTextField.CENTER);
 		DeathRatePanel.add(DeathRateTextField);
+		GlobalPanel.add(DeathRatePanel);
+			
 		
-		//Vaccination Pct panel
 		JPanel VaccinePctPanel = new JPanel();
 		VaccinePctPanel.setBounds(930,500,240,120);
 		VaccinePctPanel.setLayout(null);
 		VaccinePctPanel.setBackground(Color.green);
 		VaccinePctPanel.setBorder(border);
-		//VaccineationPct label
+		
 		JLabel VaccinePctLabel = new JLabel("Vaccination Percentage (%)");
 		VaccinePctLabel.setBounds(20,10,230,50);
 		VaccinePctLabel.setFont(font1);
 		VaccinePctPanel.add(VaccinePctLabel); 
-		//VaccinationPct text field 
+		
 		VaccineTextField = new JTextField();
 		VaccineTextField.setBounds(20,50,195,50);
 		VaccineTextField.setBorder(border);
 		VaccineTextField.setFont(font2);
 		VaccineTextField.setHorizontalAlignment(JTextField.CENTER);
 		VaccinePctPanel.add(VaccineTextField);
+		GlobalPanel.add(VaccinePctPanel);
 		
-		//button play or pause
-		PlayorPause = new JButton ("Play or Pause");//name of button
+		
+		PlayorPause = new JButton ("Play or Pause");
 		PlayorPause.setBounds (930,730,240,50);
-		PlayorPause.setBackground(new Color(70,144,10));//setting color of background
-		PlayorPause.setForeground(Color.black);//setting color of foreground
+		PlayorPause.setBackground(new Color(70,144,10));
+		PlayorPause.setForeground(Color.black);
 		PlayorPause.setBorder(border);
 		PlayorPause.addActionListener(this);
 		GlobalPanel.add(PlayorPause);
 		
-		StartInfection = new JButton ("StartTheInfection");//name of button
+		
+		StartInfection = new JButton ("StartTheInfection");
 		StartInfection.setBounds (930,800,240,50);
-		StartInfection.setBackground(new Color(70,144,10));//setting color of background
-		StartInfection.setForeground(Color.black);//setting color of foreground
+		StartInfection.setBackground(new Color(70,144,10));
+		StartInfection.setForeground(Color.black);
 		StartInfection.setBorder(border);
 		StartInfection.addActionListener(this);
 		GlobalPanel.add(StartInfection);
 				
-		//button Restart
-		Restart = new JButton ("Restart");//name of button
+		
+		Restart = new JButton ("Restart");
 		Restart.setBounds (930,870,240,50);
-		Restart.setBackground(new Color(70,144,10));//setting color of background
-		Restart.setForeground(Color.black);//setting color of foreground
+		Restart.setBackground(new Color(70,144,10));
+		Restart.setForeground(Color.black);
 		Restart.setBorder(border);
 		Restart.addActionListener(this);
 		GlobalPanel.add(Restart);
 		
-		//button Mask
-		Mask = new JButton ("Mask");//name of button
+		
+		Mask = new JButton ("Mask");
 		Mask.setBounds (750,860,100,60);
-		Mask.setBackground(Color.red);//setting color of background
-		Mask.setForeground(Color.white);//setting color of foreground
+		Mask.setBackground(Color.red);
+		Mask.setForeground(Color.white);
 		Mask.setBorder(border);
 		Mask.addActionListener(this);
 		GlobalPanel.add(Mask);
 		
-		//button Handwash
-		Handwash= new JButton ("Handwash");//name of button
+		
+		Handwash= new JButton ("Handwash");
 		Handwash.setBounds (150,860,100,60);
-		Handwash.setBackground(Color.red);//setting color of background
-		Handwash.setForeground(Color.white);//setting color of foreground
+		Handwash.setBackground(Color.red);
+		Handwash.setForeground(Color.white);
 		Handwash.setBorder(border);
 		Handwash.addActionListener(this);
 		GlobalPanel.add(Handwash);
 		
-		//button LockDown
-		LockDown= new JButton ("LockDown");//name of button
+
+		LockDown= new JButton ("LockDown");
 		LockDown.setBounds (300,860,100,60);
-		LockDown.setBackground(Color.red);//setting color of background
-		LockDown.setForeground(Color.white);//setting color of foreground
+		LockDown.setBackground(Color.red);
+		LockDown.setForeground(Color.white);
 		LockDown.setBorder(border);
 		LockDown.addActionListener(this);
 		GlobalPanel.add(LockDown);
 		
-		//button Vaccine
-		Vaccine= new JButton ("Vaccine");//name of button
+
+		Vaccine= new JButton ("Vaccine");
 		Vaccine.setBounds (450,860,100,60);
-		Vaccine.setBackground(Color.red);//setting color of background
-		Vaccine.setForeground(Color.white);//setting color of foreground
+		Vaccine.setBackground(Color.red);
+		Vaccine.setForeground(Color.white);
 		Vaccine.setBorder(border);
 		Vaccine.addActionListener(this);
 		GlobalPanel.add(Vaccine);
 
 		
-		//button SocialDistancing
-		SocialDistancing= new JButton ("SocialDist");//name of button
+		SocialDistancing= new JButton ("SocialDist");
 		SocialDistancing.setBounds (600,860,100,60);
-		SocialDistancing.setBackground(Color.red);//setting color of background
-		SocialDistancing.setForeground(Color.white);//setting color of foreground
+		SocialDistancing.setBackground(Color.red);
+		SocialDistancing.setForeground(Color.white);
 		SocialDistancing.setBorder(border);
 		SocialDistancing.addActionListener(this);
 		GlobalPanel.add(SocialDistancing);
+			
 		
-		//Adding buttons and area for moving objects
-		
-		GlobalPanel.add(TimePanel);
-		GlobalPanel.add(PeopleInfectedPanel);
-		GlobalPanel.add(DeathRatePanel);
-		GlobalPanel.add(VaccinePctPanel);
-		
-		// Adding zone where the faces are moving
 		movingObjects = new PlotTheFaces (80);
 		GlobalPanel.add(movingObjects);
 		
 		graphs = new PlotTheGraphs ();
 		GlobalPanel.add(graphs);
 		
+		JLabel graphTitle = new JLabel("<html> <div style='text-align: center'> The evolution of the pandemic <br/> as a function of time </div></html>",SwingConstants.CENTER);
+		graphTitle.setBounds(1200,40,500,50);
+		graphTitle.setFont(new Font("Arial", Font.BOLD, 24));
+		GlobalPanel.add(graphTitle); 
+		
 		Background = new JLabel(new ImageIcon("Background.png"));
 		Background.setBounds(0,0,900,830);
 		Background.setBorder(border);
 		GlobalPanel.add(Background);
 		
-		//Display the playground
+		
 		this.add(GlobalPanel);
-		this.setResizable(true);
-		this.setVisible(true);//visibility of the window
+		this.setVisible(true);
 		addWindowListener(this);
 		
 		monChrono = new Timer (100,this);	
-		monChrono.start();
-	
+		monChrono.start();	
 	}
 	
 	public void playSound(String soundName) {
@@ -260,24 +251,18 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 	
 	public void actionPerformed (ActionEvent e){
 		
-		//SocialDistancing button 
-		if (e.getSource() == SocialDistancing) {
-			if (startInfection) {
-				if (!movingObjects.faces.activateLockdown) {
-					movingObjects.faces.activateSocialDistancing = !movingObjects.faces.activateSocialDistancing;
-				
-					if (movingObjects.faces.activateSocialDistancing) {
-						SocialDistancing.setBackground(new Color (0,255,128));
-						SocialDistancing.setForeground(Color.black);
-					}else {
-						SocialDistancing.setBackground(Color.red);
-						SocialDistancing.setForeground(Color.white);
-					}
-				}
+		if (e.getSource() == Handwash) {
+			movingObjects.getHandwash = !movingObjects.getHandwash;
+			if (movingObjects.getHandwash) {
+				Handwash.setBackground(new Color (0,255,128));
+				Handwash.setForeground(Color.black);
+			}else {
+				Handwash.setBackground(Color.red);
+				Handwash.setForeground(Color.white);
 			}
 		}
 		
-		//Lockdown button
+		
 		if (e.getSource() == LockDown) {
 			if (startInfection) {
 				if (lockdownDuration ==0.0) {
@@ -325,37 +310,13 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			}		
 		}
 		
-		//Mask button 
-		if (e.getSource() == Mask) {
-			movingObjects.faces.maskOn = !movingObjects.faces.maskOn;
-			movingObjects.faces.toWearMask();
-			if (movingObjects.faces.maskOn) {
-				Mask.setBackground(new Color (0,255,128));
-				Mask.setForeground(Color.black);
-			}else{
-				Mask.setBackground(Color.red);
-				Mask.setForeground(Color.white);
-			}
-		}
-		
-		//Handwash button
-		if (e.getSource() == Handwash) {
-			movingObjects.getHandwash = !movingObjects.getHandwash;
-			if (movingObjects.getHandwash) {
-				Handwash.setBackground(new Color (0,255,128));
-				Handwash.setForeground(Color.black);
-			}else {
-				Handwash.setBackground(Color.red);
-				Handwash.setForeground(Color.white);
-			}
-		}
-		
-		//vaccine button
+	
 		if (e.getSource() == Vaccine) {
 			if (startInfection) {
 				double pctToVaccinate = movingObjects.faces.percentageVaccinated;
 				String vactoSet = null;
-				while (pctToVaccinate <= movingObjects.faces.percentageVaccinated || pctToVaccinate > 100.0  ) {
+				while (pctToVaccinate <= movingObjects.faces.percentageVaccinated || pctToVaccinate > 100.0) {
+					notPause = false;
 					vactoSet = JOptionPane.showInputDialog(this,"What percentage of the population de you want to vaccinate? (From "+ (int)(movingObjects.faces.percentageVaccinated+1.0) +"% to 100%)");			
 					if (vactoSet == null) {
 						break;
@@ -366,6 +327,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 					}
 					pctToVaccinate = Double.parseDouble(vactoSet);
 				}
+				notPause = true;
 				movingObjects.faces.percentageVaccinated = pctToVaccinate;
 				if (pctToVaccinate >0.0 && pctToVaccinate <= 100.0 && vactoSet != null) {					
 					Vaccine.setBackground(new Color (0,255,128));
@@ -377,13 +339,43 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			}
 					
 		}
+		
+		
+		if (e.getSource() == SocialDistancing) {
+			if (startInfection) {
+				if (!movingObjects.faces.activateLockdown) {
+					movingObjects.faces.activateSocialDistancing = !movingObjects.faces.activateSocialDistancing;
+				
+					if (movingObjects.faces.activateSocialDistancing) {
+						SocialDistancing.setBackground(new Color (0,255,128));
+						SocialDistancing.setForeground(Color.black);
+					}else {
+						SocialDistancing.setBackground(Color.red);
+						SocialDistancing.setForeground(Color.white);
+					}
+				}
+			}
+		}
+		
+				
+		if (e.getSource() == Mask) {
+			movingObjects.faces.maskOn = !movingObjects.faces.maskOn;
+			movingObjects.faces.toWearMask();
+			if (movingObjects.faces.maskOn) {
+				Mask.setBackground(new Color (0,255,128));
+				Mask.setForeground(Color.black);
+			}else{
+				Mask.setBackground(Color.red);
+				Mask.setForeground(Color.white);
+			}
+		}
 		 
-		//Play or Pause button 
+		
 		if (e.getSource() == PlayorPause) {
 			notPause = !notPause;
 		}
 		
-		//Start Infection
+		
 		if (e.getSource() == StartInfection) {
 			if (!startInfection) {
 				startInfection = true;
@@ -413,7 +405,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			}
 		}
 		
-		//Reset button 
+		
 		if (e.getSource() == Restart) {
 			time = 0.0;
 			movingObjects.faces.percentageVaccinated = 0.0;
@@ -446,15 +438,11 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			Mask.setBackground(Color.red);
 			Mask.setForeground(Color.white);
 			
-			//graphs.points.clear();
-			//graphs.xCoordinate += 50; //make a gap between 2 graphs when clicking on restart
-			
 			GlobalPanel.remove(Background);
-			GlobalPanel.add(Background);
-			
-
+			GlobalPanel.add(Background);			
 		}
-				
+		
+						
 		if (e.getSource() == monChrono && notPause ){
 			if (startInfection) {
 				time = time + 100.0;
@@ -481,7 +469,6 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 				countToChangeVelocity =0;
 			}
 			
-			//Setting parameters to plot the graphs
 			graphs.nbInfected = movingObjects.faces.infectedPeople.size();
 			graphs.nbDead = movingObjects.faces.deadPeople.size();
 			graphs.time = this.time;
@@ -490,7 +477,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 		}
 	}	
 
-	//override
+
 	public void windowIconified(WindowEvent e) {
         monChrono.stop();
     }

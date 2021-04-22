@@ -1,23 +1,14 @@
-// Draw an IllFace Face representing an infected person
-
 import java.awt.*; 
 import java.awt.Color;
 import javax.swing.*;
 
-
 public class IllFace extends Person { 
-	
-	//constructor
-	public IllFace (){
-		super();
-	}
 	
 	public IllFace (Vec initPosition, Vec initVelocity, int nb, double probToGetInfected, boolean mask, boolean vaccine){
 		super(initPosition, initVelocity, nb, probToGetInfected, mask, vaccine);
 	}
 	
 	
-	//representation	
 	public void drawFaces (Graphics g, boolean socialDist){
 		super.drawFaces(g,socialDist);
 		g.setColor(Color.red);

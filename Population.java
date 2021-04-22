@@ -1,19 +1,14 @@
-/*
- * This class is the set of all "Person"
- * To be improved...
- */
-
 import java.util.*;
 import java.awt.*;
 
 public class Population {
 	
-	//Parameters
 	public static final double ONE_DAY = 4000.0;
 	public static final int NB_LIMIT = 4;
 	public static final double AREA_RADIUS = 40;
 	
 	public int nbVaccinated =0;
+	public double percentageVaccinated = 0.0;
 	public ArrayList<Person> everyone;
 	public LinkedList<Person> infectedPeople = new LinkedList<Person>();
 	public LinkedList<Person> deadPeople = new LinkedList<Person>();
@@ -22,10 +17,7 @@ public class Population {
 	public boolean activateSocialDistancing = false;
 	public boolean activateLockdown = false;
 	
-	public double percentageVaccinated = 0.0;
 	
-	
-	//Constructor	
 	public Population(int initNb) {
 		everyone = new ArrayList<Person>();		
 		Person newPerson = new SmileyFace ();		
@@ -48,7 +40,7 @@ public class Population {
 		}		
 	}
 	
-	//Method to distribute randomly people to a family consisting of from 2 to 6 people
+
 	public int[] generateNbOfMembers() {
 		int[] familyDistribution = new int[20];
 		int sum = 0;
@@ -71,7 +63,6 @@ public class Population {
 	}
 	
 	
-	//To verify all people are not "spawn on top of each other"
 	public boolean coincideWhenInitiate(Person p) {
 		if (!everyone.isEmpty()){
 			for (Person b : everyone) {
@@ -86,7 +77,6 @@ public class Population {
 	}
 	
 	
-	//To change everyone's velocity after some time
 	public void changeVelocity () {
 		for (Person a : everyone) {			 
 			if (Math.random() <0.5) {
@@ -96,7 +86,6 @@ public class Population {
 	}
 	
 	
-	//To start the infection
 	public void startTheInfection() {
 		for (int i =0; i< (int)(4*Math.random()+2); i++) {
 			int nb = 100;
@@ -110,7 +99,7 @@ public class Population {
 		
 	}
 	
-	//To update the world with disease	
+	
 	public void updateWorldInfection () {
 		for(int i = 0; i <everyone.size(); i++) { 
 			Person p = everyone.get(i);
@@ -127,7 +116,7 @@ public class Population {
 				}
 			}
 			
-			//A healthy person may get infected after 2 days
+			
 			if (p.timeToBeInfected >0) {
 				if (p.timeToBeInfected == 2*ONE_DAY) {
 					p.timeToBeInfected = 0.0;
@@ -141,7 +130,7 @@ public class Population {
 				}
 			}
 			
-			//An infected person may recover after 5 days or die after 7 days
+			
 			if (p instanceof IllFace) {
 				if (p.infectionTime < 5*ONE_DAY) {
 					p.infectionTime += 100.0;
@@ -166,7 +155,7 @@ public class Population {
 			}	
 		}
 	
-		//A healthy person may get infected if getting close to an infected person					
+							
 		for (Person a : everyone) {
 			if (a instanceof IllFace) {
 				for (Person b : everyone) {
@@ -179,20 +168,18 @@ public class Population {
 	}
 	
 	
-	//To update the world in general
 	public void updateWorld() {
 		this.updateWorldInfection(); 
 		if (activateLockdown) {
-			updateWorldLockdown();
+			updateWorldMovementLockdown();
 		}else if (activateSocialDistancing) {
-			updateWorldSocialDistancing();
+			updateWorldMovementSocialDistancing();
 		}else{
 			updateWorldMovement();	
 		}	
 	}
 	
 	
-	//To create "the moving population"
 	public void updateWorldMovement () {		
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {								
@@ -248,14 +235,6 @@ public class Population {
 	}
 	
 	
-	//To update the world while social distancing is on
-	public void updateWorldSocialDistancing() {
-		this.updateWorldInfection(); 
-		this.updateWorldMovementSocialDistancing();
-	}
-	
-	
-	//To create a "moving population" while social distancing is on
 	public void updateWorldMovementSocialDistancing () {
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {	
@@ -269,6 +248,7 @@ public class Population {
 		}
 	}
 	
+	
 	public void getMovingSocialDistancing (Person a, boolean nbLimit) {
 		int count =0;
 		while (this.socialDistancingImpossible(a,nbLimit)) {					
@@ -281,7 +261,7 @@ public class Population {
 		a.movement(true);
 	}
 	
-	//To verify that people are not too close to each other
+
 	public boolean noRespectSocialDistancing (Person p) {
 		int count =0;
 		if (!everyone.isEmpty()){
@@ -297,6 +277,7 @@ public class Population {
 		return false;
 	}
 	
+	
 	public boolean noRespectNbLimit (Person p) {	
 		int count =0;
 		for (Person b : everyone) {
@@ -309,6 +290,7 @@ public class Population {
 		}		
 		return false;
 	}
+	
 	
 	public boolean socialDistancingImpossible (Person p, boolean nbLimit) {
 		if (p instanceof DeadFace) {
@@ -323,14 +305,6 @@ public class Population {
 	}
 	
 	
-	//To update world while lockdown is on
-	public void updateWorldLockdown() {
-		this.updateWorldInfection(); 
-		this.updateWorldMovementLockdown();		
-	}
-	
-	
-	//To create a "moving population" during the lockdown
 	public void updateWorldMovementLockdown () {	
 		if (!everyone.isEmpty()){					
 			for (Person a : everyone) {
@@ -356,18 +330,17 @@ public class Population {
 	}
 	
 	
-	//To provide the people with masks
 	public void toWearMask () {
 		for (Person a : everyone) {
 			if (maskOn) {
-				a.wearMask = true;  //Give masks for all people
+				a.wearMask = true;
 				if (a.vaccinated) {
 					a.probabilityToGetInfected = 1.0;
 				}else{
 					a.probabilityToGetInfected = 15.0;
 				}
 			}else{
-				a.wearMask = false;   //Take off the mask
+				a.wearMask = false;
 				if (a.vaccinated) {
 					a.probabilityToGetInfected = 5.0;
 				}else{
@@ -376,6 +349,7 @@ public class Population {
 			}
 		}
 	}
+		
 		
 	public void togetvaccinated (double pctVaccinated) {
 		for (Person a : everyone) {

@@ -11,43 +11,42 @@ import javax.swing.Timer;
 class Vec {
     public double x, y;
  
-    Vec() {
-    }
+    public Vec() {}
  
-    Vec(double x, double y) {
+    public Vec(double x, double y) {
         this.x = x;
         this.y = y;
     }
  
-    void add(Vec v) {
+    public void add(Vec v) {
         x += v.x;
         y += v.y;
     }
  
-    void sub(Vec v) {
+    public void sub(Vec v) {
         x -= v.x;
         y -= v.y;
     }
  
-    void div(double val) {
+    public void div(double val) {
         x /= val;
         y /= val;
     }
  
-    void mult(double val) {
+    public void mult(double val) {
         x *= val;
         y *= val;
     }
  
-    double mag() {
+    public double mag() {
         return sqrt(pow(x, 2) + pow(y, 2));
     }
  
-    double dot(Vec v) {
+    public double dot(Vec v) {
         return this.x * v.x + this.y * v.y;
     }
  
-    void normalize() {
+    public void normalize() {
         double mag = mag();
         if (mag != 0) {
             x /= mag;
@@ -55,7 +54,7 @@ class Vec {
         }
     }
 
-    double heading() {
+    public double heading() {
         return atan2(y, x);
     }
  

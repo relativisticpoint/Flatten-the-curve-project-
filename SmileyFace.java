@@ -1,13 +1,9 @@
-// Draw a Smiley Face representing a healthy person
-
 import java.awt.*; 
 import java.awt.Color;
 import javax.swing.*;
 
-
 public class SmileyFace extends Person{ 
 	
-	//constructor
 	public SmileyFace (){
 		super();
 	}
@@ -16,8 +12,7 @@ public class SmileyFace extends Person{
 		super(initPosition,initVelocity, nb, probToGetInfected, mask, vaccine);		
 	}
 	
-	
-	//representation 
+
 	public void drawFaces (Graphics g, boolean socialDist){
 		super.drawFaces(g,socialDist);
 		if (!this.vaccinated) {
