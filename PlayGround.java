@@ -410,6 +410,7 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			movingObjects.faces.percentageVaccinated = 0.0;
 			lockdownDuration = 0.0;
 			startInfection = false;
+			notPause = true;
 			
 			GlobalPanel.remove(movingObjects);
 			movingObjects = new PlotTheFaces (80);
