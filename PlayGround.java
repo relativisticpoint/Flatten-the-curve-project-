@@ -449,8 +449,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			movingObjects.faces.percentageVaccinated = (movingObjects.faces.nbVaccinated*100.0/(movingObjects.faces.everyone.size()-movingObjects.faces.deadPeople.size()));
 					
 			TimeTextField.setText((int)(time*24.0/movingObjects.ONE_DAY)+"h");
-			PeopleInfectedTextField.setText(String.valueOf((int)(movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(80.0-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
-			DeathRateTextField.setText(String.valueOf((int)(movingObjects.faces.deadPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
+			PeopleInfectedTextField.setText(String.valueOf((movingObjects.faces.infectedPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.infectedPeople.size()/(80.0-movingObjects.faces.deadPeople.size()))*100.0))+"%)");
+			DeathRateTextField.setText(String.valueOf((movingObjects.faces.deadPeople.size()))+ " (" +String.valueOf((int)((movingObjects.faces.deadPeople.size()/80.0)*100.0))+ "%)");
 			VaccineTextField.setText(String.valueOf((int)(movingObjects.faces.percentageVaccinated)));
 			
 			if (movingObjects.faces.activateLockdown && (time - timeStartLockdown) >= (8000.0 +lockdownDuration*movingObjects.ONE_DAY)) {
