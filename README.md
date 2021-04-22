@@ -12,7 +12,7 @@ Green Dots represent healthy people.
 Red Dots represent infected people who carry the virus. They can infect other healthy people.
 ### Dead 
 Black Dots represent dead People, they are left on the spot of their death and do not influence the other dots. They are left on the map to give a general idea of the number of deaths caused by the virus.
-# Graphs :
+# Graphs 
 While the simulation evolves, one can get an idea of the rate of death and infection by looking at the rigth corner of the simulation window, the graph in blue represents the numberf infected people as a function of time, the graph in black shows the number of dead people as a function of time.
 # Features
 one can activate one or many features to stop the spread of the virus.
