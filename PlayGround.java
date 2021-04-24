@@ -431,8 +431,8 @@ public class PlayGround extends JFrame implements ActionListener, WindowListener
 			graphs = new PlotTheGraphs();
 			GlobalPanel.add(graphs);
 			
-			StartInfection.setBackground(new Color(70,144,10));
-			StartInfection.setForeground(Color.black);
+			StartInfection.setBackground(new Color(62,60,60));
+			StartInfection.setForeground(Color.white);
 			
 			Handwash.setBackground(Color.red);
 			Handwash.setForeground(Color.white);
